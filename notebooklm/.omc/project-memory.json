@@ -1,0 +1,90 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1771595691643,
+  "projectRoot": "/Users/gwanli/.claude/skills/notebooklm",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "requirements.txt"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "pip",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "scripts"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "data": {
+      "path": "data",
+      "purpose": "Data files",
+      "fileCount": 3,
+      "lastAccessed": 1771595691637,
+      "keyFiles": [
+        "auth_info.json",
+        "library.json",
+        "meeting_content.txt"
+      ]
+    },
+    "images": {
+      "path": "images",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1771595691637,
+      "keyFiles": [
+        "example_notebookchat.png"
+      ]
+    },
+    "references": {
+      "path": "references",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1771595691637,
+      "keyFiles": [
+        "api_reference.md",
+        "troubleshooting.md",
+        "usage_patterns.md"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 11,
+      "lastAccessed": 1771595691637,
+      "keyFiles": [
+        "__init__.py",
+        "ask_question.py",
+        "auth_manager.py",
+        "browser_session.py",
+        "browser_utils.py"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}
