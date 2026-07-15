@@ -23,12 +23,17 @@ Steps:
 
 ## Mode 2 — BUILD (generate matching output)
 
+> **Pairing contract (one line, canonical wording lives in `csdesign/SKILL.md` routing step 3 — sync on edit):**
+> When building alongside `../nds`: **component facts come from NDS; if a component fact conflicts with this domain's project note, this note (shipped production) wins.**
+> Stated here too because a task may load this LEADER without `csdesign/SKILL.md`, and the pair would silently lose its rule.
+
+
 Triggered when the user gives a prompt or a prototype and asks for a new Figma file or prototype that should match NH's existing quality/conventions.
 
 Steps:
 1. **Read "Common patterns" below first** — these are cross-project-confirmed rules that apply regardless of which specific project is closest, and should be treated as defaults.
 2. Identify which learned project(s) under `projects/` are the closest match to the requested screen (by domain — e.g. rights/의결권/권리 requests match `projects/domestic-stock-rights.md` if learned). If no project file matches closely, say so and proceed with only "Common patterns" + `../nds/LEADER.md` as the base — don't silently invent conventions.
-3. Read the matched project file(s) + `../nds/LEADER.md`, and load `figma-use`/`figma-generate-design`.
+3. Read the matched project file(s), then the guide domain — **`../nds/CORE.md` → `../nds/INDEX.md` → the note it names** (not `../nds/LEADER.md`, and never `../nds/sources/*`). Load `figma-use`/`figma-generate-design`.
 4. Build using the **same** information architecture, interaction patterns, and component choices documented in the project file — not a fresh generic layout. Where a project's specific note conflicts with "Common patterns," the project's own note wins (it's more specific), but flag the conflict — it likely means "Common patterns" needs its confirmed-project-count re-checked.
 5. Validate with `get_screenshot` against the patterns noted (header style, button placement, spacing) before considering it done.
 

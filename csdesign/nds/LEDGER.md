@@ -66,6 +66,14 @@ name.** `statusbar` is worse — **6 distinct keys** across `3:158`, `3760:33077
 parent SET** `ce701f7c5eda23073d17bd862838e75f191b0a96`; two earlier agents reported those same two keys as a
 "conflict". Same component. **(b) genuine collision** — the two `header_basic` SETs above are both real.
 **Blocked because `importComponentSetByKeyAsync` throws in a read-only session.** Needs a write-capable session.
+**Do NOT resolve this by picking one.** A BUILD rehearsal on 2026-07-15 confirmed the trap: the tester would have
+silently chosen `c95043e9…` because it is listed first and corroborated 6× — **a plausible tiebreaker this knowledge
+base does not endorse.** Corroboration count measures *how often it was seen*, not *which one is correct for your
+screen*. Both SETs are real. **Escalate.**
+Related, and NOT settled by precedence: `CORE.md` says `header_basic` instancing **throws**; `../asset`'s project note
+says it **instanced fine in that file** with a title-as-dropdown variant CORE doesn't document. **Both can be true** —
+the break may be file- or branch-specific. That is a *reliability* claim, not a design claim; re-test in the target
+file rather than adjudicating from notes.
 
 ## radio-keys-never-sighted — ⚠ CONTESTED (Core lists them; nothing has ever seen them)
 `radio_basic` `91f58f3a086c5ef03ac03c8d77a725d32b3f7a1f` and `radio_btn` `1a972d991cc7c8f8f97bc5557740fba58ca82f23`

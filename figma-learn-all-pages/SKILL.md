@@ -62,7 +62,7 @@ For each page:
 
 1. `get_metadata(nodeId)` → frame tree, cheap, reveals structure.
 2. **`get_screenshot` every frame that carries rules.** Not optional — see below.
-3. Write one notes file per page **as you go**, not batched at the end.
+3. **Write notes at the granularity the DOMAIN's Mode 1 specifies** — not a fixed rule of this skill. **guide-kind** domains → one note per page (`nds/` has 77). **project-kind** domains → **one project note covering all pages** (`asset/`'s single note covers 6 pages / 26 screens — its pages are steps of one flow, not independent categories). **Fan out reads per page regardless; only the write granularity differs.** Write as you go, not batched at the end.
 
 ### Layer names lie — screenshot or you learn nothing
 
@@ -125,6 +125,7 @@ A notes file that nothing links to does not exist. **Registry sync is part of le
 | Enumerating with `get_metadata` | Returns only session-loaded pages (often 1) |
 | Trusting the file's TOC | Hand-maintained, drifts, omits pages |
 | Batching notes to the end | Context runs out; earlier pages get thin |
+| Assuming one-note-per-page | That's the **guide-kind** convention. Project-kind domains write ONE note per file. Read the domain's Mode 1. |
 | Looping `setCurrentPageAsync` in one script | Reloads the file each time. Fan out in parallel instead |
 | Paraphrasing rule copy | Verbatim or it's not evidence |
 | Skipping registry sync | The single highest-impact failure — knowledge exists but is unreachable |
@@ -134,7 +135,7 @@ A notes file that nothing links to does not exist. **Registry sync is part of le
 
 This skill owns **enumeration, fan-out, and coverage integrity**. Domain-specific learning rules live elsewhere:
 
-- Route the file to its domain via `csdesign/SKILL.md` (NDS guide/library → `nds/`; production screens → `asset/`).
-- Follow that domain's `LEADER.md` **Mode 1 (LEARN)** for note structure and frontmatter, applying it once per content page.
-- Register in that domain's `LEADER.md` per Step 3.
+- **Route via `csdesign/SKILL.md`'s Domains table, by KIND — never by folder name.** A design-system guide/library file → the **guide-kind** domain. Production screens → the **matching project-kind** domain, chosen with that table's tiebreaker (fileKey already registered wins; else Owns-scope match; else **ask** — never default to the oldest project folder). More project folders are expected.
+- Follow that domain's `LEADER.md` **Mode 1 (LEARN)** for note structure, frontmatter, **and write granularity** — the domain decides per-page vs per-file, not this skill.
+- **Register per Step 3 — in whatever files that domain uses.** `nds/` splits its registry: rows go to `sources/<file>.md`, a line to `INDEX.md`, new components to `CORE.md`, new conflicts to `LEDGER.md`. Other domains keep it in `LEADER.md`. **Check the domain's Mode 1 step 7; don't assume.**
 - Re-checking an already-learned file is that domain's **Mode 3 (VERIFY)**, not a fresh learn — but re-run Step 1 regardless, since a page may have been added since.

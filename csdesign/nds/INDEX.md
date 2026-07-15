@@ -5,6 +5,10 @@
 > When a row is flagged, read the `LEDGER.md` anchor **before** building — it will tell you the rule is
 > blocked or the key is untrustworthy.
 >
+> **A row with no flag means "no contest is on record" — NOT "audited and clean."** Every LEDGER entry was found
+> by an explicit pass; an un-audited topic and a genuinely clean one look identical here. Absence of a flag is not
+> assurance.
+>
 > Rows list every source that covers the topic. **More sources on a row is a feature** — that is how
 > contradictions surface (Search Bar's 3-vs-4 states and `header_basic`'s rival keys were both found by
 > cross-reading). Rule of thumb: **guide sources state the rule, Templates/M.web show what actually exists;
