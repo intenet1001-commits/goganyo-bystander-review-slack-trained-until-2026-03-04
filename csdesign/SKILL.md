@@ -43,7 +43,7 @@ Single entry point for NH투자증권 design knowledge, organized as one topic/d
 2. **Read the matched domain's `LEADER.md`** directly (plain file read — these are reference files, not separate skills) and follow its Mode 1 (LEARN), Mode 2 (BUILD), or Mode 3 (VERIFY) instructions.
 3. **For BUILD requests pairing a guide domain with a project domain** — read in this order:
    1. **`nds/CORE.md`** (always-on component/token baseline), then **`nds/INDEX.md`** to find the topic's note, then that note. Read `nds/LEDGER.md` only when INDEX flags the topic ⚠/⛔ — **⛔ means the guide cannot be satisfied with the current library; escalate rather than fake it.** (Do **not** read `nds/sources/*.md` — that's LEARN forensics.)
-   2. Then the **matching project-kind** domain's `LEADER.md` + its project note (flow/interaction baseline).
+   2. Then the **matching project-kind** domain: **`COMMON.md`** (cross-project baseline) → **`INDEX.md`** (pick the closest project) → that **project note** (flow/interaction baseline). Read its `LEDGER.md` only when INDEX flags ⚠/⛔. (Do **not** read its `sources/*.md` — LEARN/VERIFY forensics.) A project-kind domain may not be split yet if it holds few projects — then just read its `LEADER.md`; it will say.
    3. Then build.
 
    **⭐ Precedence — this is the canonical wording; project-kind LEADERs restate it in one line and point here:**
