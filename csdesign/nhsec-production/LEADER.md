@@ -14,6 +14,24 @@ The site also opens a **notice popup as a separate top-level tab/window** on fir
 
 Recommended tool: the `mcp__plugin_superpowers-chrome_chrome__use_browser` Chrome tool (`navigate` → `list_tabs` → operate on the non-popup tab index via `eval`/`screenshot` with explicit `tab_index`). Playwright's `browser_navigate` has been observed to hang indefinitely on this specific site (repeated 30s timeouts) — if that happens, switch tools rather than retrying the same call.
 
+## Structure — deliberately NOT split (decided 2026-07-15)
+
+This domain stays a **single `LEADER.md`**, unlike `../nds` (guide) and `../asset` (project), which were split into
+`LEADER` + base + `INDEX` + `LEDGER` + `sources/`. **That asymmetry is intentional, not an oversight — don't
+"harmonise" it.**
+
+**Why they were split:** they *accumulate*. `../nds` reached ~36k tokens across 3 Figma files and a BUILD pass could
+no longer read it at all; `../asset` will hold many projects. **Why this one isn't:** it owns **one site, one learned
+page**, it doesn't accumulate the same way, and at this size it's read in one pass. Splitting it would be
+over-engineering.
+
+**Revisit only when measured, not on taste:** this file approaching ~25k tokens, or the registry growing a
+cell-per-entry that no longer scans. Then apply `../nds`'s shape.
+
+**`nhsec-production` and `nhnamuh-production` are kept as two separate domains** — different brands, different sites,
+different palettes. The `### Shared with ../nhnamuh-production` subsection is a **maintained duplicate on purpose**: it's small,
+and both sides need it at hand. **Sync it on edit; don't let the two copies drift.**
+
 ## Mode 1 — LEARN (register the site's current structure/style)
 
 Triggered when the user gives this (or a matching) production URL and asks to learn/study it (e.g. "nhsec.com 학습해").

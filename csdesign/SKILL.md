@@ -20,7 +20,19 @@ Single entry point for NH투자증권 design knowledge, organized as one topic/d
 **Kinds — the routing rules below refer to KINDS, not folder names.**
 - **guide** — reusable design-system rules + component facts. Grows by learning more guide files. Currently only `nds/`.
 - **project** — ONE shipped project's deliverables. **Expect more project rows over time** — this is the row type that multiplies.
-- **website** — live-site conventions, learned via a browser rather than Figma.
+- **website** — live-site conventions, learned via a browser rather than Figma. **Two separate productions**
+  (`nhsec-production`, `nhnamuh-production`) — different brands, different sites, **deliberately kept apart**.
+
+**Domain structure differs by kind, and by size. That is intentional — do not "fix" it into uniformity.**
+- `nds` (guide) and `asset` (project) are **split**: `LEADER.md` (modes) + a base file (`CORE.md` / `COMMON.md`) +
+  `INDEX.md` + `LEDGER.md` + `sources/`. They were split because they **accumulate** — `nds` reached ~36k tokens on
+  3 Figma files and became physically unreadable; `asset` will hold many projects. Their read cost is now bounded.
+- The **website** domains are a **single `LEADER.md` each**, and should stay that way: each owns **one site with one
+  learned page**, they don't accumulate the way guides and projects do, and at 6–10KB they're read in one pass.
+  **Splitting them would be over-engineering.**
+- **The trigger for splitting a domain** is measured, not aesthetic: its `LEADER.md` (or a single note) approaching
+  ~25k tokens, **or** its registry growing a cell-per-entry that no longer scans. Apply `nds`'s shape then — not
+  before.
 
 **Adding a domain** = one table row + the trigger keywords in this skill's `description` above (it's the only registered skill in the family, so the loader matches on it). **Nothing else** — the routing rules and `figma-learn-all-pages` name kinds, not folders, so they don't need touching. A new **project** folder should be named after its project (`asset/` predates this convention; its name is historical, its kind is what counts).
 

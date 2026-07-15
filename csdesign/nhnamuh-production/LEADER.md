@@ -10,6 +10,24 @@ This domain has three modes. Detect which one applies from the user's request; d
 
 Same underlying platform as `../nhsec-production` — read that file's "Tooling note" section first; it applies here verbatim (iframe shell via `iflg_body`, notice-popup-opens-a-separate-tab behavior, `ul.mn_list`/`.mn_sub dl` mega-menu markup, Playwright navigation hangs observed on this template → prefer the Chrome `use_browser` tool). Don't re-derive these from scratch; this file only tracks what's specific to namuh.
 
+## Structure — deliberately NOT split (decided 2026-07-15)
+
+This domain stays a **single `LEADER.md`**, unlike `../nds` (guide) and `../asset` (project), which were split into
+`LEADER` + base + `INDEX` + `LEDGER` + `sources/`. **That asymmetry is intentional, not an oversight — don't
+"harmonise" it.**
+
+**Why they were split:** they *accumulate*. `../nds` reached ~36k tokens across 3 Figma files and a BUILD pass could
+no longer read it at all; `../asset` will hold many projects. **Why this one isn't:** it owns **one site, one learned
+page**, it doesn't accumulate the same way, and at this size it's read in one pass. Splitting it would be
+over-engineering.
+
+**Revisit only when measured, not on taste:** this file approaching ~25k tokens, or the registry growing a
+cell-per-entry that no longer scans. Then apply `../nds`'s shape.
+
+**`nhsec-production` and `nhnamuh-production` are kept as two separate domains** — different brands, different sites,
+different palettes. The `### Shared with ../nhsec-production` subsection is a **maintained duplicate on purpose**: it's small,
+and both sides need it at hand. **Sync it on edit; don't let the two copies drift.**
+
 ## Mode 1 — LEARN (register the site's current structure/style)
 
 Triggered when the user gives this (or a matching) production URL and asks to learn/study it (e.g. "mynamuh.com 학습해").
