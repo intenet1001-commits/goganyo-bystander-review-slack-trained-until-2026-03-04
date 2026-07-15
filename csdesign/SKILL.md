@@ -1,6 +1,6 @@
 ---
 name: csdesign
-description: "Entry point for NH투자증권 design work across topic domains — Figma-based `asset` (production MTS screens: structure, interaction, flow) and `nds` (NH Design System: component keys, variants, tokens), plus live-website domains `nhsec-production` (nhsec.com, main site) and `nhnamuh-production` (mynamuh.com, 나무/namuh sub-brand site: nav structure, color palette). Routes any design request — learn a new project, verify/re-check an already-learned project against source, or build/prototype a screen/page — to the right domain folder(s), and coordinates when a request needs more than one domain together. Use whenever a design request mentions NH투자증권, 나무/namuh, nhsec.com, mynamuh.com, Figma, NDS, MTS 화면, asks to learn/verify/재검토/build a screen or page, and doesn't already point at a specific project file."
+description: "Entry point for NH투자증권 design work across topic domains (for learning EVERY page of a Figma file, or auditing a file's page coverage, use the `figma-learn-all-pages` skill first — this one routes, that one enumerates) — Figma-based `asset` (production MTS screens: structure, interaction, flow) and `nds` (NH Design System: component keys, variants, tokens), plus live-website domains `nhsec-production` (nhsec.com, main site) and `nhnamuh-production` (mynamuh.com, 나무/namuh sub-brand site: nav structure, color palette). Routes any design request — learn a new project, verify/re-check an already-learned project against source, or build/prototype a screen/page — to the right domain folder(s), and coordinates when a request needs more than one domain together. Use whenever a design request mentions NH투자증권, 나무/namuh, nhsec.com, mynamuh.com, Figma, NDS, MTS 화면, asks to learn/verify/재검토/build a screen or page, and doesn't already point at a specific project file."
 risk: safe
 ---
 
@@ -22,6 +22,10 @@ Single entry point for NH투자증권 design knowledge, organized as one topic/d
 **Four distinct visual identities exist under one company** — don't conflate them: the NDS/MTS app is green (`#84C13D`), nhsec.com is blue (`#1171D2`/`#1692E8`), namuh is teal (`#00A5BD`/`#0A808C`). When a request doesn't clearly say which property it targets, ask rather than assuming one skin fits all.
 
 ## Routing
+
+0. **Is it "learn ALL pages of this Figma file" (or a coverage audit of one)?** — e.g. a bare Figma URL + 학습/learn, "모든 페이지", "다 학습해", "다 학습된 거 맞아?", "빠진 페이지 없어?" → **invoke the `figma-learn-all-pages` skill first**, then come back here for domain routing (step 1) and follow that domain's Mode 1 per content page.
+
+   That skill owns page **enumeration and coverage integrity**, which this file does not: a Figma file's page list cannot be obtained from `get_metadata` (returns 1 page) or from the file's own table of contents (drifts, omits pages) — only from `use_figma` → `figma.root.children`. Certifying coverage any other way has already produced a wrong "complete" claim in this repo. A single-page/single-section learn doesn't need it; anything claiming "all" does.
 
 1. **Identify the domain(s) the request touches.**
    - Mentions a specific NH product/feature screen, a shipped file, or "이 프로젝트 학습해" with a production-flow Figma link → `asset/`.

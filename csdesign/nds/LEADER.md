@@ -46,25 +46,42 @@ Steps:
 
 (Populated as NDS guide files are learned via Mode 1 — see `projects/` for the individual files.)
 
-### NDS_UX Guide (`nEINCcmC7AVkWSqRkq60y1`) — coverage: 17/17 topics, complete as of 2026-07-15
+### NDS_UX Guide (`nEINCcmC7AVkWSqRkq60y1`) — coverage: 18/18 content pages, complete as of 2026-07-15
 
-The file's own Welcome/TOC page (`2:2899`, text nodes `3751:3` + `3751:4`) is the authoritative index — it groups the guide into 4 sections totalling 17 topics, and **all 17 are now learned and registered below**.
+## Enumerating pages — read this first
 
-> **`get_metadata` with no nodeId does NOT enumerate this file's pages** — it returns only the Welcome page (`2:2899`), even though ~17 sibling canvases exist. Don't use it to check coverage; read the Welcome TOC text nodes instead, or go by this table.
+**Two obvious methods are both WRONG. Only one works.**
 
-| TOC group | Topics | Status |
+| Method | Result | Verdict |
 |---|---|---|
+| `get_metadata` with no `nodeId` | Returns **1 page** (Welcome, `2:2899`) | ❌ Broken on this file. Reports only what's loaded in the desktop session, not the document. |
+| The Welcome/TOC page's own index (`2:2899` → text nodes `3751:3`, `3751:4`) | Lists **17 topics** in 4 groups | ❌ Incomplete. **Silently omits `- Principles`** — the foundational page. |
+| `use_figma` → `figma.root.children` | Returns **28 pages** (18 content) | ✅ **Authoritative. Use this.** |
+
+```js
+// The only reliable page enumeration for a Figma file:
+return figma.root.children.map((p,i) => `${i+1}. ${p.id} | ${p.name}`).join("\n");
+```
+
+> **This is not hypothetical.** On 2026-07-15 a coverage audit driven by the TOC reported "17/17 complete" and shipped that claim. A baseline test using `figma.root.children` found an 18th content page (`- Principles`, `4200:70`) that the TOC never lists. Never certify coverage from a TOC or from `get_metadata`.
+
+Page anatomy: of the 28 pages, **18 are content** (name starts with `- `), 4 are section headers (`🎨 Accessibility 접근성`, `✍️ UX writing 서비스 글쓰기`, `✍️ Usage Guidelines`, `📱 Patterns`), 5 are `-----` separators, 1 is Welcome. Only the `- `-prefixed pages carry rules.
+
+| Group | Topics | Status |
+|---|---|---|
+| *(ungrouped — not in the TOC)* | **Principles** (프로덕트/UI·UX/Graphic/UX Writing/Interaction 원칙) | 1/1 ✅ |
 | Accessibility (접근성) | 색상 명도대비, 터치영역 설정, 등락기호표기 | 3/3 ✅ |
 | UX Writing (글쓰기) | 완료팝업, 통화표기, 알림톡, 데이터 없음 | 4/4 ✅ |
-| Patterns | 검색, 유의사항, 공유하기, 이용동의 | 4/4 ✅ |
 | Usage Guidelines | 탭, 버튼, 팝업, 계좌 컨트롤러, 넛징, 데이트 피커 | 6/6 ✅ |
+| Patterns | 검색, 유의사항, 공유하기, 이용동의 | 4/4 ✅ |
 
-**Not covered, deliberately**: the Welcome TOC's fifth list, **Sample Page** (node `2:2910` — 서비스안내/정보입력/스텝/동의/검색·조건검색/조회/유의사항/설정·편집/완료팝업/자산/주문·거래/이체·환전), is `hidden="true"` on the TOC. These are sample *screens*, not guide rules — if they're ever needed they belong in `../asset/`, not here.
+**Not covered, deliberately**: the Welcome TOC's fifth list, **Sample Page** (node `2:2910` — 서비스안내/정보입력/스텝/동의/검색·조건검색/조회/유의사항/설정·편집/완료팝업/자산/주문·거래/이체·환전), is `hidden="true"` and is not a page — it's a text node on the Welcome page listing sample *screens*, not guide rules. If ever needed they belong in `../asset/`, not here.
 
-**TOC typo to know**: the Welcome TOC lists "등록기호표기"; the actual canvas and the learned file are **등락기호표기**. The TOC is wrong.
+**TOC typo to know**: the Welcome TOC lists "등록기호표기"; the actual canvas and the learned file are **등락기호표기**. The TOC is wrong — one more reason not to trust it.
 
 | Project | File | Learned | Last reviewed | Notes |
 |---|---|---|---|---|
+| [nds-ux-guide-principles](projects/nds-ux-guide-principles.md) | `nEINCcmC7AVkWSqRkq60y1` (NDS_UX Guide — Principles) | 2026-07-15 | — | **The foundational page — every other guide is an application of these 19 principles.** 5 categories: 프로덕트 (Minimum Thinking / Value First, Cost Later / Clear Communication / Impact First), UI·UX (Instinct / Seamless / Hierarchy / consistent), Graphic (Originality / Instinct / Recognizability / Consistency), UX Writing (Clear / Concise / Empathetic / Trustworthy), Interaction (Predictable / Immediate Feedback / Goal-oriented — only 3). Use as tiebreaker when a specific guide is silent. **Not listed in the Welcome TOC** — nearly missed entirely; see the enumeration warning above. Every TEXT node carries a placeholder layer name (`6개월간 4500시간 단축`) unrelated to content — screenshots are the only way to read this page. |
 | [nds-ux-guide-color-contrast](projects/nds-ux-guide-color-contrast.md) | `nEINCcmC7AVkWSqRkq60y1` (NDS_UX Guide — 색상 명도대비) | 2026-07-15 | 2026-07-15 | Contrast rules: 4.5:1 baseline, 3:1 for large/bold text, labels get an app-only exception (not on homepage). Includes the pass/fail badge convention and the Figma color-picker contrast-check workflow. Re-reviewed 2026-07-15 — corrected a misread ratio digit (11.89→11.69) and a section/node-ID mislabeling (Figma's internal frame layer names didn't match the on-canvas section numbers); see the file's inline `corrected 2026-07-15` notes. |
 | [nds-ux-guide-touch-area](projects/nds-ux-guide-touch-area.md) | `nEINCcmC7AVkWSqRkq60y1` (NDS_UX Guide — 터치영역 설정) | 2026-07-15 | 2026-07-15 | Touch-target minimums per element: FAB 52pt (button = touch area, ≥16pt margin), nav icons 34px icon/40px touch/8-16px gap, generic icon & check buttons 36px touch/8-16px gap, list/card icon buttons 36px touch/8-12px gap + one primary action per row. Thumb-zone (75% of taps are thumb-driven, Josh Clark cited) and one-action-per-card principles precede the sizing table. Same frame-layer-vs-on-canvas-number mismatch as color-contrast confirmed again here. |
 | [nds-ux-guide-updown-notation](projects/nds-ux-guide-updown-notation.md) | `nEINCcmC7AVkWSqRkq60y1` (NDS_UX Guide — 등락기호표기) | 2026-07-15 | 2026-07-15 | Two parallel systems: ▲/▼ triangle (scoped to 지수/현재가/관심그룹/종목요약팝업 only) vs bare +/- sign (standalone rate/return elsewhere). Color: 상승=red, 하락=blue, 보합=green-no-glyph (Korean-market convention, reversed vs US). Only one of amount/rate gets the glyph when both shown together. Financial products with no possible negative return drop the `+` sign entirely. |
