@@ -18,7 +18,7 @@
 
 Reference data collected from a real NHIS Digital Platform Figma file (org `organization::1445250327526291914`) so future `use_figma` work doesn't have to re-discover the same components from scratch. Always confirm keys still resolve with a quick `importComponentSetByKeyAsync` before relying on them — libraries evolve.
 
-**Promotion bar note** (for consistency with `../asset/LEADER.md` and the production-site domains, which require ≥2 independently-learned projects before promoting a claim to their own "Common patterns" section): this Core reference doesn't wait for a 2nd source. NDS is a single canonical design-system library — one confirmed observation from the real, subscribed library file is already authoritative, since there's no second independent implementation to cross-check against. `asset` covers independently-built shipped screens that might each do things their own way, so that domain's bar is intentionally higher. This is a deliberate difference in how the two domains work, not an inconsistency.
+**Promotion bar note** (for consistency with `../asset/COMMON.md` and the production-site domains, which require ≥2 independently-learned projects before promoting a claim to their own "Common patterns" section): this Core reference doesn't wait for a 2nd source. NDS is a single canonical design-system library — one confirmed observation from the real, subscribed library file is already authoritative, since there's no second independent implementation to cross-check against. `asset` covers independently-built shipped screens that might each do things their own way, so that domain's bar is intentionally higher. This is a deliberate difference in how the two domains work, not an inconsistency.
 
 ### Libraries
 

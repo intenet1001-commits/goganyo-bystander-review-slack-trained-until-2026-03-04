@@ -96,7 +96,7 @@ Both `NAMUH/*` and `NM/*` style families exist on this page for the same rate-ce
 
 ## Core reference cross-check
 
-The Core reference (`../LEADER.md`) lists:
+The Core reference (`../CORE.md`) lists:
 - `Table_cell` (key `fc81ad075240f81283ab0769426639ff87b6e542`, Type: `rate`/`with button`/`button`/`multi`/`2line`/`global`/`basic`)
 - `Table_header` (key `8074b6b4ab30e8d392bfb6aec6857386f10e5006`, Type: `switch`/`sorting`/`2Line`/`basic`)
 

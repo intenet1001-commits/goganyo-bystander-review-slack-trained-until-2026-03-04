@@ -191,7 +191,7 @@ The guide presents both as valid and does **not** declare a winner — it's illu
 
 ## Component keys / variants observed
 
-The deck is drawn with flat illustrative mockups, **not** live NDS_Library instances — no componentKeys are cited anywhere on this canvas. Cross-referencing the `LEADER.md` Core reference:
+The deck is drawn with flat illustrative mockups, **not** live NDS_Library instances — no componentKeys are cited anywhere on this canvas. Cross-referencing the `../CORE.md`:
 
 - **`tab_2depth_chip`** (key `0f20528265a3c598e42e30f6ae422be67e941c10`, Core reference) is the closest library component to this guide's **단일선택 chip** (50px, 2~7 items). The Core reference's existing note — that its `Default` variant ships pre-populated with several `tab_btn`+`TXT` pairs — is consistent with this guide's 2~7 item range; nothing here contradicts it.
 - This guide names **seven** distinct tab-ish controls (`tab 1`–`tab 5`, 세그먼트 컨트롤, 단일선택 chip), but the Core reference only records one tab component. **Nothing in this guide resolves how `tab 1`–`tab 5` map onto NDS_Library components** — the names look like guide-internal labels, not library component names. Do not assume a `tab_1`…`tab_5` component exists; search the library before building.

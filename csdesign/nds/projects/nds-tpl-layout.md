@@ -62,7 +62,7 @@ Explicit-node-ID resolution succeeded on every attempt (page-wide `getMainCompon
 
 - **Cross-file corroboration**: 492px content width / 24px margins inside a 540px canvas, independently confirmed on both NDS_Templates (this page) and NDS_M.web's Layout page — a genuinely cross-platform, cross-file convention, not a one-off.
 - **`header_basic` and `quickmenu_basic` both match Core exactly** — two more data points for Core over M.web's rival keys on `header_basic`.
-- **`statusbar` name-collision problem gets worse**: a new, distinct key (`fe57c685…`) joins the ≥4 already logged in LEADER.md's Open Questions — same name, different real published components, unresolved.
+- **`statusbar` name-collision problem gets worse**: a new, distinct key (`fe57c685…`) joins the ≥4 already logged in `LEDGER.md` — same name, different real published components, unresolved.
 - Screen-navigation and header-button semantics are genuinely new content (verbatim rule copy), not duplicated anywhere else learned so far.
 - `btn_bottom_page`'s variant name literally embeds `Channel=btn_bottom_layerpopup` — a stray/garbled Channel value (should be `NM`/`QV`), a minor data defect worth flagging alongside the file's other `\b`/`\x08` naming glitches.
 

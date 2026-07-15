@@ -53,7 +53,7 @@ Pointer to the live components:
 > "사용 예시
 > Figma → NDS_Templates → Popup 참고"
 
-i.e. the guide explicitly defers real popup construction to the **NDS_Templates** library (libraryKey in `LEADER.md` Core reference) — don't hand-build these.
+i.e. the guide explicitly defers real popup construction to the **NDS_Templates** library (libraryKey in `../CORE.md`) — don't hand-build these.
 
 ### 원칙 1 — 헤더 (`1:4568`)
 > "**원칙 1)** 헤더를 임의로 삭제하지 않으며, 헤더는 문장형으로 사용하지 않습니다."
@@ -210,7 +210,7 @@ Note the polarity **inverts** between the two pairs on this slide: a bottom butt
 
 ## Component keys / variants observed
 
-The deck is drawn with flat illustrative mockups, **not** live NDS_Library instances — no componentKeys are cited anywhere on this canvas. Cross-referencing the `LEADER.md` Core reference:
+The deck is drawn with flat illustrative mockups, **not** live NDS_Library instances — no componentKeys are cited anywhere on this canvas. Cross-referencing the `../CORE.md`:
 
 - The guide twice points at **NDS_Templates** for the real artifacts: "Figma → NDS_Templates → Popup 참고" (`1:4228`) and "NDS_Templates → Sample Page → 완료 참고" (`1:4480`). The Core reference already records NDS_Templates' libraryKey (`lk-6485b4ef...`) but describes its contents only as "Full page templates (e.g. product order flows)" — **this guide establishes that NDS_Templates also contains the canonical Popup set and a Sample Page → 완료 spec.** Worth promoting.
 - **`popup_radio_account`** (key `bca81c36fdb886105179354ec7c1a6b150c0d0e8`, Core reference) matches this guide's 계좌 선택 / 출금 계좌 선택 examples (`1:4568`, `1:4634`) — which are exactly the 원칙 2 Exception case (header `X`, no bottom buttons, immediate apply). The Core reference's existing warning — "Do not shrink below ~330px width; use full-width, stacked vertically" — is consistent with this guide's fixed-width philosophy; nothing contradicts.

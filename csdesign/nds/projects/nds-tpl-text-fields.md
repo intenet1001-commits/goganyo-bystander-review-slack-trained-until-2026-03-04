@@ -67,4 +67,4 @@ Instance layer names (`input_line`, `input_box`, `input line_certify`, `btn_cont
 
 ## CORE
 
-Core reference (`../LEADER.md` → "Verified component keys") has **no text-field/input row at all**. Recommend adding: `input_line` `21f296d2…`/SET `54946e9f…`, `input_box` `7c70293709…`/SET `123c8f22…`, `input line_certify` `1fa804c1…`/SET `16b2d524…` — all `remote: true`, all directly corroborated on this consumer file per Q4.
+Core reference (`../CORE.md` → "Verified component keys") has **no text-field/input row at all**. Recommend adding: `input_line` `21f296d2…`/SET `54946e9f…`, `input_box` `7c70293709…`/SET `123c8f22…`, `input line_certify` `1fa804c1…`/SET `16b2d524…` — all `remote: true`, all directly corroborated on this consumer file per Q4.

@@ -59,7 +59,7 @@ No LINE variant, no button-row variant, and no other size/height variant exists 
 
 ## CORE reference cross-check — none of the five flagged keys are confirmed here
 
-The Core reference in `LEADER.md` lists five component keys this page was expected to be the source of truth for. **All five are contradicted on componentKey, though two match loosely on visual/structural facts:**
+The Core reference in `../CORE.md` lists five component keys this page was expected to be the source of truth for. **All five are contradicted on componentKey, though two match loosely on visual/structural facts:**
 
 | Core reference key | Expected | Found on this page? |
 |---|---|---|

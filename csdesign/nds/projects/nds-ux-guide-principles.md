@@ -21,7 +21,7 @@ The **foundational page of the whole NDS_UX Guide** — 19 named principles acro
 
 **This page is NOT listed in the file's Welcome/TOC index** (`2:2899`). The TOC lists 17 topics across 4 groups (Accessibility / UX Writing / Patterns / Usage Guidelines); Principles is in none of them. A coverage audit driven by the TOC will report "17/17 complete" and silently miss this page — which is exactly what happened on 2026-07-15 before a baseline test caught it.
 
-**The TOC is not authoritative. `figma.root.children` is.** See `LEADER.md` → "Enumerating pages" for the correct method.
+**The TOC is not authoritative. `figma.root.children` is.** See `LEADER.md` → Mode 1 (LEARN) step 1 for the correct method.
 
 **Placeholder layer names, in the extreme.** Every TEXT node on this page is named either `6개월간 4500시간 단축` or `디자인 가이드라인 / 디자인 시스템의` — leftover template names with **zero** relationship to displayed content. A metadata-only read of this page yields literally nothing true. Every line below was transcribed from screenshots.
 

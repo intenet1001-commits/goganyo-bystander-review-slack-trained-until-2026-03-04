@@ -43,7 +43,7 @@ Two conclusions, worth carrying into any future pass on this file:
 
 ## Component keys / variants observed
 
-**None from this page** — there is no button spec here to cross-reference. Nothing contradicts the `LEADER.md` Core reference; nothing extends it either.
+**None from this page** — there is no button spec here to cross-reference. Nothing contradicts the `../CORE.md`; nothing extends it either.
 
 For reference, the Core reference already records these button-family keys, none of which this page confirms or refutes:
 
@@ -63,6 +63,6 @@ This page contributes **no rules of its own**. Its practical value to a BUILD pa
 - **Do not treat the absence of a Figma button guide as "no button rules exist."** For button work, read, in this order:
   1. `nds-ux-guide-popup.md` → "04. 팝업 하단 버튼" — bottom-button wording, ratios, and the left-slot dismiss rule (the most concrete button rules in this whole file).
   2. `nds-ux-guide-touch-area.md` → "03. UI 요소 별 터치 영역 크기 가이드" — minimum touch-target sizes for FAB / nav / icon / check buttons.
-  3. `LEADER.md` Core reference → `btn_bottom_page_assets` (+ `_gray`) for the real componentKeys and variant axes.
+  3. `../CORE.md` → `btn_bottom_page_assets` (+ `_gray`) for the real componentKeys and variant axes.
 - **For anything those three don't cover** (e.g. in-page box buttons, button hierarchy, states, the "Box, Button" spec the Notion page is named after), the source of truth is **Notion → `nhidesign` → "Box, Button"**, which is **not reachable from this environment**. Flag it to the user and ask for an export or a credentialed fetch rather than inventing a rule.
 - **Don't invent button specs.** Per `figma-use`'s rules and this domain's Mode 2, use real componentKeys and variant names only. If a needed button rule isn't in the three sources above, it is genuinely unknown here.
