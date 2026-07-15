@@ -87,7 +87,7 @@ Decide before starting: are you transcribing screenshot-embedded rules? Answer y
 
 After writing notes files:
 
-1. Add a row per project to the domain's registry/index (for `csdesign`, that's the domain `LEADER.md` → "Registered projects").
+1. Add the entry to **the domain's registry — wherever its Mode 1 step 7 says that is.** For `csdesign`'s split domains (`nds/`, `asset/`) that is **`INDEX.md`**, not `LEADER.md`; for its single-file domains it is `LEADER.md` → "Registered projects". **Check; don't assume.**
 2. State coverage as **N/N against the `figma.root.children` denominator**, not against a TOC.
 3. Promote cross-cutting findings (a decoded variant axis, a corrected token) into the domain's always-on reference section, not just the per-page file.
 
@@ -137,5 +137,8 @@ This skill owns **enumeration, fan-out, and coverage integrity**. Domain-specifi
 
 - **Route via `csdesign/SKILL.md`'s Domains table, by KIND — never by folder name.** A design-system guide/library file → the **guide-kind** domain. Production screens → the **matching project-kind** domain, chosen with that table's tiebreaker (fileKey already registered wins; else Owns-scope match; else **ask** — never default to the oldest project folder). More project folders are expected.
 - Follow that domain's `LEADER.md` **Mode 1 (LEARN)** for note structure, frontmatter, **and write granularity** — the domain decides per-page vs per-file, not this skill.
-- **Register per Step 3 — in whatever files that domain uses.** `nds/` splits its registry: rows go to `sources/<file>.md`, a line to `INDEX.md`, new components to `CORE.md`, new conflicts to `LEDGER.md`. Other domains keep it in `LEADER.md`. **Check the domain's Mode 1 step 7; don't assume.**
+- **Register per Step 3 — into whatever files that domain uses. `LEADER.md` is NOT always the registry.** Read the domain's **Mode 1 step 7** and do exactly what it says. Two shapes exist today:
+  - **Split domains** (`nds/`, `asset/` — they accumulate): the registry is **not** in `LEADER.md`. A line goes to `INDEX.md`, cross-file/cross-project conflicts to `LEDGER.md`, and the always-on baseline (`CORE.md` for guide-kind, `COMMON.md` for project-kind) gets new components/patterns. `nds/` additionally files per-page rows into `sources/<file>.md`. **Writing to `LEADER.md` here registers nothing** — those sections no longer exist.
+  - **Single-file domains** (the `website` pair — one site, one page, no accumulation): registry stays in `LEADER.md`.
+  **Never assume from the folder name or from a sibling domain — a domain gets split the moment it grows, and the skill won't be updated in the same breath.**
 - Re-checking an already-learned file is that domain's **Mode 3 (VERIFY)**, not a fresh learn — but re-run Step 1 regardless, since a page may have been added since.

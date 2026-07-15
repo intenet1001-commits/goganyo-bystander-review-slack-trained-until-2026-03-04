@@ -77,8 +77,10 @@ call, not this one's.)
 6. Write `projects/<kebab>.md` with frontmatter `name`, `fileKey`, `source_url`, `learned_date`,
    `sections_studied`, `status`.
 7. **Register — learning without registering is a no-op.** Add the row to `sources/<file>.md`, a line to
-   `INDEX.md`, any new component to `CORE.md`, any new conflict to `LEDGER.md`. **A note nothing links to does not
-   exist**: on 2026-07-15, 17 notes existed and 3 were registered — the other 14 were unreachable to every consumer.
+   `INDEX.md`, any new component to `CORE.md`, any new conflict to `LEDGER.md`. **When the Figma file is new to this
+   domain, also add a row to `## Learned files` above** (fileKey, `N/N` coverage, its `sources/` path) — that table is
+   the domain's file-level manifest and nothing else updates it. **A note nothing links to does not exist**: on
+   2026-07-15, 17 notes existed and 3 were registered — the other 14 were unreachable to every consumer.
 8. **Report componentKey KIND.** A COMPONENT_SET and each of its variant COMPONENTs carry **different keys**;
    `importComponentSetByKeyAsync` needs the **SET** key. Confusing them manufactured a phantom "conflict" — see
    `LEDGER#header-basic-keys`. Also **confirm the node is even an INSTANCE**: the same name can be a remote instance
