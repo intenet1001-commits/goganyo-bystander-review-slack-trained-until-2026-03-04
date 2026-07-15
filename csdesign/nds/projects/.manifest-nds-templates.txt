@@ -1,0 +1,74 @@
+# NDS_Templates — work manifest
+# fileKey: 1xE0qvn2yv3ZkQ9BwhKT1y
+# Enumerated 2026-07-15 via use_figma -> figma.root.children (the ONLY authoritative method).
+# get_metadata with no nodeId is NOT usable for this (returns session-loaded pages only).
+# TOTAL: 50 pages -> 39 content (indent + "- " prefix), 11 non-content.
+# Content = the denominator for every coverage claim. Do NOT recount from prose.
+#
+# ANOMALIES (found in the page list itself):
+#  - "📍 Button / Overlays  버튼 / 오버레이" appears TWICE: 38490:65993 (pos 5) and 3760:32197 (pos 10).
+#    Pos 5's header is immediately followed by "Padding 여백" — NOT a button/overlay.
+#    => Section headers do NOT reliably group the pages under them. Derive grouping from content.
+#  - Two pages are named " " (a single space): 1030:25731, 17912:7230. Separators.
+#  - "Step Timeline 스텝, 타임라인✔️" carries a ✔️ in its page name; no other page does. Unexplained.
+#
+# --- NON-CONTENT (11) ---
+1. 1030:25730 | "👋  Welcome___________________"
+2. 1030:25731 | " "
+3. 209:9508 | "👀 Template ___________________"
+5. 38490:65993 | "📍 Button / Overlays  버튼 / 오버레이"   <- DUPLICATE NAME
+7. 38486:65992 | "📍 Navigations  내비게이션"
+10. 3760:32197 | "📍 Button / Overlays  버튼 / 오버레이"  <- DUPLICATE NAME
+15. 3760:32198 | "📍 View  보기방식"
+25. 3760:32773 | "📍 Inputs  입력"
+31. 12568:659 | "📍 Indicators  표시자"
+33. 17912:7230 | " "
+34. 209:9496 | "📱Sample Page________________"
+#
+# --- CONTENT (39) ---
+4. 3760:33077 | "    - Layout  레이아웃"
+6. 9665:20994 | "    - Padding  여백"
+8. 32758:4146 | "    - Header 헤더"
+9. 1886:24994 | "    - Tab  탭"
+11. 18352:2356 | "    - Box Button 버튼"
+12. 13604:20760 | "    - Tooltip  툴팁"
+13. 3:158 | "    - Popup  팝업"
+14. 42129:7390 | "    - 매매 주문 확인"
+16. 94:17765 | "    - List  리스트"
+17. 404:13016 | "    - Card  카드"
+18. 3:160 | "    - Data Table  테이블(표)"
+19. 15260:2524 | "    - Chart  차트"
+20. 619:26120 | "    - Banner  배너"
+21. 16397:3177 | "    - Loading  로딩"
+22. 16889:4317 | "    - Thumbnail  썸네일"
+23. 17659:4250 | "    -  Alarm  알림"
+24. 19746:6495 | "    - Coach mark 코치마크"
+26. 1636:23684 | "    - Pulldown (Select)  풀다운, 셀렉트박스, 콤보"
+27. 3760:32774 | "    - Text Fields (Input)  텍스트필드, 인풋"
+28. 304:15709 | "    - Account Controller  계좌 컨트롤러"
+29. 12374:4326 | "    - Search Bar  검색, 검색창"
+30. 6936:17455 | "    - Controls (toggle,switch, check, radio)"
+32. 271:12615 | "    - Indicators (pagination, step)"
+35. 22330:559 | "    - GA4 Tagging"
+36. 309:16791 | "    - 유의사항"
+37. 31836:5060 | "    - 매수방법 선택"
+38. 11153:18299 | "    - Step Timeline 스텝, 타임라인✔️"
+39. 42528:7438 | "    - 의견 남기기"
+40. 23083:4390 | "    - Share 공유하기"
+41. 16357:507 | "    - No data 데이터 없음"
+42. 26819:1617 | "    - link list 이동리스트"
+43. 24156:43629 | "    - CI to CI"
+44. 15364:7116 | "    - Agree process 이용동의"
+45. 30554:12151 | "    - 확인서, 이미지 캡쳐 저장"
+46. 45212:559 | "    - 아티클"
+47. 29065:55508 | "    - 안내페이지"
+48. 302:12285 | "    - 완료팝업"
+49. 9665:19604 | "    - 자주하는질문"
+50. 27668:54043 | "    - 질문지 등록"
+#
+# --- Q4 VERDICT (get_libraries, 2026-07-15): VERDICT A — CONSUMER of NDS_Library ---
+# NDS_Templates SUBSCRIBES to: NDS_Library (lk-e6bea415...), NDS_Colors, NDS_Darkmode Colors,
+#   and NDS_Templates itself (lk-6485b4ef... = it also publishes).
+# CONTRAST: NDS_M.web does NOT subscribe to NDS_Library -> its pages held local doc re-creations.
+# => Templates composes REAL NDS_Library components. Keys seen here CORROBORATE the Core reference
+#    rather than rivaling it. Still classify tiers, but expect published/remote:true.
