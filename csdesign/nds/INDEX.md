@@ -1,6 +1,6 @@
 # INDEX — topic → note
 
-> **BUILD reads this SECOND** (after `CORE.md`), to find which of 119 notes to open. One line per topic.
+> **BUILD reads this SECOND** (after `CORE.md`), to find which of 132 notes to open. One line per topic.
 > **Flags:** ⚠ = contested / unresolved · ⛔ = the guide **cannot be satisfied** with the current library.
 > When a row is flagged, read the `LEDGER.md` anchor **before** building — it will tell you the rule is
 > blocked or the key is untrustworthy.
@@ -35,6 +35,19 @@
 | certificate, capture, 이미지 저장 캡쳐 확인서 | nds-tpl-certificate-capture.md | Templates | — |
 | chart, graph, pie/line/bar/stock/treemap/legend, 차트, 그래프 | nds-lib-chart.md | Library | ⚠ LEDGER#treemap-보합-grey; pasted images are Highcharts docs, NOT NDS |
 | chart, 차트 | nds-tpl-chart.md | Templates | — |
+| CI advisory, 자문사, FAA, OAR, 자문사코드 | nds-ci-advisory.md | CI | ⚠ FAA 75% holes unexplained; breaks the file's own `ss_img_` convention |
+| CI archive, ETF CI exploration, 자동완성, nds_icon_bullet_etf, 아카이브 | nds-ci-archive.md | CI | ⚠ **UNKNOWN — holds the file's NEWEST ETF work, not old**; LEDGER#ci-bullet-etf-rivals |
+| CI banks archive, 은행/증권/기관 구버전, K bank rebrand, 아카이브 | nds-ci-banks-brokerages-archive.md | CI | ⚠ superseded (live quotes it as 구 버전); **150 codes dropped from live** — LEDGER#ci-banks-dropped-codes |
+| CI banks brokerages, 은행/증권/기관, ss_img_company, 기관 로고 | nds-ci-banks-brokerages.md | CI | ⚠ 0 components — CDN filename contract |
+| CI domestic stock, 국내주식, ss_img_ci 종목코드, 코스피, 코스닥 | nds-ci-domestic-stock.md | CI | ⚠ 0 components — CDN filename contract |
+| CI ETF, ETF CI, ss_img_ci_etf, 디폴트 ETF | nds-ci-etf.md | CI | ⚠ LEDGER#ci-etf-occluded-duplicate; not the current ETF design state |
+| CI export rig, export settings, x2 multiplier, 2457 badges, 코스피01 | nds-ci-export.md | CI | ⚠ **x2 enforced via exportSettings**; 34 malformed + 17 duplicate names shipping |
+| CI firm banking, 펌뱅킹, ss_img_bank, 케이뱅크 히스토리 | nds-ci-firm-banking.md | CI | ⚠ `ss_img_bank10` = 1 name / 3 nodes; **undated** |
+| CI media, 언론사, ss_img_press, 벤징가 | nds-ci-media.md | CI | ⚠ press20 empty + **invisibility UNCLEARED (page unreadable read-only)** |
+| CI overseas stock, 해외주식, ss_img_ci_국가티커, usaaapl | nds-ci-overseas-stock.md | CI | ⚠ country+ticker concatenated, no separator — parse width unstated |
+| CI public agencies, 공공기관, 기관코드 | nds-ci-public-agencies.md | CI | ⚠ bare `기관코드.png` — no prefix; case inconsistent |
+| CI simple auth, 간편인증기관, 마이데이터, 기관코드 | nds-ci-simple-auth.md | CI | ⚠ 마이데이터/간편인증 sections byte-identical — copy-paste debris |
+| CI 제작 가이드, CI production rules, naming grammar, clear-space, 200x200, Tiny PNG, CDN, 디폴트 CI, 이니셜, 로고 제작 | nds-ci-production-guide.md | CI | ⚠ LEDGER#ci-etf-occluded-duplicate; ss_img_ci_etc 3-way fork; usd/usa contradiction |
 | ci, to, ci | nds-tpl-ci-to-ci.md | Templates | — |
 | coach, mark, 코치마크 | nds-tpl-coach-mark.md | Templates | ⚠ LEDGER#tooltip-no-rules |
 | color, contrast, 명도대비 색상 | nds-ux-guide-color-contrast.md | UX Guide | — |
