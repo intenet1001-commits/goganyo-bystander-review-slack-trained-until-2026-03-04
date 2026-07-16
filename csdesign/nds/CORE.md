@@ -493,4 +493,25 @@ Every real NDS screen — every frame across NDS_Library, NDS_Templates, and the
     **Import the inner/visible key `e1782bf94b991624a579f9c58c156277fd95080e`. Escalate the buried duplicate for
     deletion.** See `LEDGER#ci-etf-occluded-duplicate`.
 19. **PREFIXES NAME THE CONSUMING SURFACE, NOT THE ENTITY TYPE — and a name is not a unique key (added 2026-07-16, NDS_CI).** `bank` ⊃ 우체국/새마을금고 · `press` ⊃ IR GO/씽크풀 · `FAA28` = 쿼터백**자산운용**. **Never infer what something IS from its prefix.** Worse, **the `ss_img_*` namespace has writers outside NDS_CI** — `press20` is claimed by 벤징가 (empty frame, no outlet mapped: **the slot looks free and is not**), and `FAA`/`OAR` codes are external and expanded nowhere. **NDS_CI is not the source of truth for its own filenames.** Two contradictory retirement conventions coexist **in one file**: 펌뱅킹 **preserves** (`히스토리 참고용` + an old wordmark hidden *inside* the live asset — **a bulk-unhide resurrects a retired bank CI**); 자문사 **deletes without trace**. `ss_img_bank10` is **one name across three nodes** (구버전/신규버전/live) disambiguated by **x-position only** → **2-in-3 chance a lookup returns a history exhibit**.
-20. **`node.opacity` THROWS on `SLICE` **and** `SECTION` nodes — wrap every opacity sweep in try/catch, or test `'opacity' in n` (added 2026-07-16, NDS_CI).** `no such property 'opacity' on SECTION node` / same on SLICE — **confirmed independently by two batches**. Real cost: it killed an invisibility sweep mid-run (134 slices on one page, 7 on another). Since Gotcha 10 makes opacity sweeps mandatory, this trap is on the critical path. **Also: `node.screenshot()` is blocked read-only** (`Can't call "screenshot" in read-only mode`) — use the `get_screenshot` tool instead, and **`findAll(predicate)` deep traversal can trip the read-only guard where `findAllWithCriteria` succeeds** (verified: it unblocked a page a subagent had written off as unreadable). Some pages remain genuinely unreadable read-only regardless — **name the gap rather than implying a clean sweep.**
+20. **`node.opacity` THROWS on `SLICE` **and** `SECTION` nodes — wrap every opacity sweep in try/catch, or test `'opacity' in n` (added 2026-07-16, NDS_CI).** `no such property 'opacity' on SECTION node` / same on SLICE — **confirmed independently by two batches**. Real cost: it killed an invisibility sweep mid-run (134 slices on one page, 7 on another). Since Gotcha 10 makes opacity sweeps mandatory, this trap is on the critical path. **Also: `node.screenshot()` is blocked read-only** (`Can't call "screenshot" in read-only mode`) — **but the `get_screenshot` MCP tool is a different code path and works fine.** Do not confuse them: "cannot be visually verified" is false; sample with the tool.
+
+    **🚨 CORRECTED 2026-07-16 — the earlier root-cause here was WRONG.** This gotcha previously claimed
+    *"`findAll(predicate)` deep traversal can trip the read-only guard where `findAllWithCriteria` succeeds"*.
+    **That was a coincidence mistaken for a diagnosis.** An audit isolated the real trigger to a **single accessor**:
+    **`PageNode.children`**. Touching it on an **unloaded page** triggers a lazy page load, which the read-only
+    sandbox rejects — and the error text (`Operation attempted to modify the file while in read-only mode`) is
+    **misleading: nothing was being written.** The `findAll`→`findAllWithCriteria` swap happened to route around
+    the accessor, which is why it "worked" once and then failed on the next page.
+    **Minimal repro** (reproduced 4× with distinct Debug UUIDs):
+    ```js
+    const page = await figma.getNodeByIdAsync("3618:27");
+    return { n: page.children.length };   // ⛔ throws — this line alone
+    ```
+    **✅ The working path — no page switch needed, `.children` on CHILD nodes is fine:**
+    1. `get_metadata(fileKey, nodeId)` for the child tree (ids/names/types/positions **and `hidden` flags**) —
+       it doesn't invoke the Plugin API at all;
+    2. `await figma.getNodeByIdAsync("<childId>")` per node for what metadata can't see (`opacity`, `fills`,
+       `textDecoration`). **`childNode.children` works** — only the PAGE node's accessor is blocked.
+    **Consequence: "this page is unreadable read-only" was never true.** A page written off on that basis was fully
+    swept (21 frames + text) in **2 calls** by this path. **Before claiming a page is unreadable, try
+    `get_metadata` first — it answers most structure questions without the Plugin API.**
