@@ -10,10 +10,10 @@ domain says how a real screen was actually assembled.**
 | File | What it is | Read when |
 |---|---|---|
 | **`CORE.md`** | Always-on baseline. One row per component, **every** key sighted for it, full 40-hex. Build gotchas. | **BUILD step 1** — always |
-| **`INDEX.md`** | topic → note. 103 topics / 119 notes, with ⚠/⛔ flags. | **BUILD step 2** — always |
+| **`INDEX.md`** | topic → note. 116 topics / 132 notes, with ⚠/⛔ flags. | **BUILD step 2** — always |
 | `projects/*.md` | one note per guide **page** — the actual rules, verbatim | BUILD step 3 — only the 1–2 INDEX points you at |
 | **`LEDGER.md`** | contested / blocked / unresolved, + resolved history | BUILD **only when INDEX flags** ⚠/⛔ · VERIFY **always** |
-| `sources/*.md` | per-Figma-file LEARN forensics + the 119 registry rows | LEARN/VERIFY of that file. **Never at build time.** |
+| `sources/*.md` | per-Figma-file LEARN forensics + the 132 registry rows | LEARN/VERIFY of that file. **Never at build time.** |
 
 > **Why this is split.** Until 2026-07-15 all of the above lived in this one file. At 3 Figma files learned it
 > reached **~36,000 tokens — a single Read exceeded the cap**, so a BUILD pass physically could not read the file
@@ -30,6 +30,7 @@ domain says how a real screen was actually assembled.**
 | NDS_M.web | `uVcmG6GgOl2J8EOlc22wob` | **20/20** | `sources/nds-mweb.md` |
 | NDS_Templates | `1xE0qvn2yv3ZkQ9BwhKT1y` | **39/39** | `sources/nds-templates.md` |
 | **NDS_Library** ⭐ | `72zrHgMLM4zhCjgSuTf7cC` | **42/42** content pages (of 51 total; 9 probed + skipped) | `sources/nds-library.md` |
+| **NDS_CI** | `KmpaYeoYh41F6nyIKvBQ7h` | **13/13** content pages (of 16 total; 3 `---` separators probed + skipped) | `sources/nds-ci.md` |
 
 All coverage measured against `figma.root.children` — see Mode 1.
 
@@ -54,7 +55,7 @@ All coverage measured against `figma.root.children` — see Mode 1.
 Triggered when the user, or a project-kind domain's Mode 2, needs to build a screen/component/prototype.
 
 1. **Read `CORE.md`.** Real componentKeys and variant names only — **never invent a component**.
-2. **Read `INDEX.md`** and find the topic. **This hop is mandatory** — there are 119 notes; scanning them is not a
+2. **Read `INDEX.md`** and find the topic. **This hop is mandatory** — there are 132 notes; scanning them is not a
    plan. If a row is flagged **⚠/⛔, read that `LEDGER.md` anchor before building** — ⛔ means the guide **cannot be
    satisfied** with the current library, and you must escalate rather than fake it.
 3. **Read the 1–2 notes INDEX names.** Those hold the verbatim rules.
@@ -81,7 +82,7 @@ call, not this one's.)
    ⚠️ `p.children.length` is **unreliable for non-current pages** (Figma lazy-loads): 5 of 6 pages in one file
    falsely reported `children=0` or `=2` while holding hundreds of nodes. Sizes come from `get_metadata(nodeId)`.
 2. Load `figma-use` before any Figma call.
-3. Per page: `get_metadata(nodeId)` — **one call**. It overflows on large pages and is auto-saved; read the saved
+3. Per page: `get_metadata(nodeId)` — **one call**. ⚠️ **2026-07-16: `get_metadata` SILENTLY OMITS CHILDREN — an empty result is NOT evidence of an empty page/frame.** Proven on NDS_CI `2585:336`: reported as a self-closing empty `<frame>`, actually 14 children holding the file's only clear-space spec. **Before skipping anything as empty, confirm via the Plugin API** (`setCurrentPageAsync` then `children.length` — it lies on non-current pages). 5 pages were skipped on `get_metadata`-empty across two files; all 5 re-checked and genuinely empty, so coverage held — **by luck, not method.** See `CORE.md` Gotcha 17. It overflows on large pages and is auto-saved; read the saved
    file with a **python line/indent parser**. **Not ElementTree** — the dump is non-strict XML (an unescaped `&`
    breaks it). **Never loop narrower requests.**
 4. **Screenshot every rule-bearing frame.** **Layer names lie, and the convention is per-PAGE, not per-file** — one
