@@ -41,7 +41,7 @@ All from NDS_Library unless noted.
 | Component | key | Variant axes | Notes |
 |---|---|---|---|
 | `header_stock` | `28c77263cb49ee32b6dc3ab6df216e5887659855` | Channel, country, Type | Good reference for header structure (back icon + title + right icons); has nested `tit` and `nds_icon_header` instances |
-| `header_basic` | `c95043e94317fde7230298017f42dd8099e1cbdc` **(corroborated 2026-07-15 — see note)** | Channel, Left Icon, Right Icon (+ `rightType` `기본`/`txt btn`/`two`/`-`, added 2026-07-15 from NDS_Templates `32758:4146`) | **Broken as of 2026-07**: `importComponentSetByKeyAsync` succeeds but instancing throws `"Component set for node has existing errors"`. Build headers manually instead — see Workaround below. Re-test before trusting it again. |
+| `header_basic` | `c95043e94317fde7230298017f42dd8099e1cbdc` **(corroborated 2026-07-15 — see note)** | Channel, Left Icon, Right Icon (+ `rightType` `기본`/`txt btn`/`two`/`-`, added 2026-07-15 from NDS_Templates `32758:4146`) | **ROOT CAUSE FOUND 2026-07-16 — the set itself is FINE.** Instancing throws `"Component set for node has existing errors"` because it **nests `header_title_txt` (`9864:16724`) ×12**, which has two identically-named variants. `header_stock` nests it ×0 and works. **Fix = rename/delete one duplicate variant there; re-keying won't help.** Until then use the manual builder below. **A 2nd, genuinely different SET shares this name** — `07fb2e569ac9d8cd9e31b49cf8770209df58c089` (`Channel × Type`), published **6 seconds** after this one; **both are live in the index.** See the `header_basic` section below + `LEDGER#header-basic-keys`. |
 | `nds_icon_header` | `19619c9f1fd2e3c2e6515542d0484e651f3f30c6` | Type, Color, Darkmode | 81 variants. Confirmed present: `back`, `close`, `info`, `bell`, `bellnew`, `guide`, `kebab`, `stock`, `mic`. Use `Color=2, Darkmode=false` for standard light-mode icons. |
 | `btn_bottom_page_assets` | `0fc4758ec4ab4c83ad6052748c3dabf76d0542e8` | Channel, Type(`1-btn`/`1:2-btn`/`2-btn`), Status(`normal`/`disabled`) | Primary (green) bottom CTA. `1-btn` = full-width single button (540w). `2-btn` = one half of a two-button row (270w) — place two instances side by side. Override text via nested `TXT` node (`findAllWithCriteria({types:["TEXT"]}).find(t=>t.name==="TXT")`). |
 | `btn_bottom_page_assets_gray` | `873d1a7bbe44364aef31c19bbf15f19d7d457265` | Type(`1:2-btn`/`2-btn`, + `(icon)` variants), Status | Secondary/gray counterpart — pair with the green `2-btn` above for confirm-dialog cancel/submit rows. |
@@ -85,6 +85,49 @@ All from NDS_Library unless noted.
 >
 > All keys below are **full 40-hex** and **`unverified`** (read-only session — `importComponentSetByKeyAsync`
 > throws there). Per-page notes hold the **complete** variant-COMPONENT key tables; only SET keys are listed here.
+>
+> ## ⭐⭐ NDS_Library SUBSCRIBES TO ITSELF — this explains most "duplicate key" findings in this domain
+>
+> **Verified 2026-07-16 via `get_libraries({fileKey: "72zrHgMLM4zhCjgSuTf7cC"})`: `NDS_Library`
+> (`lk-e6bea415…`) appears in its own `libraries_added_to_file`.**
+>
+> **Consequence: a component can exist here TWICE** — the live local master (`remote: false`) **and a stale
+> re-import of its own earlier publish (`remote: true`)**. Those pairs are **not rival designs**; they are a master
+> and its own superseded snapshot. Much of what this domain has logged as "N distinct keys for one name" is
+> **version lag, not disagreement.** Classification table:
+>
+> | Observed | Means | Import? |
+> |---|---|---|
+> | `remote: false` + key in publish index | **MASTER** | ✅ **this one** |
+> | `remote: false` + key absent from index | Local unpublished — WIP | ❌ |
+> | `remote: true` + key absent from index | **Stale self-import** — superseded snapshot | ❌ |
+> | `remote: true` + traced to another library | Genuine cross-library import | ⚠️ scope it |
+>
+> **Worked example — `nds_icon_header`, and it runs opposite to the intuitive reading.** Master `19619c9f1fd2e3c2e6515542d0484e651f3f30c6`
+> (`Type/Color/Darkmode`, index 2026-06-19) vs `94ffbc72589e16b24dcaf3532c11b141e6195bf8` (`Type/Color`, no dark). The 2-axis one is **not** a
+> foreign library's reduced version — it is a **pre-Darkmode snapshot of this same component** (index shows the
+> lineage `e40b494d13e6cab0e5cc2c8b5db57b2e5ac94243` 2024-01-12 → the master above, 2026-06-19). **No other subscribed library ships an
+> `nds_icon_header` at all**; M.web's equivalent is `ndsw_icon_header` `1e4f301bff2b205d1076239009529a1ef13a2109`
+> — different name (`ndsw` = web prefix), different key. **The master GAINED the axis; the import predates it.**
+>
+> **Same shape:** `Subpage_top` is **NDS_Templates'**, and currently ships as **ONE** set
+> `d6ad46694b936bf545c099efa3d0a538f91696e4` (2025-10-29) — so `a64d3559986500518141a81b4a6dfce6a29c6ff4` / `4aee11466d7a115bc3da7c400f20a3b527903fff` are two **stale snapshots**,
+> and you almost certainly *can* swap 1-btn↔2-btn via `Type` on the live set. **This page pins two different stale
+> snapshots of another library's component**, which is very likely what a 68px height discrepancy (200 vs 268) was
+> really showing. `sectionbar` and `nds_icon_arrow` collapse the same way.
+>
+> **Publish-index method + its honest limit:** `search_design_system` **absence is strong but NOT proof** — it
+> returns a ranked, bounded set. "Absent from the index" means a targeted name query returned the master *and*
+> same-name records *and* fuzzy hits, **but not that key**. **`importComponentSetByKeyAsync` in a write-capable
+> session is the definitive test** — masters resolve, dead snapshots throw.
+>
+> Confirmed masters (key ✓ in the publish index): `statusbar` `e453babe03efec7dabe6c99a8db8d6a46eebac58`
+> (2026-04-09) · `nds_icon_header` `19619c9f1fd2e3c2e6515542d0484e651f3f30c6` (2026-06-19) · `header_basic`
+> `c95043e94317fde7230298017f42dd8099e1cbdc` (2026-04-07). `statusbar`'s index key is **byte-identical to its local
+> `remote: false` key** — a second independent confirmation of the `header_stock` proof above.
+>
+> ⚠️ **`00_컬러팔레트_라이브러리용` is subscribed TWICE**, under two different library keys (`lk-7cb0b84c…`,
+> `lk-6113fc02…`) — verified in the same call. Likely a colour-domain issue; logged, not chased.
 
 | Component | SET key | Variant axes | Note |
 |---|---|---|---|

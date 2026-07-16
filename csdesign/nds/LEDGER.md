@@ -21,7 +21,16 @@
 
 ---
 
-## search-bar-states — ⛔ **STILL BLOCKED. Corroborated a 4th time 2026-07-16 at the source of truth.**
+## search-bar-states — ⛔ **STILL BLOCKED — but it is THREE requirements, not one. Split it.**
+
+**Verdict per requirement (see `#archive-status-method` for the evidence):**
+- **Voice-mic rule → BUILT, THEN RETIRED.** The archive holds **14 `nds_icon_mic` INSTANCEs**. Not a gap — a
+  removal. **Ask the designer why it went, not whether it can exist.**
+- **탐색형 type → NEVER BUILT.** Zero occurrences, any generation. ⛔ stands.
+- **4th state → NEVER BUILT.** History is **2 → 3**; the count only ever went **up**. The guide's 4th state has no
+  provenance anywhere. ⛔ stands.
+**Bundling these was the original mistake.** A future pass should split into `#searchbar-mic-retired` (reframed),
+`#searchbar-탐색형-missing` (⛔), `#searchbar-4th-state` (⛔).
 
 **⚠️ Read this before "resolving it to 3".** A 2026-07-16 pass recommended exactly that, on the premise that this
 was a *3-vs-4 counting dispute between files*. **It is not, and this entry never claimed it was** — it already
@@ -133,6 +142,13 @@ Core recorded only BASIC; **OPTIONAL is now added to `CORE.md`.**
 
 **Correction to this entry's own wording:** it said the rival is `remote: true`. **In the library both read
 `remote: false`** — expected, since this *is* the home library, so **`remote` cannot discriminate here.**
+
+**⭐ And this collision is NOT the self-import artifact that explains most others (`CORE.md` → subscribes-to-itself).
+The publish index shows both sets published SIX SECONDS APART** — `c95043e9…` at **04:33:29** (the one actually
+instanced, and the source of this entry's 6× corroboration) and `07fb2e56…` at **04:33:35**. **Both are live in the
+index, under the same name.** A near-simultaneous double-publish → **the index genuinely offers two masters.**
+So the original refusal to pick a winner was right for a reason nobody had yet identified: **there is no stale one
+to discard.** Still **escalate** — a designer must say which is canonical, or rename one.
 
 **⭐ ROOT CAUSE of `Component set for node has existing errors` — SOLVED. `header_basic` is neither broken nor
 deprecated.** The error cascades from a nested dependency: **`header_title_txt`** (`9864:16724`) declares **two
@@ -292,16 +308,36 @@ names, categories `Symbol`/`Travel & Places`/`Animals & nature`) vs flat **`nds_
 `People & Body`/`Objects`). **Don't assume either is current.** Related: `nds_nmoji42` and `nds_infographic233` are
 **missing** from otherwise-complete sequences; `nds_infographic138` is **duplicated**.
 
-## statusbar-four-sets — ⚠ CONTESTED (four answers to "how does statusbar do dark mode")
-`e453babe…` `Type=[N2|NM|Clear]` (**no dark concept at all**) · `fe57c685…` `Type`+`Dark mode` · `fef1ad4b…`
-`Type`+`Dark mode` · `794235a4…` `Property 1=night` · plus standalone **`statusbar_darkmode`** `2112d9e7…` (dark as
-a *separate component*). **Setting `Dark mode` on the wrong one throws.** A genuine library-hygiene defect.
-⚠️ **Caveat on this entry's framing:** it was first derived using `remote` to sort masters from copies — **invalid
-in the home library, where masters read `remote: false`** (see `CORE.md` → NDS_Library masters). The **count and the
-incompatible grammars stand**; which are masters vs imports **needs re-deriving.**
-Same class: **`nds_icon_header` has two keys** — master `19619c9f…` (`Type/Color/Darkmode`) and a **2-axis
-`94ffbc72589e16b24dcaf3532c11b141e6195bf8` (`Type/Color`, no dark) imported from an unidentified other library**.
-**Which library ships `94ffbc72…` is unknown** — worth identifying.
+## statusbar-dark-mode — ⛔ **RE-DERIVED 2026-07-16. Not "4 rival sets" — the MASTER cannot do dark mode at all.**
+
+**This entry was twice wrong before it was right; both errors are recorded so they aren't repeated.**
+First framing: "four rival answers to dark mode" — derived by using `remote` to sort masters from copies, which is
+**invalid in the home library**. Second: "`nds_icon_header`'s rival comes from an unidentified other library" —
+**refuted**, see below. The **sharp** finding is better than either:
+
+**The master — `statusbar` `e453babe03efec7dabe6c99a8db8d6a46eebac58`, published 2026-04-09 — has NO dark-mode
+concept whatsoever.** Its only axis is `Type = [N2 | NM | Clear]`. Everything else is a snapshot or a workaround:
+- `fe57c685f5a27a53c49fc56c9999456340140c2f` — `remote: false` + a `Dark mode` axis, **absent from the index** →
+  **unpublished WIP**.
+- `fef1ad4be14eea79c12365981b51051d21ea4a96` (`Dark mode`) and `794235a4fc4e61da6624c9d26bbf7930438874bc`
+  (`Property 1=night`) → **stale self-imports** (NDS_Library subscribes to itself — `CORE.md`), two older grammars.
+- `statusbar_darkmode` `2112d9e78926c14cb1f2dacbc1aac2f3398ede14` → dark as a **separate component**.
+- Legacy `Statusbar` (capital S) `e85a19561355a73969857f6c25d9dbb91c63c715`, 2023-08-07 → retired.
+
+**⛔ The defect worth escalating: the live library cannot express a dark statusbar through its master, so the
+Layout page's own instances reach for stale snapshots to get one.** A BUILD that imports the master and sets
+`Dark mode` **throws** — the axis does not exist. **Escalate: the master needs a dark-mode axis, or the separate
+`statusbar_darkmode` component needs sanctioning.**
+
+**Related and REFUTED — `nds_icon_header` is NOT a cross-library conflict.** Master `19619c9f…`
+(`Type/Color/Darkmode`, index 2026-06-19); `94ffbc72589e16b24dcaf3532c11b141e6195bf8` (`Type/Color`) is a
+**pre-Darkmode snapshot of the same component**, absent from the index, with a visible lineage
+(`e40b494d13e6cab0e5cc2c8b5db57b2e5ac94243` 2024-01-12 → `19619c9f…`). **No other subscribed library ships an
+`nds_icon_header`**; M.web's is `ndsw_icon_header` `1e4f301bff2b205d1076239009529a1ef13a2109` — different name,
+different key. **The master GAINED the axis; the import predates it. Version lag, not disagreement.**
+Same shape: `Subpage_top` (**NDS_Templates'**, now ONE set `d6ad46694b936bf545c099efa3d0a538f91696e4`, 2025-10-29),
+`sectionbar`, `nds_icon_arrow`. **Import the master; a "missing axis" here usually means you're holding a snapshot.**
+Caveat: index **absence is strong, not proof** — `importComponentSetByKeyAsync` in a write session is definitive.
 
 ## quickmenu-easy-undocumented — ⚠ (Core corrected; behaviour still blank)
 `quickmenu_basic`'s `Type=Easy` (간편홈) hides the hamburger and swaps both end caps, exposing menu items present in
@@ -340,6 +376,38 @@ the live `    - Illusts` consolidated everything into the `nds_illust` SET (140 
 subject matter**, not deprecation markers; and `ss_img_` is **not** a legacy prefix (refuted via `nds-lib-icons.md`).
 See `CORE.md` Gotcha 10(c) — opacity is one of this file's four invisibility mechanisms.
 
+**⭐ The `opacity: 0.10` ghost convention is FILE-WIDE, confirmed on two independent pages.** Also on
+`    - Emoji & Nmoji / Infographic Archive`: `nds_nmoji57`, `nds_nmoji146`, `nds_nmoji147` at 0.10. And the
+Illusts ghosting is **selective *within* groups** (프로필: 3 ghosted / 3 solid; 투자종류: 2 of 10; **all 29
+`QV/illust*` solid`) — **a deliberate two-level convention, not incidental styling.**
+**⚠️ Both "no dimming" claims in the first pass were WRONG**, and for the same reason: they rested on
+`get_metadata`, **which cannot see opacity**, without screenshotting the grid. *The flagged gap was exactly where
+the evidence was.* **Strikethrough was 0 on all five archive pages — dimming carried the entire invisible signal.**
+**Against "ghosted = retired":** every ghosted number (08–123) **exists in live's complete 01–140 range**.
+**Concrete test for whoever owns `1165:16606`:** do live `nds_illust08 / 30 / 121` depict the same subjects as
+archive `투자종류/안정적투자_illust08` / `기본/중단_illust30` / `기본/투자성향_illust121`? If yes → migrated-and-marked-done,
+not retired.
+
+## deprecation-marker-👿 — ⭐ an UNDOCUMENTED marker, invisible to metadata
+**`👿` is this org's informal deprecation/scope marker**, and nothing documents it: `👿 일단 제외` (Icons Archive
+`9286:16426`) · `👿 NDS 추가 개발 해당없음` (Quickmenu page, and NDS_Templates' `Search bar_legacy`).
+**Add `👿` / `제외` / `해당없음` to the deprecation sweep** alongside `구버전`/`이전`/`미사용`/`deprecated`/`백업`/`폐기`.
+⚠️ **Its text is an INSTANCE OVERRIDE** — layer name `Comment`, characters `일단 제외`. **Invisible to
+`get_metadata`; recoverable only by screenshot.** A 5th invisibility mechanism in the same family as `CORE.md`
+Gotcha 10 — *the name is not the content, and the content only exists in the render.*
+⚠️ **Not all `👿` mean deprecated:** the Quickmenu badge is a **scope declaration** (components clean, render fine).
+**Read the sentence, don't pattern-match the emoji.**
+
+## archive-means-parking-lot — ⚠ extends "never triage by name" from ENUMERATION to STATUS
+**"Archive" in NDS_Library does not mean "retired" — it means "parking lot". 3 of the 5 archive pages host ACTIVE
+WIP:** a `테스트중` keypad section · a `디자인작업용 🎨` 연금 working area · a battery exploration whose screenshots are
+filename-dated **2026-02-27 / 03-04**. So an archive page can be **simultaneously superseded and actively edited**,
+and a page's *status* is as unsafe to infer from its name as its *content* was. **Judge per frame, not per page.**
+Also parked, not retired: the `확장 활용안` keypad proposal is ghosted at **0.5** as a whole block with
+`사용시 문의요망` — same subject as the live `- Number Keypad`/`- Security Keypad` pages. **Unchased; possible 4th
+conflict.**
+**Coverage hole, not a conflict:** **`NDS_StockIcon_CI`** is a named library outside the learned set.
+
 ## archive-status-method — ✅ RESOLVED as a **method**, worth keeping
 **All four `*-Archive` pages were dated by CROSS-PAGE/CROSS-FILE comparison, not by self-marking** — because
 **none of them carries a page-wide deprecation marker.** The page name is never evidence. What worked:
@@ -352,9 +420,18 @@ See `CORE.md` Gotcha 10(c) — opacity is one of this file's four invisibility m
   and present in both — the archive does NOT hold the missing asset.**
 - **썸네일 → `unknown`**, correctly: judged on its own evidence; its "archive" status is inherited from page
   position only, and it is file-cover art, for which live-vs-deprecated is arguably the wrong axis.
-**Bearing on `#search-bar-states`:** the archive holds **only 2 states** (`NORMAL`/`PRESSED`) across 4 types
-(LINE / R-SQUARE / ROUNDED / COMPLEXE) — **no 4th state, no 탐색형, no mic rule.** So the guide's demands were
-**never built**, not *built then retired*. **The ⛔ stands, and is now confirmed against the file's own history.**
+**Bearing on `#search-bar-states` — ⚠️ CORRECTION, this entry first said "no mic rule … never built". WRONG on the
+mic.** The ⛔ **bundles three requirements with three different histories**, and bundling them was the mistake:
+
+| Guide requirement | In the archive? | Verdict |
+|---|---|---|
+| **Voice-mic rule** | ✅ **14 `nds_icon_mic` INSTANCEs** across LINE / R-SQUARE / COMPLEXE | **BUILT, THEN RETIRED** → reframes |
+| **탐색형 type** | ❌ **zero** occurrences of `탐색형` on the page | **NEVER BUILT** → ⛔ stands |
+| **4th state** | ❌ archive has **2** (NORMAL/PRESSED); live has 3 | **NEVER BUILT — the count went UP** → ⛔ stands |
+
+**Only the mic reframes**, and it matters: "we removed it" is a different conversation with a designer than "we
+never built it". State history is **2 → 3 → (9 variants)** — pure *addition*, so the guide's 4th state has **no
+provenance in any generation**. Source: `nds-lib-search-bar-archive.md`.
 
 ## welcome-toc-drift — ⚠ (recorded so it is never used as a denominator)
 The Welcome TOC **drifts both ways** — worse than the sibling precedent, which only omitted. Real file = **51 pages**
