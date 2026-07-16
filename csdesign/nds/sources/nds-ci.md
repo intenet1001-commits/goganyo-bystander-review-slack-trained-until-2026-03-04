@@ -71,9 +71,9 @@ _(filled in as notes land — one row per learned page)_
 | `해외주식` | nds-ci-overseas-stock.md | **live** — 798 distinct assets. **No `Last update`**; recency from 큰손픽/서비스 batch labels, newest `스페이스 x_ 26.06.12` |
 | `ETF` | nds-ci-etf.md | **unknown** — populated but a **working surface** (21 pasted phone screenshots, an unfinished `삼성자산운용 - `, in-progress icons). **NO stamp, NO batch labels, NO recency signal of any kind.** ⚠️ **NOT the current state of ETF design** — it is the *baseline* the `Archive` page A/Bs against |
 | `Archive` | nds-ci-archive.md | **unknown** — refused `deprecated` in BOTH directions. Contents are **newer** than live ETF (node block 6508 vs 5735; screenshots 2026-07-08; notes 7/13). No live page defines itself against it — and that mechanism exists in this file, so its absence is meaningful |
-| `은행/증권/기관` | nds-ci-banks-brokerages.md | live — content revision stamps `240328` |
-| `간편인증기관` | nds-ci-simple-auth.md | live |
-| `공공기관` | nds-ci-public-agencies.md | live |
+| `은행/증권/기관` | nds-ci-banks-brokerages.md | **live** — both 🏷 sections stamped `240328` (`2827:5055`, `2887:9336`), rendered to confirm legibility (gold-on-dark). **Only dated evidence in its batch.** ⚠️ >2yr old, and **`240328`-as-a-date is INFERRED — the page never says it is one.** 0 components across 3,810 nodes; **235 distinct live codes** (167 SVN + 68 CDN) |
+| `간편인증기관` | nds-ci-simple-auth.md | **unknown** — 18 components, local + populated. **ZERO date stamps** (all 19 `characters` swept for Last update/update/ver./버전/6-digit → no hits). 2 components parked under `미반영` **by spatial band only**. Per method: no stamp ⇒ recency unknown |
+| `공공기관` | nds-ci-public-agencies.md | **unknown** — 6 components, local + populated + clean (**the only fully clean page in the file**). **ZERO date stamps** (all 3 `characters` swept). No parking mechanism exists here, so "nothing parked" vs "no way to say so" is **undecidable** |
 | `펌뱅킹` | nds-ci-firm-banking.md | **unknown** — zero dates anywhere; even the 케이뱅크 CI *change* is undated |
 | `언론사` | nds-ci-media.md | **live** — inline `(25/2/6 추가)`, `(26.03.24 추가)`, `(26.03.24 유유리 팀장님)`. ⚠️ **invisibility UNCLEARED** — page unreadable via Plugin API read-only |
 | `자문사` | nds-ci-advisory.md | **unknown** — zero dates. ⚠️ Highest node id = created LAST, but **node id orders creation, not maintenance** — hypothesis tested and refuted |
@@ -98,17 +98,19 @@ these are *third-party* logos whose colour belongs to 농협/애플, not NH. **G
 byte-for-byte. First time that relationship was demonstrated rather than assumed.
 
 
-## ⚠️ Registry completeness — read this before trusting the CI rows
+## ✅ Registry completeness — all 6 batches returned and are merged
 
-**4 of 6 subagent batches sent structured returns and are fully merged** (guide · export · archive · firm-media ·
-stock). **The `institutions` batch (은행/증권/기관, 간편인증기관, 공공기관) never returned** — its three notes are
-complete and committed, but its **componentKeys and LEDGER conflicts were never merged**, and its INDEX rows were
-written by the orchestrator from reading the notes rather than from the agent's own return.
-**Low expected cost** — the other five batches independently established that NDS_CI's inventory pages carry **zero
-components**, so there are probably no keys to miss — **but "probably" is doing work in that sentence.**
-**Open, and cheap to close:** are the **150 institution codes** dropped from the live banks page *retired*, or
-**re-scoped** into 간편인증기관 / 공공기관 / 펌뱅킹 / 자문사? The institutions batch holds two of those four pages
-and is the only party positioned to answer it. See `LEDGER#ci-banks-dropped-codes`.
+All six subagent batches sent structured returns; **every key and conflict is merged.** The `institutions` batch
+returned last and **refuted two claims the other batches had established** — see below. Nothing is outstanding.
+
+**⚠️ What its late return changed, recorded because a coverage number would have hidden it:**
+- **"0 components on every inventory page" was FALSE.** 간편인증기관 publishes **18** COMPONENTs and 공공기관 **6**
+  — **24 local masters with full 40-hex keys** that CORE had asserted did not exist. Correct claim: **NDS_CI is not
+  a *variant* library (0 COMPONENT_SETs anywhere), but two pages do publish standalone COMPONENTs.**
+- **The `ZYAAQH0000` "copy-paste debris" reading was BACKWARDS** — the page states the code-reuse policy in prose.
+- **The casing was recorded wrong** (`zyaaqh0000` → really `ZYAAQH0000`), and the split is `511:2`-vs-everything,
+  not 간편인증-vs-공공기관.
+- **The `#ci-banks-dropped-codes` diff was malformed** — it mixed the SVN and CDN families.
 
 ## Method notes for the next pass on this file
 

@@ -526,7 +526,29 @@ mechanism as `nds-lib-search-bar-archive`'s `확장 활용안` (0.5). **Meaning 
 holds **317**. So **150 codes were dropped from live**, plus **all 79 `ss_img_sb_*`** (live: zero).
 **But it is NOT a strict superset** — live *added* `ss_img_company_030` and `_221`. **Whether the 150 are retired
 or merely RE-SCOPED is unresolved**: live gained a `보험/캐피탈` heading the archive lacks, so the taxonomy changed.
-**Cheap untested next step: sweep 간편인증기관 / 공공기관 / 펌뱅킹 / 자문사 for the 150.** Do not assume retired.
+**⚠️ TESTED 2026-07-16 — RE-SCOPE REFUTED, and my own diff was malformed.**
+**(a) The cheap test came back a clean negative.** **None of the 150, and none of the 79 `ss_img_sb_*`, appear on
+간편인증기관 or 공공기관.** The namespaces are **disjoint, zero overlap**: `511:2` = `a1`–`a4`/`c1` + 68
+`ss_img_company_*`, **0 `ss_img_sb_*`** (regex-swept across all 3,810 nodes — *confirmed absent, not assumed*);
+`1251:2` = `ZY`/`ZV`/`ZW` + `ss_img_ci_*`; `1255:2` = `PB`. **Not re-scoped there.**
+**(b) ⛔ My "not a strict superset" was an artifact of mixing two disjoint families.** `167` is exact **and it is
+the SVN family** (167 live SVN frames, all distinct). But **`ss_img_company_030` / `_221` — my two "live
+additions" — are `ss_img_company_*` = the CDN family**, a *separate* 68. **A 167-of-317 SVN comparison cannot be
+contradicted by CDN additions. Re-run the diff per family.**
+**(c) ⭐ Better hypothesis — CONSOLIDATION, not retirement (test it, do not adopt it):** the archive's **79
+`ss_img_sb_*`** vs live's **80 `a3` (저축은행)**, with CDN retaining exactly **one** generic
+`ss_img_company_050` → `050. 저축은행`. Reads as: per-bank logos dropped from CDN, one generic mark kept, per-bank
+identity **moved to SVN `a3`**. **`80 = 79 + 1` fits precisely** — the live `a3` includes `a3aaph0000`
+상호저축은행중앙회, the **association**, not a bank.
+**Decisive test, not yet run:** diff the archive's 79 `ss_img_sb_*` names against the live 80 `a3` names (full list
+in `nds-ci-banks-brokerages.md`; **extracted via `use_figma` — `get_metadata` cannot see them**). **79:79 → closes
+as consolidated.**
+**(d) `보험/캐피탈` CANNOT absorb the 150 — the column is EMPTY.** Rightmost asset x=11769; the heading sits at
+x=12290; **nothing at or beyond it.** A category with zero members. Corroborating: the page's only insurance logo,
+`a1aahe0000` 미래에셋생명보험, is filed at x=8974 **under `은행`**. A planned home never populated — *inference,
+flagged.*
+**Verdict: NOT on the sibling pages (established). Retired / consolidated-into-`a3` / parked-pending-`보험/캐피탈`
+— UNRESOLVED.** Do not assume retired.
 
 ## ci-export-multiplier-x2 — ✅ **CI badges ship at x2 — enforced, not prose. Scope it narrowly.**
 The `export` page's rig settles the multiplier **for CI assets only**, in the strongest available form — **what
@@ -585,6 +607,27 @@ all instance-internal chart gridlines; **not one `ss_img_ci_*` is dimmed at any 
 **The convention is real in NDS_Library (65 of 153 illusts, selective within groups) and largely absent here.**
 **Sweep per page; never inherit the verdict.** **Two real whole-block parks stand:** `ETF_메인_테마` (`6461:8422`)
 @ **0.3**, and NDS_Library's `확장 활용안` @ **0.5** — both meanings unstated.
+
+## ci-mydata-code-reuse-is-policy — ✅ **RESOLVED — and the "copy-paste debris" reading was BACKWARDS**
+A prior pass flagged `마이데이터` and `간편인증기관` sharing the exemplar `ZYAAQH0000` as **likely copy-paste
+debris**, on the premise that "a real 간편인증기관 code exactly equalling a 마이데이터 code is implausible".
+**The premise is inverted. The page states the opposite in prose** (`1312:4`, verbatim):
+> `추가 되는 사업자도 마이데이터 사설인증기관 기관코드명으로 관리`
+**간편인증기관 are keyed BY their MyData private-cert-body code. Identical codes are the policy working, not a bug.**
+Note **마이데이터 has TWO code families** and they are different things: **마이데이터 기관코드** = `a1/a2/a3/a4/c1`
+lowercase (page `511:2`, label `SVN 마이데이터 기관코드`) vs **마이데이터 사설인증기관 기관코드** = `ZY/ZV/ZW`
+(page `1251:2`). `ZYAAQH0000` = 네이버 is the **second**.
+⚠️ **Narrow caveat left open:** whether the two *sections* are byte-identical **in layout** is a separate question
+and may still be debris. **Just never cite the shared code as the evidence.** Re-test on layout.
+
+## ci-govt-symbol-unspecified — ⛔ **ESCALATE: statute-governed marks reproduced with no spec and no citation**
+`공공기관` (`1255:2`) reproduces the **ROK 정부상징** for 국세청 / 관세청 / 행정안전부. That mark is governed by
+**statute** (정부기 및 정부상징 규정) — **independently of any private agreement** — with prescribed colour,
+proportion and clear-space in its own official manual. **The page carries no spec, no citation, and no rule.**
+**The most regulated marks in the file are the ones with no rule attached.** Also present without any usage rule:
+네이버 · 카카오 · 토스 · 삼성 · KB · 신한 · NH · PAYCO · PASS · 정부24.
+**This is a legal/brand question, not a design one — this domain cannot answer it. Escalate.**
+**Absence of a rule is not a grant of one** — no permission was inferred.
 
 ## ci-third-party-logo-rules-absent — ⚠ **no usage/permission/attribution rule exists anywhere in this file**
 Swept every TEXT `characters` across the institution pages: **no permission, licence, attribution, or trademark
