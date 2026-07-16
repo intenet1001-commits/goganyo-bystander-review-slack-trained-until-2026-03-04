@@ -30,6 +30,7 @@ Discovered via `get_libraries({ fileKey })` on a file already subscribed to NDS.
 | NDS_Templates | `lk-6485b4ef7b0b10972b6bedaec2939b2704dde7bf1b3c11029414263b122918e9dec57db8c867a3e3c30d3ccd34568ea2cd685c80389235d66d054f4a651770a6` | **corrected 2026-07-15** — was described as "Full page templates (e.g. product order flows)". **It is not flows.** Its most flow-like page (`42129:7390` 매매 주문 확인) was probed: 3 top-level artifacts, **zero prototype links**, each a frozen confirm moment in a different product context — a component/pattern page. Read it as **composition/usage examples** of NDS_Library components. File `1xE0qvn2yv3ZkQ9BwhKT1y`; **subscribes to NDS_Library**, so its keys corroborate this table rather than rivalling it. See `### NDS_Templates` above (10/39 learned). |
 | NDS_Colors | `lk-a53c04528e4f6b93f81844642ba2d019d3e52894662e8def952bf0ea35739941a9316cf5abf9c2320d59cb70e584b84d7cf59c567ef44d17dc5791fd1ad0ea9b` | Color fill styles — names are cryptic numeric codes (e.g. `NM/Primary/270.274`, `NM/Grayscale/20.203`), not semantic. Faster to sample colors directly off existing component instances (see Tokens below) than to decode style names. |
 | NDS_Darkmode Colors | `lk-77c238f65d24623b72cc780ce48ba757b17edd3122aea855450a33fe3643b869cd2d2a19c2079333cbdcaf940375e853687bb924c00dac4398a46b2497ea4121` | Dark-mode counterpart color styles |
+| **NDS_CI** (added 2026-07-16) | *(file `KmpaYeoYh41F6nyIKvBQ7h` — no libraryKey; it **publishes nothing**)* | **⛔ NOT a component library — a CDN asset catalogue.** Third-party institution/stock CI. **⚠️ CORRECTED 2026-07-16 — it is not a VARIANT library, but it DOES publish components.** `COMPONENT_SET` = **0** everywhere (no variant axes anywhere in the file). But `COMPONENT` is **not** 0: **간편인증기관 publishes 18 and 공공기관 publishes 6** — 24 local (`remote:false`) page-parented masters with full 40-hex keys, listed below. **0 components** holds only for 은행/증권/기관, 국내주식, 해외주식, and `export` (fully flattened: 0 COMPONENT/SET/INSTANCE across 209,573 nodes). The ETF page has **128 INSTANCEs** (mostly one pasted mockup). **⛔ Keys ≠ delivery path — both are true at once:** CDN-PNG-by-filename at *runtime*, Figma components at *design-time*. **A build that sees these keys and calls `importComponentByKeyAsync` against a filename contract is wrong.** logos are plain FRAMEs with image fills or flattened geometry. **There is no key to import for any logo.** The contract is a filename resolved server-side: **`downloadcdn.nhqv.com/mts/ci/이미지명.png`**, falling back to **디폴트 CI** on 404. The **only** importable sets are the 8 defaults on its guide page (below). It **consumes** NDS_Library — its `nds_flag` instance resolves to `d81573482ffbff1e5076384753d483a3072d775f`, matching `nds-lib-icons.md` byte-for-byte. See `LEDGER#ci-not-a-component-library`. |
 | **NDS_M.web** (added 2026-07-15) | `lk-3be70d25016393cffa2f36eac4d994fcd5f0c6417dfd4e8a182bbb77346e00a57e7b97d48be832f9ef35e37b02862383ee65d47d437001b9182bd1103d6b3d6c` | **Mobile-web component library — a separate platform from the rest of this table, which is app-side.** Its own file (`uVcmG6GgOl2J8EOlc22wob`) does **not** subscribe to NDS_Library. Keys/components here are NOT interchangeable with the app keys below even when the names match — see `### NDS_M.web` above for the three-tier warning (published vs page-local doc copy vs unpublished export scaffolding). Uses Pretendard, not NanumBarunGothic. |
 
 `Channel` variant property seen across many components: `NM` = 나무(NAMUH?) main channel, `QV` = QV channel. Default to `NM` unless the target screen is explicitly a QV surface.
@@ -168,6 +169,137 @@ All from NDS_Library unless noted.
 2. **`Type` has a third value `Easy`** (간편홈) — it **hides the hamburger** (`visible: false`) and swaps both end
    caps, exposing menu items present in no other variant. **"hamburger + 5" does not describe `Easy` at all.**
    Also `Type=pressed` is **532px tall** — it is the expanded overlay, **not** a button-press state.
+
+### NDS_CI — the 8 default/fallback CI sets (added 2026-07-16)
+
+> **These are the ONLY importable components in NDS_CI**, and they exist *because* the CDN can 404 — the
+> `MTS 종목 로고 노출 정책` renders 디폴트 CI on a miss. Every actual logo is a CDN filename, not a component.
+> All `remote: false` = **local masters** (this is their home file). All `unverified` (read-only session).
+> **All 8 read `variantGroupProperties` cleanly — zero `Component set has existing errors`**, so the
+> duplicate-variant diagnostic does not fire here (contrast NDS_Library's 7 throwing sets).
+
+| Set | SET key | Variants | Axes |
+|---|---|---|---|
+| `ss_img_ci` | `1e5ac724199f6a6910c9c7de5a0d8c8e3f1591fc` | 10 | `Property 1=[bond\|dls\|els\|foreign\|fund\|mmw\|option\|rp\|trust\|ima]` |
+| `ss_img_ci_etc` | `f3a7b6ed87a9914c0dca2f1f87d2c77cd9164dc4` | 9 | `Country=[usd(미국)\|aus\|chn\|deu\|gbr\|hkg\|idn\|jpn\|vnm]` ⚠ see `LEDGER#ci-usd-usa-contradiction` |
+| `ss_img_ci_etc` | `6df9754dd059b28f1944788478c8084590ca4820` | 4 | `Property 1=[etc\|kor_etc\|oversea_etc\|research_etc]` ⚠ 3-way name fork |
+| `ss_img_ci_etc` | `b4665cca504f745b79265bd96065cb79067088ba` | 3 | `Property 1=[ksp\|ksq\|knx]` ⚠ 3-way name fork |
+| **`ss_img_ci_etf`** | **`e1782bf94b991624a579f9c58c156277fd95080e`** | 3 | `Property 1=[kr\|us\|global]` — ✅ **the visible one. USE THIS.** |
+| `ss_img_ci_etf` | `b2862b1a740d8f3864c8003c98cbc5192324f566` | 2 | `Property 1=[kr\|global]` — ⛔ **occluded, no `us`.** `LEDGER#ci-etf-occluded-duplicate` |
+| `ss_img_ci_etn` | `5b7982db65feff2bf690c64d1ad7029ba4017d45` | 2 | `Property 1=[kr\|global]` |
+| `noimage_initials` | `52de7493c27ff680a71ac3097bd0e373ef0dea0f` | 2 | `Property 1=[English\|Korean]` |
+
+### NDS_CI — the 24 institution COMPONENTs (added 2026-07-16; CORE previously said these did not exist)
+
+> **KIND: standalone `COMPONENT` for all 24 → `importComponentByKeyAsync`, NOT `importComponentSetByKeyAsync`.**
+> There are **0 COMPONENT_SETs** on these pages, so there are no axes, no `variantGroupProperties`, and the
+> duplicate-variant⇔set-errors diagnostic is N/A. Tier (a) local masters (`remote:false` in the home file, judged
+> by structure — page-level, populated, non-instance). All **`unverified`** (read-only).
+> ⛔ **These are design-time components. Delivery is still CDN-PNG-by-filename. Do not confuse the two.**
+
+**간편인증기관 (`1251:2`) — 반영 / live:**
+| Code | Key | Institution |
+|---|---|---|
+| `ZYAAQH0000` | `34a07e607231d35e29d45eda3f6863084377f365` | 네이버 |
+| `ZYAAASPASS` | `d55dde969b42904f79bf5b361473a9003815f4df` | 삼성패스 — **NDS-minted exception** |
+| `ZYAAER0000` | `f5f7c16f0752f2ef5f100ccc68906762a97db80c` | 신한인증서 |
+| `ZYAAPC0000` | `09528e1bcb7f828099fb3435f6f62778efff01f6` | 카카오톡 |
+| `ZYAAIE0000` | `cebbdbe1558097562396adba84f1ab7a09476469` | 페이코 |
+| `ZYAAEO0000 ` ⚠️ **trailing space at source** | `3527191139eae0274691731f2f28a9c374378ae4` | KB스타뱅킹 |
+| `ZYAAATPASS` | `1878c076148fc3b574a65a4ec29fbb7e14fc8ff1` | PASS인증 — **aggregate of all 통신사** |
+| `ZYAADV0000` | `2c70601c1a8f5303ab655cd3bafd098eea2efa6a` | 토스 |
+| `ZYAABN0000` | `6024a4a37212b4ec5e062fbc578278f69d85de69` | 뱅크샐러드 |
+
+**간편인증기관 — ⛔ 미반영 / PARKED, do NOT ship:**
+| `ZVAAES0000` | `68024319b8b34607ddfe6eb0bd7a5b837322939c` | 하나은행 |
+| `ZWAACP0000` | `eee9e58691db7a88fc49d2b5ac7850275ee1612f` | NH인증서 |
+⚠️ **Parked by SPATIAL BAND ONLY** — a `반영`/`미반영` heading. **Nothing on the node marks it**: no name flag, no
+opacity, no hidden. **Undetectable except by y-position.** And with **no date stamp anywhere on the page**, a
+2-year-old "pending" is exactly what silently becomes "shipped" without anyone moving the component.
+**Re-confirm against the live app before using either.**
+
+**간편인증기관 — 모바일 신분증인증 (`ss_img_ci_appCode`):**
+| `ss_img_ci_100` | `d4aefae71456530346efd62845f698201c2ecbae` | 정부24앱 ⚠️ see appCode conflict |
+| `ss_img_ci_101` | `44a99f28ea6b34696cf9fc3bcc1d5991a528ae93` | 삼성월렛 |
+| `ss_img_ci_201` | `f4cd6d510efe20273dd17f42b6f9f7c87fb69ad4` | 카카오뱅크 |
+| `ss_img_ci_202` | `50840e2361dae76e79d8aafc28149758f5828453` | 네이버 |
+| `ss_img_ci_203` | `f93468d9c8c736d7dce2c426eeec16cd8b5f446b` | 토스 |
+| `ss_img_ci_204` | `da0f01e688a095fbeab2892ae3b320102b33939c` | NH올원뱅크 |
+| `ss_img_ci_205` | `7d4c5bd121c7767211418101397a9294afe4f848` | KB국민은행 |
+
+**공공기관 (`1255:2`) — `PBAA` system; the only fully clean page in the file:**
+| `PBAAVN0000` | `d748555458f89cf357bfc49a2833a11d84243d5a` | 국민건강보험공단 |
+| `PBAAVM0000` | `9806062b4418360b9523bfc845cdbfa0a2e14d1b` | 국민연금공단 |
+| `PBAAVJ0000` | `b136d0d9c49b43bd9e7bb3b0b3d6e65b2ddb296f` | 국세청 ⚠️ |
+| `PBAAVK0000` | `5ea941dd5e55b8dd429e9125d025c808666431e5` | 관세청 ⚠️ |
+| `PBAAVL0000` | `ccf48e19e6a3fba2d57f3c660ea2287232443858` | 행정안전부 ⚠️ |
+| `PBAAVO0000` | `540ec3e0cadcf587f27dd1d2b67158a237210232` | 공무원연금공단 |
+⚠️ **`PBAAVJ`/`PBAAVK`/`PBAAVL` are VISUALLY IDENTICAL** (the 정부상징, no text). **The code is the sole
+discriminator** → **visual dedupe or asset-hashing destroys the mapping**, and the UI *must* render the agency
+name. **Invisible to `get_metadata`; caught only by rendering.**
+
+**CI production rules — verbatim** (guide `2581:324`, stamped `Last update  2024.02.27 Moana` [sic, double space]):
+`기본적으로 유색배경으로 제작합니다.` · `심볼은 벡터형식으로 제작하나, 불가피 할시 이미지로 넣습니다.` ·
+`흰색배경으로 제작해야할 시 라인은 017 컬러코드 2pt 두께입니다.` ·
+`기존 제작되어 있는 이미지 크기와 상관없이  앞으로 제작되는 사이즈는 200x200 1배수 제작합니다.` [sic, double space] ·
+`200x200 1배수로 추출합니다. (Tiny PNG 필수!!!)` ·
+`이미지명을 프레임명으로 제작하며, 그룹 네이밍을 기관 및 종목 명칭으로 적용합니다.`
+**Layer-stack contract:** `<filename> / <종목·기관명> / symbol / Ellipse` — e.g. `ss_img_ci_017860` / `DS단석`.
+**`017` 컬러코드 ⇒ `#E0E0E0` @ 2pt** — ⚠️ **measured from two exemplars, NOT stated at source.** Confirm against
+the colour-token table before treating as canon.
+**Initials:** `글자 : Pretendard, Semibold, #FFFFFF, 20px(40x40 기준)` · `배경 : #333333` · `align center 상하좌우.`
+⚠️ **`Semibold` (one word, source) ≠ Figma's `"Semi Bold"` (two words) — `loadFontAsync` throws if you pass it
+through.** ⚠️ **How 20px scales to the 200×200 canvas is blank at source — do not infer 100px.**
+
+**⭐ Clear-space spec — the file's only one, and it has ZERO words** (guide `2585:336`, `scale guide`).
+Recovered from child geometry after `get_metadata` reported the frame **empty** (Gotcha 17). Canvas 200×200:
+guide squares `168/120/72`; three `#FF0000`@10% safe-area tints → **square symbol ≤ `104×104`** · **portrait ≤
+`88w×120h`** · **landscape ≤ `120w×88h`**. **⇒ at 200×200 a symbol never exceeds 120px on its long axis, and never
+104px if square.** The union is a plus/cross envelope — corners always clear, keeping the mark optically inside the
+circle. ⚠️ **"max bounds" is a reading of an unlabelled diagram** — natural given the three-aspect structure, but no
+text confirms it.
+
+**Naming grammar — per-asset-class. There is NO single `ss_img_ci_*` rule:**
+| class | pattern | exemplar | size |
+|---|---|---|---|
+| 국내주식 | `ss_img_ci_종목코드(숫자).png` | — | 200×200 |
+| 해외주식 | `ss_img_ci_국가티커(알파벳).png` | `ss_img_ci_usaaapl` (= `usa`+`aapl`, **no separator**) | 200×200 |
+
+⚠️ **`국가` is fixed 3 chars, lowercase — TRUE TODAY BUT WRITTEN DOWN NOWHERE.** 797 of 798 overseas assets are `usa`. **The ambiguity is already live, not hypothetical: `ss_img_ci_usaa` = `usa`+`a` (Agilent, ticker `A`)**; `usakr`(Kroger), `usako`(Coca-Cola), `usajd`(JD) all parse as two country codes. **77 tickers are ≤2 chars** — systematic exposure the moment a second country ships. **CORE states the rule the source doesn't: 3-char lowercase country, remainder = ticker.**
+⚠️ **Share classes break the layer-name key**: names drop `.a`/`.b` while the manifest keeps them → **7 securities unreachable by layer name, 6 return the wrong logo**. Two encodings ship (`usabrk.a` vs `usafoxa`). **The manifest is authoritative for overseas, not the layer name.**
+| 은행/증권/기관 | `ss_img_company_숫자.png` | `ss_img_company_002` (3-digit, zero-padded) | 200×200 |
+| 마이데이터 · 간편인증기관 · 공공기관 | **bare `기관코드.png`, no prefix** — ⛔ **NON-DISCRIMINATING**: the identical caption governs two different systems on two pages. Not a spec. | `ZYAAQH0000` (간편인증) / `PBAAVN0000` (공공) — **both UPPERCASE**; `511:2` is **lowercase** (`a1aaad0000`) | 180×180 ⚠ |
+| 펌뱅킹 | `ss_img_bank숫자.png` | `ss_img_bank06` | **180×87** ⚠ |
+| 언론사 | `ss_img_press숫자.png` | `ss_img_press01` | **200×80** ⚠ |
+| 자문사 | **`자문사코드.png`** ⚠ breaks the file's own `ss_img_` convention | `FAA07` | — |
+**⭐ Institution codes — the grammar the source never writes down** (derived, verified across 3 pages):
+**`<class><AA><xx>0000`** — `a1`/`a2`/`a3`/`a4` = 은행/외국계/저축은행/중앙회, `c1` = 금융투자 (**lowercase**, page
+`511:2`); `ZY`/`ZV`/`ZW` = 간편인증, `PB` = 공공기관 (**UPPERCASE**, pages `1251:2`/`1255:2`).
+⚠️ **The casing split is `511:2`-vs-everything-else (financial-institution family vs cert-body/agency families) —
+NOT 간편인증-vs-공공기관 — and it is specified NOWHERE.** It **fails invisibly**: a wrong-cased filename 404s and
+falls straight through to 디폴트 CI, so **a case bug and a genuinely-unknown institution look identical in
+production.** `<xx>` is a **sparse alphabetic allocation, not a counter — do NOT iterate.** Same for
+`ss_img_company_숫자` (002–294 with **226 gaps by design**) and `ss_img_ci_appCode` (non-padded, holes by design).
+
+**⭐ THE REGISTRY IS EXTERNAL — NDS mirrors it, it does not mint it** (`1312:4`, verbatim):
+`추가 되는 사업자도 마이데이터 사설인증기관 기관코드명으로 관리` ·
+`PASS 인증은 통신사마다 기관코드가 있어서 ZYAAATPASS` ·
+`삼성PASS는 마이데이터 사설인증기관 미참여 기관이라 ZYAAASPASS`
+**This Figma page is a CACHE of an external 마이데이터 기관코드 registry.** Two tiers: **`…0000` = externally
+sourced**; **`…PASS` = NDS-minted exception** where no official code exists. Rule and data agree exactly (both
+exceptions are the two the text names) — rare in this file, and worth trusting.
+⚠️ **`ZYAAATPASS` is an AGGREGATE** (PASS = one code per 통신사) → **1 code ≠ 1 company; the mapping is not
+injective.** Nor is name→code: 애큐온저축은행 has **3** codes.
+
+**⭐ `ss_img_company_null` (`3554:28`) — the unknown-code fallback, and it has a literal name.** A grey `⋯` circle;
+the only frame with no institution and no solid fill. **This IS the 디폴트 CI path — a build MUST wire it up.**
+⚠️ Its literal name `null` is a landmine for `if (!code)` / `JSON.parse`.
+
+⚠️ **펌뱅킹/언론사 contradict rule 4's `200x200`** — both are transparent-ground **wordmark lockups with no
+circle/disc**, a class the 제작방법 never mentions, sitting under 📌 샘플 as go-forward exemplars. Unresolved.
+⚠️ **Export: CI badges ship at x2** (50×50 → 100×100), enforced by 32,747 export settings — **not** by prose, and
+**not** a domain-wide rule. See `LEDGER#ci-export-multiplier-x2`.
+⚠️ **No do/don't section exists** — rules are stated positively only. **The absence is the finding.**
 
 ### Sampled tokens (fonts/colors observed on real component instances)
 
@@ -313,3 +445,73 @@ Every real NDS screen — every frame across NDS_Library, NDS_Templates, and the
     **Brand prohibition** (Icons `39114:271`, verbatim): `브랜드 로고의 메인 컬러는 Deep Blue 입니다. Deep Blue(#002A41)는 바탕색으로 사용하지 않습니다. 필요한 경우 Dark Blue(#064367) 를 대신 사용합니다.`
 15. **⚖️ LICENCE CONSTRAINS OUTPUTS, NOT JUST READS (added 2026-07-16, NDS_Library Welcome page `3418:9189`, verbatim).** `해당 파일은 NH투자증권의 디자인 자산으로 상업적 이용 및 재배포를 엄격히 금지합니다. 복사하여 사용하거나 수정하는 행위는 사내 업무 용도로만 가능합니다. NH Design System의 모든 지식재산권은 NH투자증권 플랫폼혁신부에 있습니다.` **Practical read: NDS art/copy must not be republished outward** — commercial use and redistribution are prohibited; copy/modify is **사내 업무 용도로만**. 플랫폼혁신부 is also the team named by Justify's `UI 담당자와 협의` escalation path.
 16. **The 5-colour component-maturity scheme on the blank working page is 원티드(Wanted)'s, NOT NH's — do NOT adopt it (added 2026-07-16).** 🔵 디자인&개발 배포 완료 / 🟢 디자인 그룹 내 배포 완료 / 🟡 테스트,피드백 받는중 / 🔴 아직 정규배포 안함 / ⚪ 그 외. It is a **screenshot of a conference talk** — the capture still shows a **YouTube scrubber at `15:29 / 20:24`**. No evidence NDS adopted it. **The most misquotable artifact in the file**, and only a screenshot caught it. Same page: the chart-page's pasted `스크린샷 2024-*` images are **Highcharts.com documentation**, not NDS rules — transcribing them would invent a palette NDS doesn't use.
+17. **🚨 `get_metadata` SILENTLY OMITS CHILDREN — an "empty" result is NOT evidence of emptiness (added 2026-07-16, NDS_CI). This one undermines a method step, so read it before trusting any structure-only read.**
+    **Proven:** `get_metadata(KmpaYeoYh41F6nyIKvBQ7h, "2585:336")` returns
+    `<frame id="2585:336" name="scale guide" x="-3460" y="47" width="200" height="200" />` — **self-closing, zero
+    children.** The Plugin API reports **14 children** on that same node. The omitted content is the **entire
+    clear-space specification** — the only one in the file.
+    **Why it matters beyond one frame:** `LEADER.md` Mode 1 step 3 says *"`get_metadata(nodeId)` — one call"*, and
+    `figma-learn-all-pages` triage skips pages whose probe comes back empty. **That inference is unsound.** During
+    the NDS_Library and NDS_CI passes, **5 pages were skipped on exactly this evidence** (`🎨 Foundation`,
+    `🖼️ Components`, and NDS_CI's three `---`). **All 5 were re-checked against the Plugin API and were genuinely
+    empty (`childCount: 0`) — so both coverage claims survived. But they survived by luck, not by method.**
+    **✅ THE RULE: before skipping any page or frame as empty, confirm with the Plugin API, not `get_metadata`:**
+    ```js
+    const p = await figma.getNodeByIdAsync(PAGE_ID);
+    await figma.setCurrentPageAsync(p);   // MUST load it first — children.length lies on non-current pages
+    return { name: p.name, childCount: p.children.length };
+    ```
+    **🚨 THE TRIGGER IS CHILD TYPE `GROUP` — identified 2026-07-16 (third sighting).** If a frame's child is a
+    `GROUP`, **the whole subtree is omitted and the parent serialises as `<frame … />`**. Scale on one page:
+    **`511:2` rendered 105 of 241 frames as self-closing — all populated.** Confirmed by rendering one it called
+    empty (`6011:184` → a full K-bank logo). **Consequence: that page's entire code→institution mapping is 100%
+    invisible to `get_metadata`, because the institution names live on GROUP children.** The `scale guide`
+    14-child case is the same bug. **`use_figma` is the only way to read it.**
+
+    **🚨 IT CORRUPTS COUNTS, NOT JUST STRUCTURE (added 2026-07-16, second sighting).** Reproduced on **8/8** nodes
+    of NDS_CI 국내주식. **The dropped kind is `GROUP`** — and **2,541 of 2,948 domestic assets (86%) are GROUPs**.
+    Measured divergence on one page: XML `2,941` assets / `2,908` distinct names / `30` duplicate codes vs the API's
+    **`2,948` / `2,909` / `31`**. The XML **missed `ss_img_ci_267250` ×6 entirely** — the page's worst name
+    collision (six assets, one code, no arbitration) was **invisible to a metadata read**.
+    **⇒ `get_metadata` is safe for NAVIGATION and TEXT. NEVER for counts, and never as proof of absence.**
+    **Any `.length` in this domain must come from `findAllWithCriteria`.**
+
+    **Corollary — the failure compounds with Gotcha 10.** `get_metadata` cannot see opacity, `textDecoration`, fill
+    colour, or instance overrides *and* may omit nodes outright. **A structure-only read is not a floor on what
+    exists.** When a frame ought to hold a rule and `get_metadata` shows nothing, that is a **signal to render it**,
+    not evidence of absence. `scale guide` is the worked example: no text, no metadata children, and the whole rule
+    encoded in child coordinates.
+18. **⭐ INVISIBILITY MECHANISM #6 — FULL OCCLUSION BY A SELF-NESTED DUPLICATE SECTION (added 2026-07-16, NDS_CI).**
+    A `SECTION` named `디폴트 ETF` (`3867:7814`) sits **inside** an identically-named `SECTION` (`3867:7821`) at
+    `x=0, y=0, 447×1045` — **exactly its parent's bounds**, hiding it completely. **Verified: same name, inner is a
+    direct child of outer, identical dimensions.** `get_metadata` lists **both** sets; **the canvas renders only the
+    inner one.** Someone duplicated the section to add a variant and buried the original instead of deleting it.
+    **Consequence:** `ss_img_ci_etf` resolves to two live importable keys — inner
+    `e1782bf94b991624a579f9c58c156277fd95080e` (`Property 1=[kr|us|global]`, **the visible one**) vs outer
+    `b2862b1a740d8f3864c8003c98cbc5192324f566` (`Property 1=[kr|global]`, **occluded, no `us` variant**). A
+    name→key lookup can silently pick the one **missing US ETF support**, and nothing on the canvas reveals it.
+    **Import the inner/visible key `e1782bf94b991624a579f9c58c156277fd95080e`. Escalate the buried duplicate for
+    deletion.** See `LEDGER#ci-etf-occluded-duplicate`.
+19. **PREFIXES NAME THE CONSUMING SURFACE, NOT THE ENTITY TYPE — and a name is not a unique key (added 2026-07-16, NDS_CI).** `bank` ⊃ 우체국/새마을금고 · `press` ⊃ IR GO/씽크풀 · `FAA28` = 쿼터백**자산운용**. **Never infer what something IS from its prefix.** Worse, **the `ss_img_*` namespace has writers outside NDS_CI** — `press20` is claimed by 벤징가 (empty frame, no outlet mapped: **the slot looks free and is not**), and `FAA`/`OAR` codes are external and expanded nowhere. **NDS_CI is not the source of truth for its own filenames.** Two contradictory retirement conventions coexist **in one file**: 펌뱅킹 **preserves** (`히스토리 참고용` + an old wordmark hidden *inside* the live asset — **a bulk-unhide resurrects a retired bank CI**); 자문사 **deletes without trace**. `ss_img_bank10` is **one name across three nodes** (구버전/신규버전/live) disambiguated by **x-position only** → **2-in-3 chance a lookup returns a history exhibit**.
+20. **`node.opacity` THROWS on `SLICE` **and** `SECTION` nodes — wrap every opacity sweep in try/catch, or test `'opacity' in n` (added 2026-07-16, NDS_CI).** `no such property 'opacity' on SECTION node` / same on SLICE — **confirmed independently by two batches**. Real cost: it killed an invisibility sweep mid-run (134 slices on one page, 7 on another). Since Gotcha 10 makes opacity sweeps mandatory, this trap is on the critical path. **Also: `node.screenshot()` is blocked read-only** (`Can't call "screenshot" in read-only mode`) — **but the `get_screenshot` MCP tool is a different code path and works fine.** Do not confuse them: "cannot be visually verified" is false; sample with the tool.
+
+    **🚨 CORRECTED 2026-07-16 — the earlier root-cause here was WRONG.** This gotcha previously claimed
+    *"`findAll(predicate)` deep traversal can trip the read-only guard where `findAllWithCriteria` succeeds"*.
+    **That was a coincidence mistaken for a diagnosis.** An audit isolated the real trigger to a **single accessor**:
+    **`PageNode.children`**. Touching it on an **unloaded page** triggers a lazy page load, which the read-only
+    sandbox rejects — and the error text (`Operation attempted to modify the file while in read-only mode`) is
+    **misleading: nothing was being written.** The `findAll`→`findAllWithCriteria` swap happened to route around
+    the accessor, which is why it "worked" once and then failed on the next page.
+    **Minimal repro** (reproduced 4× with distinct Debug UUIDs):
+    ```js
+    const page = await figma.getNodeByIdAsync("3618:27");
+    return { n: page.children.length };   // ⛔ throws — this line alone
+    ```
+    **✅ The working path — no page switch needed, `.children` on CHILD nodes is fine:**
+    1. `get_metadata(fileKey, nodeId)` for the child tree (ids/names/types/positions **and `hidden` flags**) —
+       it doesn't invoke the Plugin API at all;
+    2. `await figma.getNodeByIdAsync("<childId>")` per node for what metadata can't see (`opacity`, `fills`,
+       `textDecoration`). **`childNode.children` works** — only the PAGE node's accessor is blocked.
+    **Consequence: "this page is unreadable read-only" was never true.** A page written off on that basis was fully
+    swept (21 frames + text) in **2 calls** by this path. **Before claiming a page is unreadable, try
+    `get_metadata` first — it answers most structure questions without the Plugin API.**

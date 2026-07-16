@@ -454,6 +454,295 @@ No `Last update`. Not deprecated either → `status: unknown`. **Likely home for
 Internal defect: frame `03` says **`세 가지 유형`**, frame `04` says **`네 가지의 유형`** while naming three;
 diagrams show three on both → **three is correct; `04` is a source defect** (not silently normalised).
 
+---
+
+# Opened 2026-07-16 by the NDS_CI learn (`KmpaYeoYh41F6nyIKvBQ7h`)
+
+## ci-not-a-component-library — ✅ RESOLVED as a **fact about the file** (read this before any CI build)
+**NDS_CI is NOT a component library, and a BUILD that treats it like `NDS_Library` fails at step one.** Verified
+across every inventory page: `COMPONENT` / `COMPONENT_SET` / `INSTANCE` counts are **0**. Logos are plain FRAMEs
+with image fills, raw vectors, or (on `export`) flattened geometry. **There is no key to import for any logo.**
+**The build contract is a filename resolved server-side:** `downloadcdn.nhqv.com/mts/ci/이미지명.png`, with a
+documented two-branch fallback (`MTS 종목 로고 노출 정책`, `5377:474`): CDN hit → render it; **CDN miss → render
+디폴트 CI**. The only importable sets in the whole file are the **8 default/fallback sets on the guide page** —
+those exist precisely *because* the CDN can 404. And `종목 CI 이미지가 없을 시 개발 처리` means **initials are
+generated at runtime by dev** — do not expect per-item initial assets to exist as files.
+
+## ci-etf-occluded-duplicate — ⛔ **a live component set is buried under an identically-named copy**
+`ss_img_ci_etf` resolves to **two live, importable SET keys**:
+- **`e1782bf94b991624a579f9c58c156277fd95080e`** — `Property 1=[kr|us|global]` — **the one the canvas renders. Use this.**
+- `b2862b1a740d8f3864c8003c98cbc5192324f566` — `Property 1=[kr|global]` — **occluded, and missing `us` entirely.**
+**Mechanism (verified by the orchestrator):** SECTION `디폴트 ETF` (`3867:7814`) sits **inside** SECTION
+`디폴트 ETF` (`3867:7821`) at `x=0, y=0, 447×1045` — **exactly its parent's bounds**, hiding it completely. Someone
+duplicated the section to add `us` and buried the original instead of deleting it. **`get_metadata` lists both; the
+canvas shows one.** A name→key lookup can silently select the ETF set **with no US support**, and nothing on canvas
+reveals the mistake. **Escalate the buried duplicate for deletion.** New invisibility mechanism — `CORE.md` Gotcha 18.
+
+## ci-bullet-etf-rivals — ⚠ CONTESTED (the file's only ETF bullet component exists twice, on the "Archive" page)
+**Two published SETs both named `nds_icon_bullet_etf`, different keys, BYTE-IDENTICAL renders, same axis/variants:**
+`88f608455b8748933faf181b7e2483671894ce8d` and `53e076897835655ab0fc596cc4f3d2a42b68dd2a`. **Name-based import has
+no tiebreaker, and Figma will not flag it** (a SET-level duplicate is not a variant error, so the
+duplicate-variant⇔set-errors diagnostic does **not** fire). **The live ETF page has zero components** — so the
+file's only ETF bullet definition lives on the page named `Archive`, twice.
+⚠️ **Related but distinct — do not merge:** the guide page's `nds_icon_bullet_etf` frames (`3867:7871`,
+`3867:7878`) are **cross-file name debris** — the name belongs to **NDS_Library's** icon set, and those frames are
+**not instances of it**. A name-based cross-file join manufactures a phantom link. **Three different things share
+this name across two files.**
+
+## ci-archive-is-the-newest-work — ⚠ **the page named `Archive` holds the file's most CURRENT ETF design**
+**Refused `deprecated` in both directions, and the contents contradict the name.** Evidence: max node-id block
+**6508** vs the live ETF page's **5735**; the shared `필수 ETF` note is `6059:3412` here vs `5718:190` live — **this
+page's copy is newer**. Screenshots filename-dated **2026-07-08**; notes dated **(7/13 기획회의)**.
+**Not `superseded`, because no live page defines itself against it** — ETF (`3179:310`) and 국내주식 (`109:25310`)
+were both checked and neither carries a `구 버전`/pointer callout. **That mechanism demonstrably exists in this file
+(the banks pair below), so its absence here is meaningful.** No `Last update` on either page → `unknown`.
+**⛔ Consequence: the live ETF page is NOT the current state of ETF CI design.** The Archive holds an **undecided
+프리텐다드 vs 산돌 격동고딕 font A/B**, a `컬러 테스트`, and an open `ETF검색 : CI 넣을건지 체크`.
+**⚠️ "Did the decision land on the live ETF page?" — ASKED AND ANSWERED: NO, and the naive reading INVERTS the
+chronology.** The live ETF page is the **"before"**, not the resolution. Node ids prove the order: its composites
+are `5725`–`5735` and its `필수 ETF` note is `5718:190`, vs Archive's `6059:3412`. **An older page cannot resolve a
+later question.**
+**Font census of all 188 TEXT nodes on live ETF:** composites use **`Sandoll GyeokdongG2 / 06 Hv` exclusively**
+(13 segments, **zero Pretendard on any composite**); Pretendard appears only on section chrome (5 segments).
+**The two fonts never touch the same element — they were never A/B'd there.**
+**⇒ This entry is CORROBORATED, not closed, and the live page supplies the missing half: what the Archive is
+A/B-ing *against* is 산돌 격동고딕 G2 / 06 Hv, the incumbent baseline.** 🚩 **Guard: reading the live page as
+"산돌 won" inverts the chronology — the decision is still open, and the Archive is the authority.**
+⚠️ **`ETF_메인_테마` (`6461:8422`) — an entire top-level frame at `opacity: 0.3`.** Same whole-block "parked"
+mechanism as `nds-lib-search-bar-archive`'s `확장 활용안` (0.5). **Meaning unstated — not guessed.**
+
+## ci-banks-dropped-codes — ⚠ CONTESTED (150 institution codes are on the archive and NOT live)
+`은행/증권/기관 Archive` → **superseded**, established by **three independent strands** (a model for this domain):
+1. **The live page quotes this page's generation and labels it old.** Live `은행/증권/기관` (`511:2`) carries
+   `히스토리 참고용` blocks pairing `구 버전 CI` vs `신규 버전 CI`. **K bank rebranded** (navy `Kbank` wordmark →
+   blue `K` monogram); live ships the monogram, **byte-identical MD5 `74a04d00…` to its own 신규 버전 exemplar**,
+   while this archive's `089. 케이뱅크` holds the **wordmark**.
+2. **The live page's `구 버전 CI` exemplars are node ids `2887:2805` / `2887:5440` — this archive's own id
+   generation.** The live page literally quotes archive-batch nodes as "the old version".
+3. **Content revision dates**: archive `CDN 은행증권 코드 230705` / `SVN 마이데이터 기관코드 240320` vs live
+   **240328 / 240328**. Stronger than a page-touch stamp.
+
+**The unresolved part:** `codes_onlyInLive` is the **empty set** — all 167 live codes exist on the archive, which
+holds **317**. So **150 codes were dropped from live**, plus **all 79 `ss_img_sb_*`** (live: zero).
+**But it is NOT a strict superset** — live *added* `ss_img_company_030` and `_221`. **Whether the 150 are retired
+or merely RE-SCOPED is unresolved**: live gained a `보험/캐피탈` heading the archive lacks, so the taxonomy changed.
+**⚠️ TESTED 2026-07-16 — RE-SCOPE REFUTED, and my own diff was malformed.**
+**(a) The cheap test came back a clean negative.** **None of the 150, and none of the 79 `ss_img_sb_*`, appear on
+간편인증기관 or 공공기관.** The namespaces are **disjoint, zero overlap**: `511:2` = `a1`–`a4`/`c1` + 68
+`ss_img_company_*`, **0 `ss_img_sb_*`** (regex-swept across all 3,810 nodes — *confirmed absent, not assumed*);
+`1251:2` = `ZY`/`ZV`/`ZW` + `ss_img_ci_*`; `1255:2` = `PB`. **Not re-scoped there.**
+**(b) ⛔ My "not a strict superset" was an artifact of mixing two disjoint families.** `167` is exact **and it is
+the SVN family** (167 live SVN frames, all distinct). But **`ss_img_company_030` / `_221` — my two "live
+additions" — are `ss_img_company_*` = the CDN family**, a *separate* 68. **A 167-of-317 SVN comparison cannot be
+contradicted by CDN additions. Re-run the diff per family.**
+**(c) ⛔ CONSOLIDATION — HYPOTHESIS REFUTED 2026-07-16 (audit). Do not chase it.**
+The earlier entry proposed: *per-bank 저축은행 logos dropped from CDN, one generic `ss_img_company_050` kept,
+per-bank identity moved to SVN `a3`; `80 = 79 + 1` fits precisely.* **Both halves are false.**
+- **The arithmetic was numerology.** Live `a3` is **80 codes but only 79 DISTINCT names** — 애큐온저축은행 owns
+  **two** codes (`a3aalt0000`, `a3aalx0000`). `a3aaph0000` 상호저축은행중앙회 is real and present, but it is **one
+  OF** the 79 distinct names, **not an extra on top of 79 banks**. True shape: **78 banks + 1 association = 79
+  distinct names over 80 codes.** "80 = 79 + 1 fits precisely" was the right total for the wrong reason.
+- **The migration never happened.** The **archive page carries its own fully-labelled `a3` family**, and a
+  name-keyed cross-page diff returns: archive `a3` = **80**, live `a3` = **80**, `codes_onlyInArchive` = **[]**,
+  `codes_onlyInLive` = **[]**, `labels_onlyInArchive` = **[]**, `labels_onlyInLive` = **[]**, `relabelled` = **[]**,
+  **`identical = true`**. **The `a3` set already existed complete on the archive, coexisting with all 79
+  `ss_img_sb_*`, and is byte-for-byte unchanged in live. `a3` absorbed nothing; nothing moved.**
+- **⇒ The 79 `ss_img_sb_*` were dropped from the CDN family with no corresponding SVN gain.**
+
+**(c2) The "decisive test, not yet run" is struck — it is BOTH unrunnable as written AND unnecessary.**
+It said *"diff the archive's 79 `ss_img_sb_*` names against the live 80 `a3` names"*. **The archive's
+`ss_img_sb_*` nodes carry ZERO Korean names** — verified 79/79: they are leaf `RECTANGLE`s with a single opaque
+image fill. **There is no join key on that side**, so a name-keyed diff cannot run. And it is moot anyway: the
+archive-`a3` ≡ live-`a3` comparison above settles the question without it.
+**Lesson for this ledger: a "decisive test" written without checking that both sides carry the join key is not a
+test — it is a wish.** It sat unrun for a day looking like diligence.
+
+**(d) `보험/캐피탈` CANNOT absorb the 150 — the column is EMPTY.** Rightmost asset x=11769; the heading sits at
+x=12290; **nothing at or beyond it.** A category with zero members. Corroborating: the page's only insurance logo,
+`a1aahe0000` 미래에셋생명보험, is filed at x=8974 **under `은행`**. A planned home never populated — *inference,
+flagged.*
+**Verdict (narrowed 2026-07-16): re-scope REFUTED (clean negative sweep) · consolidation REFUTED (archive-`a3` ≡ live-`a3`, identical).
+Two options remain: RETIRED, or PARKED pending the empty `보험/캐피탈` column.** Still unresolved between those two —
+but the search space is now two, not four, and both eliminated branches are eliminated **by evidence, not by guess**.
+
+## ci-export-multiplier-x2 — ✅ **CI badges ship at x2 — enforced, not prose. Scope it narrowly.**
+The `export` page's rig settles the multiplier **for CI assets only**, in the strongest available form — **what
+Figma will actually emit**, swept across all 209,573 nodes:
+| Setting | Nodes |
+|---|---|
+| PNG `contentsOnly:true` **SCALE 2** | **32,747 (99.0%)** — the asset convention |
+| PNG **SCALE 4** | 286 (incl. all 13 frames) — **a whole-board proof sheet, NOT an asset convention** |
+| PNG **SCALE 1** | 39 |
+**Different granularity, different object — do not collapse the 4x into the asset rule.** There are **no `@2x`/`_x2`
+suffixes and no `배수` prose** anywhere on the page (`suffix` is `""` on all 33,085 settings) — the convention lives
+**only** in export settings.
+**⚠️ It does NOT adjudicate `#illust-export-multiplier`, and must not be used to.** The CI guide's
+`200x200 1배수로 추출합니다` (stamped **2024.02.27**) is **19 months older** than the illust rule
+`필요 배수로 추출` (**2025.10.24**), and covers a different asset class. **Read them as per-asset-class rules that
+do not actually conflict** — CDN-delivered CI is forced to a single file per asset (the path
+`…/mts/ci/이미지명.png` **cannot express a multiplier ladder**), while bundled illusts can ship a ladder.
+**The guide's `1배수` is also explicitly go-forward**, not retroactive: `기존 제작되어 있는 이미지 크기와 상관없이`.
+
+## ci-export-name-defects — ⚠ 34 malformed + 17 duplicate asset names are shipping
+**Layer name = export filename**, so every name defect is a file defect. On a corpus of **2,457** `\d{6}` assets
+(**2,440 unique**):
+- **17 duplicate names → silent overwrite on export.** `000000` ×3 with *different* innards — only `825:15986` is
+  the real sentinel; two empty circles squat on its name.
+- **34 malformed, all live at `PNG@2x`**: leading spaces (`ss_img_ci_ 080420`), doubled infix
+  (`ss_img_ci_ci_001380`), stray `#` (`ss_img_ci_#025900`), empty ticker (`ss_img_ci_`), extension baked into the
+  name (`ss_img_ci_global_stock.png`).
+- **`ss_img_ci_030200` (`825:8348`) is 49×49** where all 2,512 others are 50×50 → emits **98×98**, off-contract.
+- **13× duplication**: 209,573 nodes for a 16,121-node corpus. `코스닥08` contains the **full** corpus including
+  every 코스피 badge, and all 13 section headers sit inside each frame — **the frame names assert a partition that
+  does not exist.** Reads as an abandoned plan to trim each copy.
+**NOT defects — do not "fix":** 21 `K`/`L`/`M`-suffixed names (`00088K`, `08537M`) are **preferred shares**, a real
+Korean convention; 40 oversized bitmaps are **mask-clipped by design** (737 of 2,491 assets use `Oval[isMask]`).
+
+## ci-9bcc3d-latent-trap — ⚠ a hex string sits inside a shipped asset and survives only by luck
+`825:866` — a TEXT node reading **`9bcc3d`** inside `ss_img_ci_053590`. **Visible** (`visible:true`, `opacity:1`,
+`#333333` on grey, 14px) — not hidden, not ghosted, not white-on-white. **One asset only**: a sweep of all 442 TEXTs
+for `/^#?[0-9a-fA-F]{6}$/` returns **13 hits = exactly 1 per frame, all the same asset** (the 13× duplication).
+**It does NOT ship — by accident.** It sits at dx **−111**, dy **+86**, outside its parent's 50×50 box.
+**`053590` is the ONLY FRAME among 2,491 assets** (the other 2,490 are GROUPs) and `clipsContent: true` clips it
+away. **Had it been a GROUP like every sibling, the bbox would expand to the union of children (~161px) and the
+badge would ship with `9bcc3d` baked in.** ⚠️ **Ungrouping/regrouping or converting it to a group silently starts
+shipping the defect. Flag; do not fix blind.**
+**Settled, not a defect:** `원준` (`825:5535`) is a **company, not a designer's name** — nearest asset is
+`ss_img_ci_382840` at 80px, and **382840 is 원준's real KOSDAQ ticker** (secondary-battery equipment). The badge
+exists (`has382840 = true`); the label is a one-off annotation, parented to the frame, outside every export bound —
+**does not ship.**
+
+## ci-ghosting-not-file-wide — ⚠ the 0.10 convention does NOT generalise; assuming it reports false-clean
+**Measured per page (try/catch-guarded, `'opacity' in n`):** 국내주식 **9 ghosts** (assets `ss_img_ci_267080` @
+**0.10**, `ss_img_ci_078340` @ **0.20**; rest are `scale guide` @ 0.5/0.4/0 + 3 incidental) · **해외주식: zero** ·
+**ETF: zero** · 은행/증권/기관 Archive **0 of 5,616** · `export` **26 nodes, all @0.4, all leaf VECTORs inside logo
+artwork — 2 per frame, i.e. artwork, not parking** · `Archive` **48 dimmed but the fifteen 0.10 hits are a decoy** —
+all instance-internal chart gridlines; **not one `ss_img_ci_*` is dimmed at any value.**
+**⇒ A file-wide "0.10 = parked" assumption reports false-clean on most NDS_CI pages and false-positive on two.**
+**The convention is real in NDS_Library (65 of 153 illusts, selective within groups) and largely absent here.**
+**Sweep per page; never inherit the verdict.** **Two real whole-block parks stand:** `ETF_메인_테마` (`6461:8422`)
+@ **0.3**, and NDS_Library's `확장 활용안` @ **0.5** — both meanings unstated.
+
+## ci-mydata-code-reuse-is-policy — ✅ **RESOLVED — and the "copy-paste debris" reading was BACKWARDS**
+A prior pass flagged `마이데이터` and `간편인증기관` sharing the exemplar `ZYAAQH0000` as **likely copy-paste
+debris**, on the premise that "a real 간편인증기관 code exactly equalling a 마이데이터 code is implausible".
+**The premise is inverted. The page states the opposite in prose** (`1312:4`, verbatim):
+> `추가 되는 사업자도 마이데이터 사설인증기관 기관코드명으로 관리`
+**간편인증기관 are keyed BY their MyData private-cert-body code. Identical codes are the policy working, not a bug.**
+Note **마이데이터 has TWO code families** and they are different things: **마이데이터 기관코드** = `a1/a2/a3/a4/c1`
+lowercase (page `511:2`, label `SVN 마이데이터 기관코드`) vs **마이데이터 사설인증기관 기관코드** = `ZY/ZV/ZW`
+(page `1251:2`). `ZYAAQH0000` = 네이버 is the **second**.
+⚠️ **Narrow caveat left open:** whether the two *sections* are byte-identical **in layout** is a separate question
+and may still be debris. **Just never cite the shared code as the evidence.** Re-test on layout.
+
+## ci-govt-symbol-unspecified — ⛔ **ESCALATE: statute-governed marks reproduced with no spec and no citation**
+`공공기관` (`1255:2`) reproduces the **ROK 정부상징** for 국세청 / 관세청 / 행정안전부. That mark is governed by
+**statute** (정부기 및 정부상징 규정) — **independently of any private agreement** — with prescribed colour,
+proportion and clear-space in its own official manual. **The page carries no spec, no citation, and no rule.**
+**The most regulated marks in the file are the ones with no rule attached.** Also present without any usage rule:
+네이버 · 카카오 · 토스 · 삼성 · KB · 신한 · NH · PAYCO · PASS · 정부24.
+**This is a legal/brand question, not a design one — this domain cannot answer it. Escalate.**
+**Absence of a rule is not a grant of one** — no permission was inferred.
+
+## ci-third-party-logo-rules-absent — ⚠ **no usage/permission/attribution rule exists anywhere in this file**
+Swept every TEXT `characters` across the institution pages: **no permission, licence, attribution, or trademark
+notice for any bank/publisher/advisory mark.** The only IP text is NDS's own notice (`CORE.md` Gotcha 15), which
+governs **NDS's own library — not other companies' marks**. **Stated as absence; not inferred.**
+Two facts sharpen it without adjudicating it: 펌뱅킹's own note says
+`새로 제작한 06번만 로고 원본파일 (나머지는 서버 다운로드 받은 png)` → **10 of 11 bank logos are downloaded PNGs**;
+and **all 9 advisory marks are hand-redrawn Figma vectors** — redrawing a third party's trademark is a different
+act from embedding a supplied file. **Escalate to whoever owns legal/brand; this domain cannot answer it.**
+
+## ci-prefix-names-the-surface — 🔁 FILE-WIDE (promoted to CORE Gotcha 19)
+**NDS_CI prefixes name the CONSUMING SURFACE, not the institution type.** `bank` ⊃ 우체국/새마을금고 · `press` ⊃
+IR GO/씽크풀 · `FAA28` = 쿼터백**자산운용**. **Never infer entity type from a prefix.**
+**And the `ss_img_*` namespace has writers OUTSIDE NDS_CI** — `press20` is claimed by 벤징가 with an empty frame and
+no outlet mapped (**the slot looks free and is not**); `FAA`/`OAR` codes are external and expanded nowhere.
+**NDS_CI is not the source of truth for its own filenames.**
+**Two contradictory retirement conventions coexist in one file:** 펌뱅킹 **preserves** (`히스토리 참고용` + hidden
+old wordmark); 자문사 **deletes without trace**. `ss_img_bank10` is **one name across three nodes**
+(구버전/신규버전/live), disambiguated by **x-position only** → a lookup has a **2-in-3 chance of returning a history
+exhibit**. And `ss_img_bank06` is the only bank frame with **0 children** — `frame.children[0]` walkers break on 06
+alone.
+
+## nds-stockicon-ci-referent — ✅ RESOLVED — **`NDS_StockIcon_CI` is not a library. The coverage hole was a phantom.**
+`LEDGER` recorded `NDS_StockIcon_CI` as "a named library outside the learned set". **It does not exist as a
+subscribable library.** `get_libraries(KmpaYeoYh41F6nyIKvBQ7h)` — **`next_offset: null`, enumeration complete, not
+truncated** — returns: **added** = NDS_Templates · NDS_Library · NDS_Darkmode Colors · NDS_Colors (+ `NDS_CI` itself
+and `00_컬러팔레트_라이브러리용` ×2, per the self-subscription finding); **available** = 5 community kits + 4 org
+(`가이드 ⚙️ EMS`, `운영 ⚙️ EMS`, `NDS_M.web`, `가이드 ⚙️ 홈페이지`). **No `NDS_StockIcon_CI` anywhere.**
+**And NDS_CI publishes nothing** — its stock/ETF pages have no libraryKey of their own.
+**⇒ The name almost certainly referred to NDS_CI's own stock-CI material** — now learned, 13/13. **Closed as a
+naming artifact, not a gap.** The 8 default sets on its guide page are the only importable components in the file.
+
+## ci-get-metadata-lossy-counts — ⛔ **cross-batch: any `.length` taken from `get_metadata` is LOW**
+**`get_metadata` omits `GROUP` nodes**, and **86% of NDS_CI's domestic assets (2,541 of 2,948) are GROUPs.**
+Measured on 국내주식: XML **2,941** assets / **2,908** distinct names / **30** duplicate codes vs the API's
+**2,948 / 2,909 / 31**. **The XML missed `ss_img_ci_267250` ×6 entirely** — the page's worst collision (six assets,
+one code, no arbitration) was **invisible to a metadata read**. Reproduced **8/8**.
+**⇒ `get_metadata` is safe for NAVIGATION and TEXT. NEVER for counts, never as proof of absence.**
+**Every `.length` in this domain must come from `findAllWithCriteria`.** See `CORE.md` Gotcha 17.
+**Retro-check owed:** any earlier count in this domain sourced from an XML dump is suspect. (Checked: the `export`
+page's 2,491/2,457/2,440 came from `findAllWithCriteria` — sound. Others unaudited.)
+
+## ci-etc-vs-etf-not-the-same — ⚠ **one character apart, three artifacts, do NOT merge them**
+**`ss_img_ci_etc` ≠ `ss_img_ci_etf`.** Different components; the names differ by one character. Recorded because
+merging them in a registry is the obvious mistake:
+- **`ss_img_ci_etf`** — 2 published SETs (`e1782bf9…` visible / `b2862b1a…` occluded), guide page.
+- **`ss_img_ci_etc`** — a **3-way fork**, 3 SETs, 3 incompatible axis vocabularies (see below).
+- **11 plain FRAMEs named `ss_img_ci_etf` on the live ETF page** — **not components at all.**
+⭐ **The live ETF page hand-reinvents `ss_img_ci_etf` instead of instancing the published set** — Subtract boolean +
+raw TEXT + an `nds_flag` instance. It instances **neither** published `etf` key (all 128 of its instances were
+resolved; `ss_img_ci_etf` is not among the mains). **Axis mismatch follows:** the published set uses
+`Property 1=[kr|us|global]`; the hand-built one expresses the same split via `nds_flag` `Country=USD/KRW(한국)`.
+**Three artifacts share this name in one file, and the two on the live page aren't importable.**
+
+## ci-usd-usa-contradiction — ⚠ the axis uses a CURRENCY code where the filename grammar uses a COUNTRY code
+`ss_img_ci_etc`'s axis ships `Country=usd(미국)` while the filename exemplar is **`ss_img_ci_usaaapl`** — and all 8
+sibling variants are ISO-3166 (`aus`/`chn`/`deu`/`gbr`/`hkg`/`idn`/`jpn`/`vnm`). Node id `4709:302` ≫ siblings
+`3867:74xx` ⇒ added later, consistent with a hand-typed slip. **Same failure class as `nds_flag` shipping ISO-4217
+codes under a `(국가코드)` caption** (`nds-lib-icons.md`) — **this design system mislabels code systems more than
+once; check the values, never the caption.** **Third site confirmed 2026-07-16:** the overseas pages ship **four
+casings** (`usd`/`USD`/`usd`-slice/`usa`) and **three words for the same concept** (`해외`/`usa`/`oversea` [sic]).
+**With `nds_flag`'s ISO-4217-under-국가코드, that is a three-site house habit, not an accident.**
+
+**⭐ Overseas share classes break the layer-name key (added 2026-07-16):** layer names **drop `.a`/`.b`** while the
+manifest keeps them → **6 duplicate names ↔ 13 manifest entries = 7 securities unreachable by layer name, and 6
+that return the WRONG logo.** Two encodings ship side by side: `usabrk.a` vs `usafoxa`. **For overseas, the
+manifest is authoritative — not the layer name.**
+**⭐ The country prefix is fixed-3 lowercase — true today, written down nowhere, and already ambiguous:**
+`ss_img_ci_usaa` = `usa`+`a` (**Agilent, ticker `A`**); `usakr`(Kroger) / `usako`(Coca-Cola) / `usajd`(JD) all parse
+as two country codes. **77 tickers are ≤2 chars.** 797 of 798 assets are `usa`, so nothing breaks *yet* — **it
+breaks the moment a second country ships.** Promoted to `CORE.md`.
+**⭐ Heading counts here fail DIFFERENTLY from the `Nmoji 142→152` mode — distinguish them:** `이미지 CI 리스트 (711)`
+is **exact for its manifest** but the canvas holds **798** — a *frozen manifest outrun by the canvas*, not a rotted
+heading. (`🌍 해외 (6개)` / `🇰🇷 국내 (5개)` are both correct.) **94 canvas assets are absent from the manifest; 7
+manifest entries have no canvas asset.**
+Related, unresolved: **`ss_img_ci_etc` is a THREE-way name fork** — three SETs, three keys, three incompatible axis
+vocabularies (`Country` / `etc|kor_etc|oversea_etc|research_etc` / `ksp|ksq|knx`), all live, serving 주식/기타/지수.
+**Key off the node, never the name.**
+
+## ci-export-badges-mostly-offcanvas — ⚠ **2,291 of 2,491 badges in `825:5` render NOTHING**
+Audit finding 2026-07-16. The frame is `1770×4275` with `clipsContent: true`, but child badges sit at **x up to
+26,905** — far outside it. **All 2,291 have `absoluteRenderBounds: null`** — they render nothing on canvas. Only
+**200** (codes `000000`–`003545`, matching the frame's own title `코스피  No. 000000~003545`) are actually inside.
+**⇒ "2,457 export badges in `825:5`" is not 2,457 renderable badges** — the vast majority of that frame's children
+are **parked off-canvas overflow**. Any export or verification plan built on that number needs re-basing.
+Corollary for `#ci-export-name-defects`: the 34 malformed + 17 duplicate names still matter (layer name = export
+filename), but **how many actually emit** is now an open question — a badge with `absoluteRenderBounds: null`
+inside a clipping frame may export empty. **Not chased.**
+**Also settled: `node.screenshot()` is blocked read-only, but the `get_screenshot` MCP tool is a different code
+path and renders individual badges fine.** "Cannot be visually verified" was false — sample with the tool. Only
+badges inside the parent's clip rect render.
+
+## ci-archive-90-images-are-labeled-benchmarks — ✅ RESOLVED — not disguised foreign material
+The ~90 pasted phone screenshots on `Archive` (`3323:345`) were flagged as *"suspect provenance — they look like
+competitor captures"*. **Sampled and identified: they are a deliberately LABELLED competitor-benchmark board** —
+Toss · Kakao Pay · Naver Pay · Mirae Asset · Korea Investment. **The board says what it is.** That is materially
+different from the two real provenance traps in this domain (Highcharts docs and a 원티드 conference talk **posing
+as NDS rules**, unlabelled). **The caution still stands — do NOT transcribe them as NDS design intent** — but the
+file is not lying about them, and "unread + suspect" overstated it.
+
 ## Resolved
 
 Kept, not deleted — this is where VERIFY's `corrected <date>` history lives, and it is the evidence that more
