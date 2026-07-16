@@ -535,20 +535,35 @@ or merely RE-SCOPED is unresolved**: live gained a `보험/캐피탈` heading th
 the SVN family** (167 live SVN frames, all distinct). But **`ss_img_company_030` / `_221` — my two "live
 additions" — are `ss_img_company_*` = the CDN family**, a *separate* 68. **A 167-of-317 SVN comparison cannot be
 contradicted by CDN additions. Re-run the diff per family.**
-**(c) ⭐ Better hypothesis — CONSOLIDATION, not retirement (test it, do not adopt it):** the archive's **79
-`ss_img_sb_*`** vs live's **80 `a3` (저축은행)**, with CDN retaining exactly **one** generic
-`ss_img_company_050` → `050. 저축은행`. Reads as: per-bank logos dropped from CDN, one generic mark kept, per-bank
-identity **moved to SVN `a3`**. **`80 = 79 + 1` fits precisely** — the live `a3` includes `a3aaph0000`
-상호저축은행중앙회, the **association**, not a bank.
-**Decisive test, not yet run:** diff the archive's 79 `ss_img_sb_*` names against the live 80 `a3` names (full list
-in `nds-ci-banks-brokerages.md`; **extracted via `use_figma` — `get_metadata` cannot see them**). **79:79 → closes
-as consolidated.**
+**(c) ⛔ CONSOLIDATION — HYPOTHESIS REFUTED 2026-07-16 (audit). Do not chase it.**
+The earlier entry proposed: *per-bank 저축은행 logos dropped from CDN, one generic `ss_img_company_050` kept,
+per-bank identity moved to SVN `a3`; `80 = 79 + 1` fits precisely.* **Both halves are false.**
+- **The arithmetic was numerology.** Live `a3` is **80 codes but only 79 DISTINCT names** — 애큐온저축은행 owns
+  **two** codes (`a3aalt0000`, `a3aalx0000`). `a3aaph0000` 상호저축은행중앙회 is real and present, but it is **one
+  OF** the 79 distinct names, **not an extra on top of 79 banks**. True shape: **78 banks + 1 association = 79
+  distinct names over 80 codes.** "80 = 79 + 1 fits precisely" was the right total for the wrong reason.
+- **The migration never happened.** The **archive page carries its own fully-labelled `a3` family**, and a
+  name-keyed cross-page diff returns: archive `a3` = **80**, live `a3` = **80**, `codes_onlyInArchive` = **[]**,
+  `codes_onlyInLive` = **[]**, `labels_onlyInArchive` = **[]**, `labels_onlyInLive` = **[]**, `relabelled` = **[]**,
+  **`identical = true`**. **The `a3` set already existed complete on the archive, coexisting with all 79
+  `ss_img_sb_*`, and is byte-for-byte unchanged in live. `a3` absorbed nothing; nothing moved.**
+- **⇒ The 79 `ss_img_sb_*` were dropped from the CDN family with no corresponding SVN gain.**
+
+**(c2) The "decisive test, not yet run" is struck — it is BOTH unrunnable as written AND unnecessary.**
+It said *"diff the archive's 79 `ss_img_sb_*` names against the live 80 `a3` names"*. **The archive's
+`ss_img_sb_*` nodes carry ZERO Korean names** — verified 79/79: they are leaf `RECTANGLE`s with a single opaque
+image fill. **There is no join key on that side**, so a name-keyed diff cannot run. And it is moot anyway: the
+archive-`a3` ≡ live-`a3` comparison above settles the question without it.
+**Lesson for this ledger: a "decisive test" written without checking that both sides carry the join key is not a
+test — it is a wish.** It sat unrun for a day looking like diligence.
+
 **(d) `보험/캐피탈` CANNOT absorb the 150 — the column is EMPTY.** Rightmost asset x=11769; the heading sits at
 x=12290; **nothing at or beyond it.** A category with zero members. Corroborating: the page's only insurance logo,
 `a1aahe0000` 미래에셋생명보험, is filed at x=8974 **under `은행`**. A planned home never populated — *inference,
 flagged.*
-**Verdict: NOT on the sibling pages (established). Retired / consolidated-into-`a3` / parked-pending-`보험/캐피탈`
-— UNRESOLVED.** Do not assume retired.
+**Verdict (narrowed 2026-07-16): re-scope REFUTED (clean negative sweep) · consolidation REFUTED (archive-`a3` ≡ live-`a3`, identical).
+Two options remain: RETIRED, or PARKED pending the empty `보험/캐피탈` column.** Still unresolved between those two —
+but the search space is now two, not four, and both eliminated branches are eliminated **by evidence, not by guess**.
 
 ## ci-export-multiplier-x2 — ✅ **CI badges ship at x2 — enforced, not prose. Scope it narrowly.**
 The `export` page's rig settles the multiplier **for CI assets only**, in the strongest available form — **what
@@ -706,6 +721,27 @@ manifest entries have no canvas asset.**
 Related, unresolved: **`ss_img_ci_etc` is a THREE-way name fork** — three SETs, three keys, three incompatible axis
 vocabularies (`Country` / `etc|kor_etc|oversea_etc|research_etc` / `ksp|ksq|knx`), all live, serving 주식/기타/지수.
 **Key off the node, never the name.**
+
+## ci-export-badges-mostly-offcanvas — ⚠ **2,291 of 2,491 badges in `825:5` render NOTHING**
+Audit finding 2026-07-16. The frame is `1770×4275` with `clipsContent: true`, but child badges sit at **x up to
+26,905** — far outside it. **All 2,291 have `absoluteRenderBounds: null`** — they render nothing on canvas. Only
+**200** (codes `000000`–`003545`, matching the frame's own title `코스피  No. 000000~003545`) are actually inside.
+**⇒ "2,457 export badges in `825:5`" is not 2,457 renderable badges** — the vast majority of that frame's children
+are **parked off-canvas overflow**. Any export or verification plan built on that number needs re-basing.
+Corollary for `#ci-export-name-defects`: the 34 malformed + 17 duplicate names still matter (layer name = export
+filename), but **how many actually emit** is now an open question — a badge with `absoluteRenderBounds: null`
+inside a clipping frame may export empty. **Not chased.**
+**Also settled: `node.screenshot()` is blocked read-only, but the `get_screenshot` MCP tool is a different code
+path and renders individual badges fine.** "Cannot be visually verified" was false — sample with the tool. Only
+badges inside the parent's clip rect render.
+
+## ci-archive-90-images-are-labeled-benchmarks — ✅ RESOLVED — not disguised foreign material
+The ~90 pasted phone screenshots on `Archive` (`3323:345`) were flagged as *"suspect provenance — they look like
+competitor captures"*. **Sampled and identified: they are a deliberately LABELLED competitor-benchmark board** —
+Toss · Kakao Pay · Naver Pay · Mirae Asset · Korea Investment. **The board says what it is.** That is materially
+different from the two real provenance traps in this domain (Highcharts docs and a 원티드 conference talk **posing
+as NDS rules**, unlabelled). **The caution still stands — do NOT transcribe them as NDS design intent** — but the
+file is not lying about them, and "unread + suspect" overstated it.
 
 ## Resolved
 
