@@ -10,10 +10,10 @@ domain says how a real screen was actually assembled.**
 | File | What it is | Read when |
 |---|---|---|
 | **`CORE.md`** | Always-on baseline. One row per component, **every** key sighted for it, full 40-hex. Build gotchas. | **BUILD step 1** — always |
-| **`INDEX.md`** | topic → note. 61 topics / 77 notes, with ⚠/⛔ flags. | **BUILD step 2** — always |
+| **`INDEX.md`** | topic → note. 103 topics / 119 notes, with ⚠/⛔ flags. | **BUILD step 2** — always |
 | `projects/*.md` | one note per guide **page** — the actual rules, verbatim | BUILD step 3 — only the 1–2 INDEX points you at |
 | **`LEDGER.md`** | contested / blocked / unresolved, + resolved history | BUILD **only when INDEX flags** ⚠/⛔ · VERIFY **always** |
-| `sources/*.md` | per-Figma-file LEARN forensics + the 77 registry rows | LEARN/VERIFY of that file. **Never at build time.** |
+| `sources/*.md` | per-Figma-file LEARN forensics + the 119 registry rows | LEARN/VERIFY of that file. **Never at build time.** |
 
 > **Why this is split.** Until 2026-07-15 all of the above lived in this one file. At 3 Figma files learned it
 > reached **~36,000 tokens — a single Read exceeded the cap**, so a BUILD pass physically could not read the file
@@ -29,8 +29,23 @@ domain says how a real screen was actually assembled.**
 | NDS_UX Guide | `nEINCcmC7AVkWSqRkq60y1` | **18/18** content pages | `sources/nds-ux-guide.md` |
 | NDS_M.web | `uVcmG6GgOl2J8EOlc22wob` | **20/20** | `sources/nds-mweb.md` |
 | NDS_Templates | `1xE0qvn2yv3ZkQ9BwhKT1y` | **39/39** | `sources/nds-templates.md` |
+| **NDS_Library** ⭐ | `72zrHgMLM4zhCjgSuTf7cC` | **42/42** content pages (of 51 total; 9 probed + skipped) | `sources/nds-library.md` |
 
 All coverage measured against `figma.root.children` — see Mode 1.
+
+> ⭐ **NDS_Library is the source of truth, not another opinion.** It is the file the `NDS_Library` libraryKey points
+> at and that NDS_Templates subscribes to — the other three files **describe** or **consume** these components.
+> Learning it (2026-07-16) resolved three standing LEDGER entries (`#radio-keys-never-sighted`,
+> `#header-basic-keys` incl. the **root cause** of the `header_basic` breakage, `#tab-2depth-chip-source`),
+> corroborated one ⛔ a fourth time (`#search-bar-states`), and **corrected `CORE.md`'s font claim**
+> (labels/body are NanumBarunGothic, not Pretendard). **When this file and a guide/template disagree about what a
+> component IS, this file wins.** (It does **not** win on what a screen should *do* — that is the project domains'.)
+>
+> ⚠️ **Triage by page name does NOT work in this file** — `sources/nds-library.md` documents it in full. Two
+> underscore-padded "headers" hold real rules (`📖 Justify` = 119k chars; `🌈 Graphic asset` = the sizing rules),
+> two identical-looking ones are genuinely empty, and the **blank-named last page** holds the `guide_parent` set and
+> the library's ordering rationale. **Probe every page; a name-driven pass would have shipped "38/38" against a
+> true 42.**
 
 ---
 
@@ -39,7 +54,7 @@ All coverage measured against `figma.root.children` — see Mode 1.
 Triggered when the user, or a project-kind domain's Mode 2, needs to build a screen/component/prototype.
 
 1. **Read `CORE.md`.** Real componentKeys and variant names only — **never invent a component**.
-2. **Read `INDEX.md`** and find the topic. **This hop is mandatory** — there are 77 notes; scanning them is not a
+2. **Read `INDEX.md`** and find the topic. **This hop is mandatory** — there are 119 notes; scanning them is not a
    plan. If a row is flagged **⚠/⛔, read that `LEDGER.md` anchor before building** — ⛔ means the guide **cannot be
    satisfied** with the current library, and you must escalate rather than fake it.
 3. **Read the 1–2 notes INDEX names.** Those hold the verbatim rules.

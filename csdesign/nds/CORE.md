@@ -72,6 +72,60 @@ All from NDS_Library unless noted.
 | `pagination01` | `1f8a2fec3ced9d0ddae3c8acffc34f3520626da0` | — | **added 2026-07-15**. Carousel dots (`Step=N`). **Corroborated 3× independently** (`271:12615`, `619:26120`, and Core's own prior sighting). Its page-mate `step_header` is a wizard step indicator — structurally unrelated (different SET), and it appears **standalone on one instance and as a SET member on another**; that duality is **unresolved**. `unverified — read-only session`. |
 | `nds_icon_arrow` | `dde648604e4d08cc6b99c44dda81ec73ccbb4b15` | Color(`01`/`03`/`04`/`05`/`06`), Type(`up`/`down`/`left`/`right`), Height(`h16`/`h24`) | Two different components share this exact name (an older one, key `e5c1cd3126858fc4f2ad492128e21c059097a5b9`, last updated 2025-11-03) — prefer the more recently updated key above. Use `Type=right` for a plain list-row chevron (the "actionable, nothing pending" state in a 3-tier status pattern — see `../asset/projects/domestic-stock-rights.md`). |
 
+### NDS_Library masters — keys read at the source of truth (added 2026-07-16)
+
+> **`remote: false` here means MASTER, not "documentation re-creation."** NDS_Library **is** the home library —
+> a master always reads `remote: false` **in its own file**; `remote: true` only means "imported from elsewhere."
+> **Proof:** `header_stock` reads `remote: false` here with key `28c77263cb49ee32b6dc3ab6df216e5887659855` —
+> **byte-identical to the key this table already recorded as verified** from other files, where it reads
+> `remote: true`. Same component, opposite side of the library boundary.
+> **This inversion was made and caught during this pass** — it had labelled `header_basic` / `quickmenu_basic` /
+> `nds_icon_header` "do NOT import", i.e. the three most-used masters in the system. **Judge tier by structure and
+> publish state, never by the `remote` flag alone.**
+>
+> All keys below are **full 40-hex** and **`unverified`** (read-only session — `importComponentSetByKeyAsync`
+> throws there). Per-page notes hold the **complete** variant-COMPONENT key tables; only SET keys are listed here.
+
+| Component | SET key | Variant axes | Note |
+|---|---|---|---|
+| `header_basic` (BASIC) | `c95043e94317fde7230298017f42dd8099e1cbdc` | Channel(NM, N2, clear 밝은배경, clear 어두운배경) × Left Icon × Right Icon | ⛔ nests broken `header_title_txt` |
+| `header_basic` (OPTIONAL) | `07fb2e569ac9d8cd9e31b49cf8770209df58c089` | Channel(NM, N2) × Type(버튼, 아이콘 1개, 아이콘 2개) | **⚠️ NOT previously in Core.** Same name, real 2nd set. ⛔ same nested defect |
+| `header_title_txt` | `3adbf2e221ffa7d8421e52a8e1b6cb51b0bb7e47` | ⛔ **UNREADABLE — the broken one** | duplicate variant `2depth 메뉴표시=off, 어두운배경=off` |
+| `header_stock` | `28c77263cb49ee32b6dc3ab6df216e5887659855` | Channel × country(국내/해외) × Type(현재가/주문/차트) | ✅ clean deps, **usable today** |
+| `header_order_switcher` | `201081a13664d076948028592c941252b1083a35` | Channel × Type(일반/소수점) | default state unspecified |
+| `tit` | `c8f9c55cd64cbb8cd3101d64028c075079053a61` | **`\bLine`**(1줄, `\b`2줄) | ⚠️ U+0008 in axis + value |
+| `quickmenu_basic` | `9c5dd3cd3e714255914cf288f442fad7c3ac76dd` | Channel × Type(normal, pressed, **Easy**) | see correction below |
+| `quickmenu_allmenu` | `306256ff8cf9f31da5c059d6c1237d6ffe36c095` | Type(login/logout) | |
+| `quickmenu_ticker` | `04062068328db463acde622df2d88d51ba3063aa` | Type(매매동향/환율/news) | |
+| `quickmenu_nmpick` | `ffbda22a2ba9199d3c7b16937c585fbf7c9c27b8` | Type(today/levelup/pick/membership) | |
+| `nds_icon_header` | `19619c9f1fd2e3c2e6515542d0484e651f3f30c6` | Type(**37 values**) × Color(2, 6) × Darkmode | ✅ **81 variants — corroborated exactly.** `Color` is a ColorNumber: NM→2, N2→6 |
+| `nds_illust` | `0ec614d9667c2ae11fd9887cc3aa571c85546dca` | `NM/N2`(on/off) × No(nds_illust01…140) | **280 variants, no gaps.** Axis is semantically broken — "which channel is `on`?" is unanswerable |
+| `nds_flag` | `d81573482ffbff1e5076384753d483a3072d775f` | Type(Circle/Square) × Country(28) | codes are **ISO-4217 currency codes** despite the `(국가코드)` caption |
+| `nds_icon_arrow` | `dde648604e4d08cc6b99c44dda81ec73ccbb4b15` | Color × Type × Height | |
+| `nds_icon_step` | `be9d70861f0510a5ea083d0c20360aafae7f4c56` | Channel × Step(01–07/next01–07/pre) | |
+| `nds_icon_bullet` | `eb1ab3ac46e5e6e5c1c6539e7334ac2b3e922e4f` | ⛔ **THROWS** | variants `25 global`/`26 chatbot` lack the `Type=` prefix. `ms_btn_memo` fails identically |
+| `radio_basic` | `91f58f3a086c5ef03ac03c8d77a725d32b3f7a1f` | Channel(NM/QV) × Status(normal/selected/disabled/disabled-selected) | ✅ **SIGHTED 2026-07-16 — resolves `#radio-keys-never-sighted`.** Matches Core exactly |
+| `radio_btn` | `1a972d991cc7c8f8f97bc5557740fba58ca82f23` | Height(h46/h60) × Active(off/on/disabled) | ✅ **SIGHTED.** No Channel axis |
+| `searchbar_basic` | `755deb62dc296ad41135fb0147e814de64cb7e08` | Type(left-line/left-solid/right-solid) × **Status(normal/pressed/filled)** | **3 states — corroborates ⛔ `#search-bar-states`** |
+| `searchbar_filter` | `0ca00d45253ed2384c2cce8e681af9eda793c502` | Type(line/no line/round) × **Status(normal/pressed/filled)** | 3 states |
+| `guide_parent` | `965da57e41718e449483f3e85afe510b30695d3b` | **KIND: standalone COMPONENT — no set** | ⚠️ **use `importComponentByKeyAsync`.** Distinct from `Component 1` |
+| `Component 1` | `63dad438b76acef52f178928763cb34708cc377e` | Property 1 (22 variants) | typos are **real string values**: `=Lable` [sic], `= Full Popup` [sic, leading space], `=Variant20` |
+| `list_icon` | `d15c808ac3325366f72303f3d20929dfadd05799` | ⛔ **THROWS** | dup variant `Type=인포그래픽, Line=multi, Margin=30, Arrow=off` (`81858:762`) |
+| `nds_img_tab_gradation` | `3b21c3c00f45d9d1b58527c1a04ea64dde00daa1` | ⛔ **THROWS** | dup variant `Type=nds_img_tab_gradation01` |
+
+**Tab / Button / Input / View / Indicator SET keys** are extensive; full tables live in the per-page notes
+(`nds-lib-tab.md`, `nds-lib-box-button.md`, `nds-lib-controls.md`, `nds-lib-text-field.md`, `nds-lib-pulldown.md`,
+`nds-lib-account-controller.md`, `nds-lib-card.md`, `nds-lib-list.md`, `nds-lib-chart.md`, `nds-lib-indicators.md`,
+`nds-lib-label.md`, `nds-lib-number-keypad.md`, `nds-lib-security-keypad.md`, `nds-lib-icons.md`). Use `INDEX.md`.
+
+**`quickmenu_basic` — CORRECTED 2026-07-16. The old "5 icons + hamburger" description is wrong twice:**
+1. **The 5 are TEXT labels, not icons** — `icon_hamburger` is the only icon. Labels verbatim: `홈`, `관심\n그룹`,
+   `주식\n현재가`, `국내주식\n주문`, `국내주식\n잔고/손익`. There is also a **6th trailing slot** (`icon_영역` GROUP)
+   the old description omitted.
+2. **`Type` has a third value `Easy`** (간편홈) — it **hides the hamburger** (`visible: false`) and swaps both end
+   caps, exposing menu items present in no other variant. **"hamburger + 5" does not describe `Easy` at all.**
+   Also `Type=pressed` is **532px tall** — it is the expanded overlay, **not** a button-press state.
+
 ### Sampled tokens (fonts/colors observed on real component instances)
 
 Because NDS_Colors style names are non-semantic numeric codes, prefer sampling actual fills/text colors off existing component instances (see `figma-use` for the sampling script pattern: create instance → `findAllWithCriteria` → read `fills`/`fontName`/`fontSize` → remove instance) over guessing a style name. Values confirmed 2026-07:
@@ -81,11 +135,59 @@ Because NDS_Colors style names are non-semantic numeric codes, prefer sampling a
 - Muted secondary text (labels, switcher text): `rgb(0.341, 0.376, 0.416)` ≈ `#576078`
 - White surface: `#FFFFFF`
 - Headers/buttons font: `NanumBarunGothic` (`Bold` for titles/CTAs, `Regular` for body use in headers)
-- Labels/body font: `Pretendard` (`Regular`, `SemiBold`)
+- ~~Labels/body font: `Pretendard` (`Regular`, `SemiBold`)~~ → **corrected 2026-07-16 from NDS_Library itself.**
+  **Labels/body in NDS_Library are `NanumBarunGothic`, not Pretendard.** Two independent lines of evidence from
+  the library file (`72zrHgMLM4zhCjgSuTf7cC`):
+  1. Its **Typography page defines 36 local text styles — zero Pretendard.** All are `NanumBarunGothic` or
+     `Roboto`, and `Label/Nanum/R/15` + `Label/Nanum/B/15` exist explicitly. (`nds-lib-typography.md`)
+  2. A **`fontName` census of real instances** on the Header page: `NanumBarunGothic Regular` ×66,
+     `NanumBarunGothic Bold` ×15, `Roboto Medium` ×14, `Roboto Regular` ×9, `Roboto Bold` ×5 — every component
+     label is NanumBarunGothic; doc prose is Roboto. Tab page: zero Pretendard. (`nds-lib-top-navigation.md`)
+  **Nuance — "zero Pretendard in the library" is too strong, don't overcorrect:** `Pretendard SemiBold` ×4 does
+  ship, as the raw font on `" 통합"` inside **`nds_img_market_switcher`**, nested in `header_stock`. That is real
+  published component content, not an annotation. (2 further `Pretendard Regular` hits are designer sticky-note
+  `Comment` nodes — discard those.) **Precise rule: Nanum for labels/body; Pretendard survives only as a raw font
+  in ≥1 published asset, never as a style.**
+  *Why the old claim existed:* it was sampled from **rendered instances**, not from styles — a legitimate method
+  that happened to land on the one Pretendard asset. **`NDS_M.web` genuinely does use Pretendard** (different
+  platform, different file, `uVcmG6GgOl2J8EOlc22wob`) — that row in the Libraries table above is still correct.
+  Scope the font to the file you are building against.
 - Account-row title font: `Roboto Medium` (as used inside `popup_radio_account`)
 - `popup_radio_account` corner radius: 16px. Bottom CTA buttons: 0 radius (square, full-bleed).
 
-### Workaround: manual header (since `header_basic` is broken)
+### `header_basic` — ROOT CAUSE FOUND 2026-07-16. It is not broken, and it is not deprecated.
+
+**The defect is one component upstream.** `header_basic` reads `key`/`remote`/`variantGroupProperties` cleanly and
+has no duplicate variants of its own. The error cascades from a **nested dependency**: **`header_title_txt`**
+(`9864:16724`) declares **two variants with the identical combo** `2depth 메뉴표시=off, 어두운배경=off`
+(`9864:16725` and `50853:16826`). Reading its axes throws `Component set has existing errors`; reading a child's
+`variantProperties` throws `Component set for node has existing errors` — **the exact string recorded above**.
+
+Proof by nesting (verified twice independently, orchestrator + subagent):
+
+| Set | node | nests `header_title_txt` | instancing |
+|---|---|---|---|
+| `header_basic` BASIC | `8901:13953` | ×12 | ⛔ throws |
+| `header_basic` OPTIONAL | `8901:13980` | ×6 | ⛔ throws |
+| `header_stock` | `8901:13894` | **×0** | ✅ works |
+
+That reproduces the observed pattern exactly with no appeal to deprecation. **Zero on-canvas evidence of
+`header_basic` being broken/deprecated/superseded** — it renders normally under the heading "BASIC", no
+strikethrough, no dimming, no marker. **The fix is to rename or delete one duplicate variant in
+`header_title_txt`.** Re-keying would not help — the defect is upstream of the key. **Escalate to the designer;
+this is a one-line fix that unblocks the most-used component in the system.** Until then, use the manual builder
+below.
+
+> ⭐ **Reusable diagnostic (audited across 27 sets, exact 1:1, zero exceptions):**
+> **duplicate variant name ⇔ `Component set has existing errors`.** When a set throws, look for two children
+> declaring the same variant combo. **Seven broken sets are known in NDS_Library** — addressed by node id, since
+> their keys are unusable anyway: `header_title_txt` (`9864:16724`), `nds_img_tab_gradation` (`14449:15313`),
+> `list_icon` (`50855:17337`), `input_line` dup (`45112:2329`), `NM` keypad (`12003:14703`), plus
+> `nds_icon_bullet` and `ms_btn_memo` (variants missing the `Type=` prefix their siblings have).
+> Full keys: `LEDGER#library-structural-defects`.
+> **Guard every `variantGroupProperties` read with try/catch — a bulk sweep over this file crashes without it.**
+
+### Workaround: manual header (while `header_title_txt` remains unfixed)
 
 ```js
 const iconSet = await figma.importComponentSetByKeyAsync("19619c9f1fd2e3c2e6515542d0484e651f3f30c6");
@@ -111,7 +213,11 @@ Every real NDS screen — every frame across NDS_Library, NDS_Templates, and the
 
 ### Gotchas specific to this design system
 
-1. **`header_basic` import succeeded on one attempt (this file, `mxm5Ml7RfFH9bEXrhWdKRy`), but failed with `"Component set for node has existing errors"` on another attempt in the same file.** Also confirmed working as a plain `createInstance()` when observed inside an existing production file (`domestic-stock-rights` project, fileKey `ZkwarjFkN8BiGolWO7PcwI` — title-as-dropdown variant instanced fine there). So the break is not universal to the component — likely a specific corrupted variant or transient import-cache issue in a specific target file. **Don't assume it's broken — try it first**, and only fall back to the manual-header workaround below if the specific file/variant actually errors.
+1. **ROOT CAUSE FOUND 2026-07-16 — see the `header_basic` section above. The set is fine; its nested
+   `header_title_txt` has two identically-named variants.** That also explains the "works here, throws there"
+   inconsistency below: whether you hit the error depends on whether the operation resolves the broken nested
+   dependency, not on the target file. **Diagnostic: duplicate variant name ⇔ set-has-errors (1:1 across 27 sets).**
+   Original observation retained for history: **`header_basic` import succeeded on one attempt (this file, `mxm5Ml7RfFH9bEXrhWdKRy`), but failed with `"Component set for node has existing errors"` on another attempt in the same file.** Also confirmed working as a plain `createInstance()` when observed inside an existing production file (`domestic-stock-rights` project, fileKey `ZkwarjFkN8BiGolWO7PcwI` — title-as-dropdown variant instanced fine there). So the break is not universal to the component — likely a specific corrupted variant or transient import-cache issue in a specific target file. **Don't assume it's broken — try it first**, and only fall back to the manual-header workaround below if the specific file/variant actually errors.
 2. **`popup_radio_account` breaks when resized narrow.** It's built for a single full-width row in a vertical list (account picker / bottom sheet), not a side-by-side card. Stack rows vertically at full width (≥330px).
 3. **`radio_basic` / `check_icon_*` are bare glyphs with no label slot.** Always pair them with your own text node in a wrapping auto-layout frame if you need a labeled option or list row.
 4. **Color style names in NDS_Colors/NDS_Darkmode Colors are opaque numeric codes** (`NM/Primary/270.274` etc.) with no changelog describing which is "the" brand green. Sampling real instances is faster and more reliable than guessing from the name list — see Sampled tokens above. **Partially superseded 2026-07-15**: `projects/nds-mweb-colors.md` decodes this naming scheme — the `NM`/`QV` channel prefix, the `ESS` (Essential) tier, and semantic Korean suffixes (e.g. `NM/ESS/primary/2.022(대표컬러)` = `#84C13D`, `QV` counterpart `#FFAA1A`; `NM/ESS/line/2.017(박스테두리)` = `#E0E0E0`). Read that file before falling back to sampling. Caveats: it was learned from the **M.web** file, so confirm a style resolves the same way on the app side before relying on it there; and duplicate codes for the same hex do exist across paths (`NM/Line/137.017` vs `NM/ESS/line/2.017`, both `#E0E0E0`; `NAMUH/Others/129.001` vs `NM/ESS/others/1.238` for up/down) — unreconciled.
@@ -135,3 +241,32 @@ Every real NDS screen — every frame across NDS_Library, NDS_Templates, and the
    - **`9665:19604` 자주하는질문 labels its own non-compliance**, holding a `가이드 미반영` composition (legacy right-chevron, navigates away) beside a `NDS가이드 반영` one (accordion).
    **Counter-example, so this is not "the library always drifts":** `23083:4390` Share corroborates `nds-ux-guide-share` **word-for-word**, including the exact 카카오톡 → 링크 복사 → 더보기 order, and links back to that guide. **It varies by page. Check, don't assume — in either direction.**
 9. Multiple plans exist on this account (`whoami`) — for NH-internal work the right org is usually **NHIS Digital Platform** (`organization::1445250327526291914`), not the personal `chunsung's team` plan.
+10. **⭐ INVISIBILITY HAS FOUR MECHANISMS IN THIS SYSTEM, NOT ONE. `get_metadata` and layer-name walks miss all four — RENDER EVERY RULE-BEARING FRAME (added 2026-07-16, NDS_Library).** The domain previously knew only `hidden="true"`. Each of these was caught *only* by screenshotting, and each one silently corrupted a conclusion before it was caught:
+    - **(a) Fill matching background.** `제작중` on the Graphic-asset Nmoji card reports `visible: true` but is **white text on a white card**. Reading it literally would have flagged Nmoji ⛔ **and blocked a BUILD pass from 152 shipped nmoji components.** Two `Last update` stamps are likewise **dark-on-dark** and missed a full-text grep of the dump.
+    - **(b) `STRIKETHROUGH` on a text segment.** Popup `5913:11448` extracts as `레이어 팝업은 [최대 높이 850/ 최소 높이 230]`, but `최대 높이 850` is its own **`STRIKETHROUGH` segment** (verified via `getStyledTextSegments(['textDecoration'])`, not eyeballed). **A text-only read reports a retired value as live.** No replacement is given → layer-popup max height is **unresolved at source**. *Distinct from "rules live in images": the rule IS live text; its **styling** carries the negation.* **Add `textDecoration` to the read checklist.**
+    - **(c) `opacity: 0.30` on a whole section.** `tab_2depth_txt` (`3683:15217`) is dimmed to 30% while its siblings sit at 1.0 — likely soft-deprecation, **no confirming text on canvas**. Evidence, not verdict; confirm with a designer. Same mechanism greys out the ~126 non-Lottie infographics.
+    - **(d) `hidden="true"`** (already known) — renders as a blank 1×1 PNG. Never quote such a node's text-node names as rules.
+    **Corollary:** for NDS_Library the operative warning is **not** "rules live inside pasted screenshots" — 4 of 5 graphics pages had *zero* image-embedded rules. It is **"rules live in styling and position, so render anyway."** (Image-embedded rules do still exist elsewhere: 9-patch's whole stretch/padding diagram is a 2018 raster; Number Keypad's every measurement is an annotation overlay; Security Keypad's tablet spec is camera-roll photos.)
+11. **⭐ U+0008 (`\b`) CONTROL CHARACTERS ARE BAKED INTO REAL, SHIPPED NAMES — CONFIRMED FILE-WIDE ACROSS 6 INDEPENDENT BATCHES (added 2026-07-16).** Not just layer names (the known `\x08title`) — **variant axis names, axis values, component names, style names, and even a page name.** They are **invisible in the Figma UI and in screenshots**, and `setProperties({Height: …})` / `variantName === 'Type=password'` **fail silently or with a baffling error**. Confirmed instances: axis `"\bLine"` + value `"\b2줄"` (`tit`) · `"\bHeight"` (`btn_container_except_stockplus`) · `"\bFold"` (`card_accordion_center` — **while its sibling `card_accordion_right` has a clean `Fold`**, so identical-looking code works on one and throws on the other) · `"Type\b"` (`card_guide`) · `"\bSelect"` (`financial_boxlist_nm`) · `"\bType"` (chart gauge) · `"\bValue"` (`nds_img_switcher`) · `Type=\bessential` (`input_label`) · `Type=\b레이블표시` (`account_apply`) · `\bms_btn_calendar` · `nds_icon_menu`'s `\bexchange` · style names `Notice/\bRoboto/R/19` and `…/B/19` · `Type=␈number_ios` / `␈password` (`keyboard`) · **the page name ` 📖 \bJustify___…`**.
+    **Rule: read axis names/values off the API byte-for-byte and match by key. NEVER hand-type a name from a screenshot or from this document.**
+12. **`N2` vs `QV` — two spellings, one role, NOT proven identical. Do not merge; do not string-match one and assume you caught both (added 2026-07-16).** Both occupy the dark channel opposite a light `NM`, and **`Channel=[NM|N2]` and `Channel=[NM|QV]` never co-occur on one axis**, so no direct test exists in most families. **Evidence FOR equivalence (strongest available):** on the Tooltip page a variant named `Type=QV` **renders on-canvas as `N2 툴팁 타이틀`**. **Evidence AGAINST a naive merge:** measured fills differ — `N2` header self-fill `#0E2A3F` vs `QV` tab pill `#0E1A49`. Close but distinct navies (may just be different families using different tokens). `nds_img_market_switcher` even ships `Channel=[NM|N2|ALL]`. **Consequence: a build filtering on `"QV"` silently skips every `N2` component, and vice versa. Enumerate the axis, don't assume its vocabulary.**
+    ⚠️ **`QV` in NDS_Library is dark navy `#0E1A49` — NOT orange.** `nds-mweb-colors` records `QV/ESS/primary/2.022(대표컬러)` = `#FFAA1A`, but that is **NDS_M.web, a different file/platform**. **Do not carry "QV = orange" into NDS_Library work.** (Notable: NM's tab pill `#2C363B` *is* exactly M.web's `NM/ESS/grayscale/1.296(홈상단배경)` — so those ColorNumbers do reach this file, which makes the QV divergence more interesting, not less.)
+13. **Names are not identifiers in this file, and counts in headings are stale. Resolve by key/node-id; count with `.length` (added 2026-07-16).**
+    - **Name collisions with genuinely different keys**: `header_basic` ×2 · `tab_btn` **×3** (3 axis signatures) · `Line_chart01` **×3** · `statusbar` ×4 · `label_risk` ×2 · `input_line` ×2 (one broken) · `toggle_text46` ×2 (different axes) · `Subpage_top` ×2 (separate SETs — you **cannot** swap 1-btn↔2-btn via a property) · `line_section` ×2 · `nds_icon_mic`, `nds_icon_arrowred`, `bank` (**incompatible axis vocabularies — a real fork**), `rate`, `nds_infographic138`.
+    - **Stale heading counts — systemic, trust none of them**: `Nmoji: 142개` → **really 152** · `Emoji IMG : 80개` → **really 91 (89 distinct)** · `Infographic(전체DB) : 251개` → **really 253**.
+    - **Numbering holes — iterating `01..N` will 404**: `nds_nmoji42` missing · `nds_infographic233` missing · `nds_infographic138` duplicated. (`nds_illust01–140` is the only clean sequence.)
+14. **🔥 THE ICON 컬러넘버 LEGEND — decodes every `Color=N` axis across all 143 icon sets (added 2026-07-16).** Recovered by screenshot from Icons `9244:16154`; **its column semantics exist ONLY as spatial layout and are unreadable from node names.** Headed `🔥 필수 🔥 아이콘 쓰실 디자이너들! 확인하세요!`
+    | Color | 컬러넘버 | hex | tier |
+    |---|---|---|---|
+    | **2** | `023` | `#333333` | 기본 |
+    | **3** | `013` | `#666666` | 기본 |
+    | **4** | `024` | `#999999` | 기본 |
+    | **5** | `074` | `#C5C5C5` | 기본 |
+    | **6** | `063` | `#FFFFFF` | 기본 |
+    | **1** | `004` | `#000000` | 예외 |
+    | **7** | `127` | `#DDDDDD` | 예외 |
+    Rule, verbatim: `😈 최대한 이 안에서 사용하되, 추가적인 컬러가 필요하다면 디자인팀 내 논의를 통해 컬러를 추가도록 합시다.`
+    **⚠️ `Color` is a ColorNumber, not a channel.** Measured binding on `nds_icon_header`: **NM→`Color=2`, N2→`Color=6`**. Mixing them is **silently wrong, not an error.**
+    **Brand prohibition** (Icons `39114:271`, verbatim): `브랜드 로고의 메인 컬러는 Deep Blue 입니다. Deep Blue(#002A41)는 바탕색으로 사용하지 않습니다. 필요한 경우 Dark Blue(#064367) 를 대신 사용합니다.`
+15. **⚖️ LICENCE CONSTRAINS OUTPUTS, NOT JUST READS (added 2026-07-16, NDS_Library Welcome page `3418:9189`, verbatim).** `해당 파일은 NH투자증권의 디자인 자산으로 상업적 이용 및 재배포를 엄격히 금지합니다. 복사하여 사용하거나 수정하는 행위는 사내 업무 용도로만 가능합니다. NH Design System의 모든 지식재산권은 NH투자증권 플랫폼혁신부에 있습니다.` **Practical read: NDS art/copy must not be republished outward** — commercial use and redistribution are prohibited; copy/modify is **사내 업무 용도로만**. 플랫폼혁신부 is also the team named by Justify's `UI 담당자와 협의` escalation path.
+16. **The 5-colour component-maturity scheme on the blank working page is 원티드(Wanted)'s, NOT NH's — do NOT adopt it (added 2026-07-16).** 🔵 디자인&개발 배포 완료 / 🟢 디자인 그룹 내 배포 완료 / 🟡 테스트,피드백 받는중 / 🔴 아직 정규배포 안함 / ⚪ 그 외. It is a **screenshot of a conference talk** — the capture still shows a **YouTube scrubber at `15:29 / 20:24`**. No evidence NDS adopted it. **The most misquotable artifact in the file**, and only a screenshot caught it. Same page: the chart-page's pasted `스크린샷 2024-*` images are **Highcharts.com documentation**, not NDS rules — transcribing them would invent a palette NDS doesn't use.
