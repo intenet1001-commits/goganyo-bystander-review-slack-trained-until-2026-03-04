@@ -21,6 +21,26 @@ Small and dense: **120 nodes, 18 COMPONENTs, 19 TEXT nodes**, and — unusually 
 
 It is **two half-pages side by side**, each with its own heading, its own grammar caption, and its own code system. **They share nothing.**
 
+## ⛔ REFUTATION — "NDS_CI has 0 components on every inventory page" is **FALSE**
+
+The batch context asserts NDS_CI is not a component library and that sibling batches found **0 components on every inventory page they touched**, with the contract being a CDN filename (`downloadcdn.nhqv.com/mts/ci/이미지명.png`) → 디폴트 CI on 404.
+
+**Confirmed for `511:2` (0 COMPONENT, 0 COMPONENT_SET, verified by guarded `findAllWithCriteria`). REFUTED here.**
+
+| Page | COMPONENT | COMPONENT_SET | Method |
+|---|---|---|---|
+| `511:2` 은행/증권/기관 | **0** | **0** | ✅ confirms the contract |
+| **`1251:2` (this page)** | **18** | 0 | ⛔ **refutes "every page"** |
+| `1255:2` 공공기관 | **6** | 0 | ⛔ **refutes "every page"** |
+
+All 24 are real, local (`remote:false`), page-parented masters with full 40-hex keys — listed below. **This is not a metadata artifact**; I read them off the nodes.
+
+**The generalisation must be narrowed to: `NDS_CI is not a *variant* library — 0 COMPONENT_SETs file-wide (verified across all 3 of my pages). But two of my three pages DO publish standalone COMPONENTs.`**
+
+**⚠️ What this does NOT refute:** the CDN-filename contract itself. **I found no CDN URL anywhere in my batch.** I probed all 40 TEXT nodes across the three pages for `cdn|nhqv|http|.png|download` — the only hits are the three grammar captions (`ss_img_company_숫자.png`, `기관코드.png`, `ss_img_ci_appCode.png`) and two section labels (`CDN 은행증권 코드`, `히스토리 참고용 - CDN 은행증권`). **The string `downloadcdn.nhqv.com` appears nowhere in my pages.** The `.png` captions are consistent with a filename contract, and `CDN 은행증권 코드` names CDN explicitly — but **the URL pattern itself is not stated on any page I read.** It must come from a page outside my batch; **I can neither confirm nor contradict the path.**
+
+**So both can be true at once, and I think they are:** the assets are consumed as CDN PNGs by filename, **and** these two pages also publish Figma components for design-time use. **The component keys are real and importable — but they are almost certainly NOT the production delivery path.** ⛔ **Do not let the presence of keys mislead a build into `importComponentByKeyAsync` when the runtime contract is a filename.** That is the trap this refutation exists to prevent.
+
 ## ⚠️ Third-party-logo usage rule: **NONE EXISTS**
 
 **Stated as a finding; not inferred.** I read `characters` on all 19 TEXT nodes (not layer names). The page carries **네이버, 카카오, 토스, 삼성, KB, 신한, NH, PAYCO, 뱅크샐러드, 하나은행, PASS(통신3사), 정부24** — some of Korea's most aggressively protected trademarks, plus **the Korean government's 정부상징 (Taegeuk) mark**.
@@ -112,6 +132,56 @@ Three separate things, and all three matter:
 > **`ZYAA` + `<mnemonic>`** — an NDS-minted exception where no official code exists (`ZYAAATPASS`, `ZYAAASPASS`).
 
 **The `0000` suffix is the tell.** `…PASS`-suffixed codes are *locally invented*; `…0000`-suffixed codes are *externally sourced*. **Both exceptions on this page are exactly the two cases the rule text calls out** — the rule and the data agree, which is rare in this file and worth trusting.
+
+## ⭐ REFUTATION — `zyaaqh0000` on both 마이데이터 and 간편인증기관 is **BY DESIGN, not copy-paste debris**
+
+It was put to me that the `마이데이터` and `간편인증기관` sections are byte-identical including the exemplar frame name `zyaaqh0000`, and that this is *likely copy-paste debris, since a real 간편인증기관 code exactly equalling a 마이데이터 code is implausible.*
+
+**I refute the reasoning. The premise "implausible" is exactly backwards, and this page states why in prose.**
+
+The governance rule (`1312:4`), verbatim:
+
+> `추가 되는 사업자도 마이데이터 사설인증기관 기관코드명으로 관리`
+
+**"Newly added providers are likewise managed under their 마이데이터 사설인증기관 기관코드 name."** A 간편인증기관 code **equalling** a 마이데이터 code is not a coincidence to be explained away — **it is the stated allocation policy.** 간편인증기관 are keyed *by* their MyData private-certification-body code. **Identical codes across the two sections are the rule working, not debris.**
+
+The confusion is resolvable, and the resolution is that **마이데이터 has TWO distinct code families**, which my batch happens to span both of:
+
+| Family | Governs | Prefix | Where I see it |
+|---|---|---|---|
+| **마이데이터 기관코드** | financial institutions | `a1`/`a2`/`a3`/`a4`/`c1` (**lowercase**) | `511:2`, label `SVN 마이데이터 기관코드` |
+| **마이데이터 사설인증기관 기관코드** | private cert bodies | `ZY`/`ZV`/`ZW` (**UPPERCASE**) | **this page** |
+
+`ZYAAQH0000` (네이버) belongs to the **second** family. A 마이데이터 page showing the same code is showing **the same registry**, correctly.
+
+**⚠️ What I cannot rule out:** whether the two sections are *byte-identical in layout* (genuinely duplicated blocks) is a separate question from whether the *code* is shared — and I cannot see the 마이데이터 page. **A shared code is not evidence of duplication.** If the sections are truly identical node-for-node, that may still be debris; **but `zyaaqh0000` must not be cited as the evidence for it.** Re-test on layout, not on the code.
+
+**⛔ And the casing in that report does not match my page — see below.**
+
+## ⚠️ CASING — confirmed, and it is NOT as reported. Nothing specifies it.
+
+The exemplar was given to me as **`zyaaqh0000` (lowercase)** for 마이데이터 + 간편인증, vs `PBAAVN0000` (uppercase) for 공공기관.
+
+**On this page it is UPPERCASE.** Verified with `JSON.stringify` on all 18 component names — not eyeballed:
+
+> `"ZYAAQH0000"` — `name.trim() === name.trim().toUpperCase()` → **true** for all 11 `기관코드` components.
+
+**The full picture across my batch, all verified by `JSON.stringify`:**
+
+| Page | Family | Case | Verified |
+|---|---|---|---|
+| `511:2` | `a1aaad0000`, `c1aacq0000` | **lowercase** | ✅ |
+| **`1251:2` (this page)** | **`ZYAAQH0000`, `ZVAAES0000`** | **UPPERCASE** | ✅ |
+| `1251:2` | `ss_img_ci_100` | lowercase (different family) | ✅ |
+| `1255:2` | `PBAAVN0000` | **UPPERCASE** | ✅ |
+
+**So: `511:2` lowercase; both auth/agency pages UPPERCASE.** The lowercase/uppercase split is **not** 간편인증-vs-공공기관 as reported — **it is `511:2`-vs-everything-else**, i.e. it tracks the *financial-institution* family vs the *cert-body/agency* families.
+
+**Is it specified? NO.** Neither caption (`기관코드.png` here, `기관코드.png` on `1255:2`, `ss_img_company_숫자.png` on `511:2`) says one word about case. **No page in my batch states a casing rule.**
+
+**⛔ And your failure analysis is right, which is what makes this dangerous:** the contract is a CDN filename → **404 falls through to the 디폴트 CI**. A case-wrong filename produces a *plausible-looking default logo*, not an error. **Nobody sees the bug.** On `511:2` that default even has a name: **`ss_img_company_null`** — the grey `⋯` circle. A case bug and a genuinely-unknown institution are **visually identical in production**.
+
+**If the report's `zyaaqh0000` is a faithful transcription of the 마이데이터 page, then the same code is cased differently on two pages of one library — and exactly one of them resolves.** That is a live LEDGER item and worth more than the debris question.
 
 ## The naming grammar — TWO systems, verbatim captions
 

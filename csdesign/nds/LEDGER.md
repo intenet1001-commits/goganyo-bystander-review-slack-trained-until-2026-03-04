@@ -498,7 +498,16 @@ were both checked and neither carries a `구 버전`/pointer callout. **That mec
 (the banks pair below), so its absence here is meaningful.** No `Last update` on either page → `unknown`.
 **⛔ Consequence: the live ETF page is NOT the current state of ETF CI design.** The Archive holds an **undecided
 프리텐다드 vs 산돌 격동고딕 font A/B**, a `컬러 테스트`, and an open `ETF검색 : CI 넣을건지 체크`.
-**Open question for whoever owns live ETF (`3179:310`): did the 프리텐다드/산돌 decision land?** That closes this.
+**⚠️ "Did the decision land on the live ETF page?" — ASKED AND ANSWERED: NO, and the naive reading INVERTS the
+chronology.** The live ETF page is the **"before"**, not the resolution. Node ids prove the order: its composites
+are `5725`–`5735` and its `필수 ETF` note is `5718:190`, vs Archive's `6059:3412`. **An older page cannot resolve a
+later question.**
+**Font census of all 188 TEXT nodes on live ETF:** composites use **`Sandoll GyeokdongG2 / 06 Hv` exclusively**
+(13 segments, **zero Pretendard on any composite**); Pretendard appears only on section chrome (5 segments).
+**The two fonts never touch the same element — they were never A/B'd there.**
+**⇒ This entry is CORROBORATED, not closed, and the live page supplies the missing half: what the Archive is
+A/B-ing *against* is 산돌 격동고딕 G2 / 06 Hv, the incumbent baseline.** 🚩 **Guard: reading the live page as
+"산돌 won" inverts the chronology — the decision is still open, and the Archive is the authority.**
 ⚠️ **`ETF_메인_테마` (`6461:8422`) — an entire top-level frame at `opacity: 0.3`.** Same whole-block "parked"
 mechanism as `nds-lib-search-bar-archive`'s `확장 활용안` (0.5). **Meaning unstated — not guessed.**
 
@@ -566,6 +575,17 @@ shipping the defect. Flag; do not fix blind.**
 exists (`has382840 = true`); the label is a one-off annotation, parented to the frame, outside every export bound —
 **does not ship.**
 
+## ci-ghosting-not-file-wide — ⚠ the 0.10 convention does NOT generalise; assuming it reports false-clean
+**Measured per page (try/catch-guarded, `'opacity' in n`):** 국내주식 **9 ghosts** (assets `ss_img_ci_267080` @
+**0.10**, `ss_img_ci_078340` @ **0.20**; rest are `scale guide` @ 0.5/0.4/0 + 3 incidental) · **해외주식: zero** ·
+**ETF: zero** · 은행/증권/기관 Archive **0 of 5,616** · `export` **26 nodes, all @0.4, all leaf VECTORs inside logo
+artwork — 2 per frame, i.e. artwork, not parking** · `Archive` **48 dimmed but the fifteen 0.10 hits are a decoy** —
+all instance-internal chart gridlines; **not one `ss_img_ci_*` is dimmed at any value.**
+**⇒ A file-wide "0.10 = parked" assumption reports false-clean on most NDS_CI pages and false-positive on two.**
+**The convention is real in NDS_Library (65 of 153 illusts, selective within groups) and largely absent here.**
+**Sweep per page; never inherit the verdict.** **Two real whole-block parks stand:** `ETF_메인_테마` (`6461:8422`)
+@ **0.3**, and NDS_Library's `확장 활용안` @ **0.5** — both meanings unstated.
+
 ## ci-third-party-logo-rules-absent — ⚠ **no usage/permission/attribution rule exists anywhere in this file**
 Swept every TEXT `characters` across the institution pages: **no permission, licence, attribution, or trademark
 notice for any bank/publisher/advisory mark.** The only IP text is NDS's own notice (`CORE.md` Gotcha 15), which
@@ -587,12 +607,59 @@ old wordmark); 자문사 **deletes without trace**. `ss_img_bank10` is **one nam
 exhibit**. And `ss_img_bank06` is the only bank frame with **0 children** — `frame.children[0]` walkers break on 06
 alone.
 
+## nds-stockicon-ci-referent — ✅ RESOLVED — **`NDS_StockIcon_CI` is not a library. The coverage hole was a phantom.**
+`LEDGER` recorded `NDS_StockIcon_CI` as "a named library outside the learned set". **It does not exist as a
+subscribable library.** `get_libraries(KmpaYeoYh41F6nyIKvBQ7h)` — **`next_offset: null`, enumeration complete, not
+truncated** — returns: **added** = NDS_Templates · NDS_Library · NDS_Darkmode Colors · NDS_Colors (+ `NDS_CI` itself
+and `00_컬러팔레트_라이브러리용` ×2, per the self-subscription finding); **available** = 5 community kits + 4 org
+(`가이드 ⚙️ EMS`, `운영 ⚙️ EMS`, `NDS_M.web`, `가이드 ⚙️ 홈페이지`). **No `NDS_StockIcon_CI` anywhere.**
+**And NDS_CI publishes nothing** — its stock/ETF pages have no libraryKey of their own.
+**⇒ The name almost certainly referred to NDS_CI's own stock-CI material** — now learned, 13/13. **Closed as a
+naming artifact, not a gap.** The 8 default sets on its guide page are the only importable components in the file.
+
+## ci-get-metadata-lossy-counts — ⛔ **cross-batch: any `.length` taken from `get_metadata` is LOW**
+**`get_metadata` omits `GROUP` nodes**, and **86% of NDS_CI's domestic assets (2,541 of 2,948) are GROUPs.**
+Measured on 국내주식: XML **2,941** assets / **2,908** distinct names / **30** duplicate codes vs the API's
+**2,948 / 2,909 / 31**. **The XML missed `ss_img_ci_267250` ×6 entirely** — the page's worst collision (six assets,
+one code, no arbitration) was **invisible to a metadata read**. Reproduced **8/8**.
+**⇒ `get_metadata` is safe for NAVIGATION and TEXT. NEVER for counts, never as proof of absence.**
+**Every `.length` in this domain must come from `findAllWithCriteria`.** See `CORE.md` Gotcha 17.
+**Retro-check owed:** any earlier count in this domain sourced from an XML dump is suspect. (Checked: the `export`
+page's 2,491/2,457/2,440 came from `findAllWithCriteria` — sound. Others unaudited.)
+
+## ci-etc-vs-etf-not-the-same — ⚠ **one character apart, three artifacts, do NOT merge them**
+**`ss_img_ci_etc` ≠ `ss_img_ci_etf`.** Different components; the names differ by one character. Recorded because
+merging them in a registry is the obvious mistake:
+- **`ss_img_ci_etf`** — 2 published SETs (`e1782bf9…` visible / `b2862b1a…` occluded), guide page.
+- **`ss_img_ci_etc`** — a **3-way fork**, 3 SETs, 3 incompatible axis vocabularies (see below).
+- **11 plain FRAMEs named `ss_img_ci_etf` on the live ETF page** — **not components at all.**
+⭐ **The live ETF page hand-reinvents `ss_img_ci_etf` instead of instancing the published set** — Subtract boolean +
+raw TEXT + an `nds_flag` instance. It instances **neither** published `etf` key (all 128 of its instances were
+resolved; `ss_img_ci_etf` is not among the mains). **Axis mismatch follows:** the published set uses
+`Property 1=[kr|us|global]`; the hand-built one expresses the same split via `nds_flag` `Country=USD/KRW(한국)`.
+**Three artifacts share this name in one file, and the two on the live page aren't importable.**
+
 ## ci-usd-usa-contradiction — ⚠ the axis uses a CURRENCY code where the filename grammar uses a COUNTRY code
 `ss_img_ci_etc`'s axis ships `Country=usd(미국)` while the filename exemplar is **`ss_img_ci_usaaapl`** — and all 8
 sibling variants are ISO-3166 (`aus`/`chn`/`deu`/`gbr`/`hkg`/`idn`/`jpn`/`vnm`). Node id `4709:302` ≫ siblings
 `3867:74xx` ⇒ added later, consistent with a hand-typed slip. **Same failure class as `nds_flag` shipping ISO-4217
 codes under a `(국가코드)` caption** (`nds-lib-icons.md`) — **this design system mislabels code systems more than
-once; check the values, never the caption.**
+once; check the values, never the caption.** **Third site confirmed 2026-07-16:** the overseas pages ship **four
+casings** (`usd`/`USD`/`usd`-slice/`usa`) and **three words for the same concept** (`해외`/`usa`/`oversea` [sic]).
+**With `nds_flag`'s ISO-4217-under-국가코드, that is a three-site house habit, not an accident.**
+
+**⭐ Overseas share classes break the layer-name key (added 2026-07-16):** layer names **drop `.a`/`.b`** while the
+manifest keeps them → **6 duplicate names ↔ 13 manifest entries = 7 securities unreachable by layer name, and 6
+that return the WRONG logo.** Two encodings ship side by side: `usabrk.a` vs `usafoxa`. **For overseas, the
+manifest is authoritative — not the layer name.**
+**⭐ The country prefix is fixed-3 lowercase — true today, written down nowhere, and already ambiguous:**
+`ss_img_ci_usaa` = `usa`+`a` (**Agilent, ticker `A`**); `usakr`(Kroger) / `usako`(Coca-Cola) / `usajd`(JD) all parse
+as two country codes. **77 tickers are ≤2 chars.** 797 of 798 assets are `usa`, so nothing breaks *yet* — **it
+breaks the moment a second country ships.** Promoted to `CORE.md`.
+**⭐ Heading counts here fail DIFFERENTLY from the `Nmoji 142→152` mode — distinguish them:** `이미지 CI 리스트 (711)`
+is **exact for its manifest** but the canvas holds **798** — a *frozen manifest outrun by the canvas*, not a rotted
+heading. (`🌍 해외 (6개)` / `🇰🇷 국내 (5개)` are both correct.) **94 canvas assets are absent from the manifest; 7
+manifest entries have no canvas asset.**
 Related, unresolved: **`ss_img_ci_etc` is a THREE-way name fork** — three SETs, three keys, three incompatible axis
 vocabularies (`Country` / `etc|kor_etc|oversea_etc|research_etc` / `ksp|ksq|knx`), all live, serving 주식/기타/지수.
 **Key off the node, never the name.**
