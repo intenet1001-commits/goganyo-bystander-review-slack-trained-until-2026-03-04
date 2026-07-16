@@ -76,10 +76,14 @@ On-canvas heading (`3720:936`), verbatim:
 |---|---|---|
 | Manifest lines in `1427:718` | **711** | `characters.split(/\r?\n/).filter(Boolean).length` |
 | Manifest **distinct** entries | **711** | `new Set(...).size` — **zero duplicates in the manifest** |
-| **Distinct `ss_img_ci_*` assets on canvas** | **798** | `new Set(names).size` over all non-TEXT nodes |
-| `RECTANGLE` assets (legacy `기존 ` block) | **712** (706 distinct) | `.length` |
-| `FRAME` assets (post-manifest additions) | **91** | `.length` |
-| All `ss_img_ci_*` nodes incl. captions | **813** | `.length` |
+| **Distinct `ss_img_ci_*` assets on canvas** | **798** | `new Set(names).size`, non-TEXT, **Plugin API** |
+| `ss_img_ci_*` non-TEXT nodes | **809** | `.length`, Plugin API |
+| — of which `RECTANGLE` (legacy `기존 ` block) | **712** (706 distinct) | `.length` |
+| — of which `FRAME` (post-manifest additions) | **91** | `.length` |
+| — of which `GROUP` / `VECTOR` | **5** / **1** | `.length` |
+| All `ss_img_ci_*` nodes incl. caption TEXT | **813** | `.length` |
+
+> ✅ **Recounted via the Plugin API after `get_metadata` was proven lossy on the domestic page** (it drops `GROUP`s; see `nds-ci-domestic-stock.md`). **This page survives the correction intact — 798 both ways** — because only 5 of its assets are `GROUP`s. **The XML happened to be safe here; that was luck, not reliability.**
 
 **The finding is the disagreement — and it is subtler than "stale by N".**
 
@@ -107,7 +111,29 @@ Observed forms across **798 distinct** names:
 | `ss_img_ci_usa<ticker><class>` | `usafoxa` `usanwsa` `usauaa` `usadisck` `usallyva` `usallyvk` `usalsxma` `usalsxmk` | ⚠️ concatenated share class — **competing convention** |
 | `ss_img_ci_etc` | — | fallback; **not `usa`-prefixed, breaks the grammar** |
 
-**Single-letter tickers are present and legal**: `usaa` `usac` `usad` `usaf` `usag`(→`usags`) `usah` `usaj` `usak` `usal` `usao` `usat` `usau` `usav`. ⚠️ **`ss_img_ci_usaa` is ambiguous** — `usa`+`a` (Agilent) vs a `usaa`-prefixed name. Purely positional parsing (`usa` = first 3 chars) resolves it, but only if you know the country code is fixed-width.
+### ⭐ Is the country prefix fixed 3-width? — TESTED. Yes today, undocumented, and one asset proves the ambiguity is real.
+
+Measured across **798 distinct names** (Plugin API):
+
+| Test | Result |
+|---|---|
+| names prefixed `usa` | **797** |
+| names NOT prefixed `usa` | **1** — `ss_img_ci_etc` |
+| distinct country prefixes in evidence | **1** (`usa`) |
+
+**The `국가` slot is real but has exactly one value on this page.** So a fixed-3 parse (`slice(0,3)` = country, remainder = ticker) is **correct today for 797 of 798** — `ss_img_ci_etc` being the sole break.
+
+**But the ambiguity the guide never resolves is live, and here is the proof:**
+
+> **`ss_img_ci_usaa` = `usa` + `a`** — Agilent Technologies, whose ticker is the single letter **`A`**.
+
+**`usaa` is simultaneously readable as a 4-char country prefix and as `usa`+`a`.** Nothing in the filename disambiguates it; **only the out-of-band knowledge that the country slot is 3 wide** makes it parseable. **17 single/double-letter tickers make this a systematic exposure, not a one-off:** `a` `ba` `bb` `be` `bf` `bk` `bp` `br` `c` `cb` `ce` `cf` `ci` `cl` `cp` `d` `dd` `de` `dg` `ea` `ed` `eh` `el` `es` `ew` `f` `fb` `fe` `fl` `gd` `ge` `gl` `gm` `gs` `h` `hd` `ip` `ir` `it` `j` `jd` `k` `ko` `kr` `l` `lh` `li` `lw` `ma` `mo` `ms` `mu` `ni` `nu` `o` `pg` `ph` `pm` `qs` `re` `rf` `rh` `rl` `sb` `so` `sq` `t` `tt` `u` `ua` `v` `vz` `wm` `wu` `wy` `zi` `zm` (77 of them ≤2 chars).
+
+⚠️ **`ss_img_ci_usakr` = `usa` + `kr`** (Kroger). **A naive reader sees the country codes `usa` and `kr` concatenated.** Likewise `ss_img_ci_usako` (Coca-Cola, `KO`) and `ss_img_ci_usajd` (JD.com). **The moment a second country prefix ships, these become genuinely undecidable without a width rule.**
+
+**Recommendation for CORE: state the width rule explicitly — `국가` is fixed 3 chars, lowercase; the remainder is the ticker.** It is true, load-bearing, and **written down nowhere.**
+
+⚠️ And the same country/currency confusion as `nds_flag`: **the filename grammar uses the country code `usa`, while `ss_img_ci_etc`'s variant axis uses the *currency* code `Country=usd(미국)`.** Same concept, one place says `usa`, the other says `usd`, and the axis is *labelled* `Country`. **Identical class to `nds_flag` shipping ISO-4217 under a `(국가코드)` caption** (`nds-lib-icons`). **This is now a three-site pattern in NDS — it is a house habit, not an accident.**
 
 ## 🔥 Invisibility mechanisms found on this page — 2 of the 5, and 3 conclusively absent
 

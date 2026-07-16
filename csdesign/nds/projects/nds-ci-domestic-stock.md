@@ -62,13 +62,19 @@ Canonical (`3720:911`):
 
 `(숫자)` is the placeholder token, not a literal name part. Actual distribution across **2,908 distinct names** (`.length`, not a heading):
 
-| Form | Count | Verdict |
+> ⚠️ **All counts below are RECOUNTED via the Plugin API.** My first pass derived them from the `get_metadata` XML dump, which is **proven lossy on this page** — see "get_metadata silently omits children" below. The XML-derived figures were wrong.
+
+| Form | Distinct | Verdict |
 |---|---|---|
-| `ss_img_ci_` + 6 digits — e.g. `ss_img_ci_005930` | **2,791** | canonical |
+| `ss_img_ci_` + 6 digits — e.g. `ss_img_ci_005930` | **2,793** | canonical |
 | `ss_img_ci_` + 6 **alphanumeric** — e.g. `ss_img_ci_0004Y0`, `ss_img_ci_33626K` | **55** | ⚠️ **grammar says `(숫자)`; these are NOT digits.** KRX codes for 우선주 / 신주인수권증서 / 전환사채 legitimately contain letters. **The documented grammar is wrong at source** — quoted verbatim above with the contradiction preserved. |
-| `ss_img_ci_ 064400` — **leading space** | **54** | ⚠️ malformed |
+| `ss_img_ci_ 064400` — **leading space** | **55** (incl. ` 33626L`) | ⚠️ malformed |
 | `ss_img_ci_455180 ` — **trailing space** | **1** | ⚠️ malformed |
-| malformed / other | **7** | see below |
+| malformed / other | **5** | see below |
+
+**Totals (`.length`, Plugin API, authoritative): 2,948 `ss_img_ci_*` nodes · 2,947 excluding the caption TEXT · 2,909 distinct names · 31 duplicated codes.**
+
+⚠️ **Node-type breakdown is the reason the XML lied: `GROUP` 2,541 · `FRAME` 405 · `RECTANGLE` 1 · `TEXT` 1.** **86% of the assets on this page are `GROUP`s** — precisely the node kind `get_metadata` drops.
 
 **The 55 alphanumeric codes are a real, load-bearing exception, not typos.** Full list:
 
@@ -92,11 +98,13 @@ Full leading-space list: ` 064400` ` 080420` ` 240550` ` 241840` ` 303810` ` 336
 | `ss_img_ci_455180 ` | — | trailing space. |
 | `ss_img_ci_종목코드(숫자).png` | `3720:911` | **not an asset — this is the rule caption TEXT node.** Do not count it as an asset; a naive `startsWith('ss_img_ci_')` sweep does. |
 
-## ⚠️ 30 duplicate codes — a name→asset lookup WILL collide
+## ⚠️ 31 duplicate codes — a name→asset lookup WILL collide
 
-30 codes appear more than once (`222080` ×3, `000240` ×3, `003780` ×3; the rest ×2):
+**31 codes appear more than once** (recounted via API; the XML dump reported only 30 — it missed `267250` entirely):
 
-`000000`(×2) `000240`(×3) `000720` `000950` `001510` `003780`(×3) `003920` `005300` `005380` `008770` `009150` `009540` `019170` `022100` `025530` `030190` `030200` `035510` `042660` `054220` `066970` `090460` `096760` `100090` `108320` `180640` `222080`(×3) `296640` `363260` `383220`
+`000000`(×2) `000240`(×3) `000720` `000950` `001510` `003780`(×3) `003920` `005300` `005380` `008770` `009150` `009540` `019170` `022100` `025530` `030190` `030200` `035510` `042660` `054220` `066970` `090460` `096760` `100090` `108320` `180640` `222080`(×3) **`267250`(×6)** `296640` `363260` `383220`
+
+> ⭐ **`ss_img_ci_267250` ×6 is the worst collision on the page — and `get_metadata` could not see it at all.** All six are `GROUP`s, which the XML dump drops. It surfaced only on the API recount. `267250` = HD현대. **Six competing assets for one code, with no ghost, no strike, and no label to arbitrate.** Unresolved — and it is the single strongest argument for not trusting the XML dump for inventory work.
 
 **Not all duplicates are errors — read the sentence, not the marker.** The dated 교체 (replacement) pattern deliberately places old and new side-by-side:
 
@@ -208,9 +216,21 @@ The only key resolvable from this page is via its 165 INSTANCEs, which all resol
 9. **`ss_img_ci_218410` name/stamp mismatch** — live child `에스엔시스`, hidden child `rfhic-logo 1`, stamp `RFHIC`. Resolved as a legitimate ticker-reuse history, but it will read as a defect to anyone name-matching.
 10. **Cross-file corroboration (NOT a conflict):** the `ss_img_` prefix here matches the `ss_img_` family already recorded in `nds-lib-icons` (`ss_img_quickbar`, `ss_img_2022home_morebank`, `ss_img_filter`). **`ss_` = the shipped-asset namespace, `nds_` = the component namespace.** This page is entirely `ss_`, consistent with it holding zero components. That is a coherent, file-spanning convention, not an accident.
 
-## Gaps / unverifiable
+## ⛔ `get_metadata` SILENTLY OMITS CHILDREN — confirmed on this page, and it corrupted my first pass
 
-- **`get_metadata` XML reports 2,941 `ss_img_ci_*` nodes; the Plugin API `findAll` reports 2,948.** A 7-node discrepancy. The XML omits some `GROUP`-wrapped nodes the API sees. **I report both; the API figure is authoritative** (`.length` off live nodes). Distinct-name count of **2,908** is computed from the XML dump and may therefore under-count by ≤7.
+**Independently reproduced.** The XML dump renders `ss_img_ci_kodex` (`3775:6`, ETF page) and its siblings as **self-closing, childless** `<frame ... />`. The Plugin API says each has **2 children** (`GROUP:삼성자산운용`, `FRAME:scale guide`). Verified on 8 nodes; **8/8 had omitted children**.
+
+**On this page the damage is structural, not cosmetic** — `GROUP` is exactly what gets dropped, and **2,541 of 2,948 `ss_img_ci_*` nodes (86%) are `GROUP`s.**
+
+| Measure | `get_metadata` XML | **Plugin API (authoritative)** | Error |
+|---|---|---|---|
+| `ss_img_ci_*` nodes | 2,941 | **2,948** | −7 |
+| distinct names | 2,908 | **2,909** | −1 |
+| duplicated codes | 30 | **31** | −1 — **missed `267250` ×6 entirely** |
+
+**Lesson for the LEDGER: never derive an inventory count from `get_metadata`.** It is safe for locating rule-bearing frames and reading TEXT layer names; it is **unsafe for any `.length`**. Every count in this note is now API-derived. The one-call-per-page `get_metadata` method is still correct for *navigation* — but the counts must come from `findAllWithCriteria`.
+
+## Gaps / unverifiable
 - **Whether the CDN strips the leading space** in the 55 padded names — undeterminable read-only. Needs one HTTP probe of `downloadcdn.nhqv.com/mts/ci/ss_img_ci_%20064400.png` vs `…ss_img_ci_064400.png`.
 - **The `9bcc3d` TEXT node (`109:26171`)** — a bare hex value with no context. Not interpreted.
 - **`ss_img_ci_000000` (×2)** — placeholder vs real asset unresolved.

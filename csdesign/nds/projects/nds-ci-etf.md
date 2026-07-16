@@ -168,17 +168,78 @@ TEXT `5718:190`, the one piece of real design guidance on the page:
 
 **Zero COMPONENTs / COMPONENT_SETs live on this page** (`findAllWithCriteria` → `[]`, both). All keys below are resolved **through INSTANCEs via `getMainComponentAsync()`** — the only correct method, since `get_metadata` renders a SET as `<frame>` and a COMPONENT as `<symbol>`.
 
-| Instance | Main COMPONENT key (40-hex) | Parent SET key (40-hex) | KIND to import | `remote` | Tier |
-|---|---|---|---|---|---|
-| **`ss_img_ci_etc`** (`5718:285`) | `df7e19380ea3c116d0c05de088bea42c1764f0ac` (`Country=usd(미국)`) | **`f3a7b6ed87a9914c0dca2f1f87d2c77cd9164dc4`** | **COMPONENT_SET** → `importComponentSetByKeyAsync` | **`false`** | **(a) source component, viewed from inside its home file** |
-| `nds_flag` (`5725:1072`) | `7d31624cb9404a2506dd8c2b5022f2540dc43fbd` (`Type=Square, Country=USD(미국)`) | **`d81573482ffbff1e5076384753d483a3072d775f`** | COMPONENT_SET | `true` | (b) consumed from NDS_Library — **key matches `nds-lib-icons.md` exactly** |
-| `00_통합검색03_결과04_메뉴특정` (`5718:1328`) | `89590df752efa727b3b1292cfe915d3a6bbbd1a8` | **none — `parent` is `null`** | **COMPONENT** → `importComponentByKeyAsync` | `true` | (b) consumed — a full-screen template, almost certainly from `NDS_Templates` |
+**All 128 INSTANCEs resolved.** 17 distinct mains — the full census:
+
+| Instance | Main COMPONENT key (40-hex) | Parent SET key (40-hex) | KIND to import | `remote` | × | Tier |
+|---|---|---|---|---|---|---|
+| **`ss_img_ci_etc`** (`5718:285`) | `df7e19380ea3c116d0c05de088bea42c1764f0ac` (`Country=usd(미국)`) | **`f3a7b6ed87a9914c0dca2f1f87d2c77cd9164dc4`** | **COMPONENT_SET** → `importComponentSetByKeyAsync` | **`false`** | 1 | **(a) source, home file** |
+| `nds_flag` | `7d31624cb9404a2506dd8c2b5022f2540dc43fbd` (`Type=Square, Country=USD(미국)`) | **`d81573482ffbff1e5076384753d483a3072d775f`** | COMPONENT_SET | `true` | 12 | (b) — ⭐ **key matches `nds-lib-icons.md`** |
+| `nds_icon_arrow` | `d0ec4c9777b1f8ce1bec480f25a1f72c2d962aa1` (`Color=05, Type=right, Height=h24`) | **`dde648604e4d08cc6b99c44dda81ec73ccbb4b15`** | COMPONENT_SET | `true` | 8 | (b) — ⭐ **key matches `nds-lib-icons.md`** |
+| `nds_icon_delet` | `b3488a5164e3a5c1ae8ae80dbd52bcaa25267ba5` (`Color=5, Height=h30`) | **`74eac710a62949cb0702187de2b05bd9d206f105`** | COMPONENT_SET | `true` | 1 | (b) — ⭐ **key matches `nds-lib-icons.md`** (the `delet` typo set) |
+| `btn_container_regular` | `b4c29be637082d22f9ac89482efa9f855b39b79c` (`Strength=4(line)-R, Height=h40, Status=normal`) | `fd0a4e2fd7b3c49612b27963bd8bf41f1580910b` | COMPONENT_SET | `true` | 42 | (b) |
+| `contents_card` | `9df72d5e04329d08ba9997ec04731553b45132c4` (`Type=국내종목`) | `7ffbb0995364c7ab909efdee3edb624bd611fdbb` | COMPONENT_SET | `true` | 21 | (b) |
+| `feature` | `51b76877af1fbc85d8da6e4bd24c3e5254683f53` (`Property 1=⭐️ 특정종목90`) | `827394efded65b2474ff3e74a2dc028f7a404519` | COMPONENT_SET | `true` | 14 | (b) |
+| `tab_line_21pt` | `a7cb76aa05b9f6e5b3e80918dde04957a77d3a5f` (`Type=swipe, Active=on,Channel=NM`) | `f82db6566e1b3a8a8e879b7f3e926911a2af7b11` | COMPONENT_SET | `true` | 9 | (b) — ⚠️ axis value `Active=on,Channel=NM` **contains a comma**, i.e. two axes collapsed into one value |
+| `icon_triangle` | `7e0bc43daf2c79a562cb023476b6a2c7c6cbb871` (`Type=increase, Gray=false`) | `8de9dbda1ecc745436ac40b774767fd53cde1f9b` | COMPONENT_SET | `true` | 7 | (b) — mirrors `rate_home`'s `Type/Gray` axes in `nds-lib-icons` |
+| `label` | `8046757c426a3392f263f67d9b9fcb965b801cd3` (`Property 1=normal`) | `10153ec2a923e77ea568f3a712a9218a18def445` | COMPONENT_SET | `true` | 5 | (b) |
+| `label_risk` | `953e11d13f03c9335b25995916527108db800db2` (`Type=stroke, Lv=비보장`) | `d71897c636a71e92ebef7e6075bb797aa3572b09` | COMPONENT_SET | `true` | 3 | (b) |
+| `card_stock` | `090b770f0342c89843423f17238194a5c5c31e53` (`Property 1=해외`) | `286c5366acc3dd1631fe5334c485c1a57d7c1548` | COMPONENT_SET | `true` | 1 | (b) |
+| `statusbar` | `e5e2a9f9fc56a1b50a96ab0569e8f9a3dd7649cf` (`Type=NM, Dark mode=false`) | `b4d07422e1eedeb9f1ae4b831e905357e54b01a6` | COMPONENT_SET | `true` | 1 | (b) |
+| `search_header_input` | `51ad65c98cfcd71450cbd262aec4b31c3702f80d` (`Property 1=input`) | `289a99ce52df180d574a3e592492f88896668bc3` | COMPONENT_SET | `true` | 1 | (b) |
+| `00_통합검색03_결과04_메뉴특정` (`5718:1328`) | `89590df752efa727b3b1292cfe915d3a6bbbd1a8` | **none — `parent` is `null`** | **COMPONENT** → `importComponentByKeyAsync` | `true` | 1 | (b) — full-screen template, likely `NDS_Templates` |
+| `label/lv3` | `f93baa92c21301afaad69ec820f839800908288f` | **none — `parent` is `null`** | **COMPONENT** → `importComponentByKeyAsync` | `true` | 1 | (b) — ⚠️ **slash in the name**; a standalone, unlike its `label` sibling |
+
+⭐ **Three independent key confirmations against `nds-lib-icons.md`** — `nds_flag`, `nds_icon_arrow`, `nds_icon_delet` all resolve byte-for-byte to the SET keys recorded there. **That is three-way corroboration of that note's key table from a different file, via a different method (`getMainComponentAsync` rather than reading `.key` off the set).**
+
+⚠️ **All 14 remote SETs above are `remote: true` and 13 of the 16 mains come from ONE pasted mockup** (`00_통합검색…`). They document what NDS_Templates/NDS_Library ship, **not what the ETF page designs.** Do not read them as ETF rules.
 
 **KIND discipline:** `ss_img_ci_etc` and `nds_flag` are **SET** keys (import via `importComponentSetByKeyAsync`); `00_통합검색03_결과04_메뉴특정` is a **standalone COMPONENT** with `parent === null` (import via `importComponentByKeyAsync`). **Mixing these is the exact error the method warns about** — I verified each `parent.type` explicitly rather than inferring from the metadata tag.
+
+### ⛔ `ss_img_ci_etc` ≠ `ss_img_ci_etf` — do not merge these in the LEDGER
+
+The guide page reportedly carries a **`ss_img_ci_etf`** SET with two live keys (`e1782bf9…` visible / `b2862b1a…` occluded). **That is a different component from mine.** `etc` (etcetera — the fallback) and `etf` (the product) differ by one character and are separate sets:
+
+| Name | SET key | Where |
+|---|---|---|
+| **`ss_img_ci_etc`** | `f3a7b6ed87a9914c0dca2f1f87d2c77cd9164dc4` | instanced on **my** ETF page (`5718:285`) |
+| `ss_img_ci_etf` | `e1782bf94b991624a579f9c58c156277fd95080e` / `b2862b1a740d8f3864c8003c98cbc5192324f566` | guide page — **not referenced from my page** |
+
+**Answer to "does your ETF page instance either `ss_img_ci_etf` key?" — NO, neither.** I resolved **all 128 INSTANCEs** on the page via `getMainComponentAsync()`; the full set of distinct mains is enumerated above and **`ss_img_ci_etf` is not among them.** The 11 nodes named `ss_img_ci_etf` on my page are **plain `FRAME`s, not instances** — they are a hand-built exploration that *duplicates the name* of a real component set without instancing it.
+
+⭐ **That is itself the finding: my page reinvents `ss_img_ci_etf` by hand instead of using the published set.** The composites are drawn from a `Subtract` boolean + raw TEXT + an `nds_flag` instance — not from `e1782bf9…`. **A third artifact now shares the name `ss_img_ci_etf`** (guide set ×2 keys + my 11 frames), and mine is the only one that is not a component.
+
+⚠️ **Note the axis mismatch that follows:** the guide's `ss_img_ci_etf` uses `kr|us|global`, but my composites carry **`nds_flag` `Country=USD(미국)` / `Country=KRW(한국)`** — i.e. my page expresses the same kr/us distinction through **a different component with a currency-coded axis.** Two incompatible encodings of one concept.
 
 ⚠️ **`ss_img_ci_etc`'s axis value is `Country=usd(미국)` — lowercase `usd`**, whereas `nds_flag` uses **uppercase `USD(미국)`**. **Two sets, same concept, different casing.** A fourth casing convention in one file.
 
 **Verification: `unverified` for all three.** Read-only; `importComponentSetByKeyAsync` would throw. Keys read off the resolved main components — authoritative for identity, not a round-trip test.
+
+## 🚨 The 프리텐다드 vs 산돌 격동고딕 A/B did NOT land here — this page is the "before"
+
+`Archive` (`3323:345`) reportedly holds a **newer** ETF pass with an undecided 프리텐다드 vs 산돌 격동고딕 A/B. **My page does not close that decision — the node IDs prove it is the earlier state.** My composites are block `5725`–`5735`; Archive's shared `필수 ETF` note is `6059:3412` vs mine at `5718:190`. **Mine is older. An older page cannot resolve a question raised later.**
+
+Full font census (`getStyledTextSegments(['fontName'])`, all 188 TEXT nodes):
+
+| Font / style | Segments | Used for |
+|---|---|---|
+| `NanumBarunGothic / Regular` | 91 | pasted mockup (`00_통합검색…`) |
+| `Roboto / Regular` | 45 | pasted mockup — numerals |
+| `NanumBarunGothic / Bold` | 16 | pasted mockup |
+| **`Sandoll GyeokdongG2 / 06 Hv`** | **13** | ⭐ **the `ss_img_ci_etf` composites — `나스닥` `100` `S&P` `코스피` `배당` `다우존스`** |
+| `Roboto / Medium` | 13 | pasted mockup — prices |
+| `Pretendard / Bold` | 3 | SECTION headings `국내ETF` / `해외ETF` |
+| `Pretendard / Regular` | 2 | the two rule captions |
+| `Inter / Bold` | 2 | loose labels `국내 ETF` / `미국 ETF` |
+| `Inter / Regular` | 2 | the arirang URL, `삼성자산운용 - ` |
+| `Noto Sans KR / Bold` | 1 | the `필수 ETF` brief |
+
+**On this page the composites use `Sandoll GyeokdongG2 / 06 Hv` exclusively — zero Pretendard on any composite.** Pretendard appears here **only on section chrome** (headings + rule captions), never on an icon.
+
+⭐ **So the two fonts were never A/B'd against each other on this page — they never touched the same element.** 산돌 was simply *the* composite font. The A/B is a **later** question, raised in Archive against this page's 산돌 baseline. **Reading my page as "산돌 won" would invert the chronology.**
+
+**Verdict: `LEDGER#ci-archive-is-the-newest-work` is CORROBORATED, not closed.** My page supplies the missing half — **what Archive is testing *against*: 산돌 격동고딕 G2 / 06 Hv.** The decision remains open, and Archive is the authority.
+
+⚠️ Also note **five font families for chrome alone** (Pretendard, Inter, Noto Sans KR + the mockup's NanumBarunGothic/Roboto). `국내ETF` (SECTION heading) is **Pretendard/Bold** while `국내 ETF` (loose label `3775:2`) is **Inter/Bold** — **near-identical strings, different fonts, 8px apart in meaning.** Corroborates that this page is a working surface, not a finished spec.
 
 ## ⭐ The `NDS_StockIcon_CI` relationship — the LEDGER hole is REFRAMED, not closed
 

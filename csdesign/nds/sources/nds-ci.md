@@ -67,9 +67,9 @@ _(filled in as notes land — one row per learned page)_
 | Page | Note | Status (+ evidence) |
 |---|---|---|
 | `⭐️CI 제작 가이드⭐️` | nds-ci-production-guide.md | **live** — two per-frame stamps: `Last update  2024.02.27 Moana`, `Last update  2024.08.30 Viviana, Moana` [sic, double space]. ⚠️ **No page-level stamp**; node-id stratigraphy (4709:/5160:/5377:/5855:/6313: all ≫ 3867:) proves later edits no stamp covers |
-| `국내주식` | nds-ci-domestic-stock.md | live |
-| `해외주식` | nds-ci-overseas-stock.md | live |
-| `ETF` | nds-ci-etf.md | live — ⚠️ **but NOT the current state of ETF design**; the `Archive` page holds newer work |
+| `국내주식` | nds-ci-domestic-stock.md | **live** — 2,948 assets populated (API count; the XML says 2,941 — see Gotcha 17). **No `Last update`**; recency from rolling batch labels, newest `SFA넥셀 종목 CI 교체 (26.06.29)` |
+| `해외주식` | nds-ci-overseas-stock.md | **live** — 798 distinct assets. **No `Last update`**; recency from 큰손픽/서비스 batch labels, newest `스페이스 x_ 26.06.12` |
+| `ETF` | nds-ci-etf.md | **unknown** — populated but a **working surface** (21 pasted phone screenshots, an unfinished `삼성자산운용 - `, in-progress icons). **NO stamp, NO batch labels, NO recency signal of any kind.** ⚠️ **NOT the current state of ETF design** — it is the *baseline* the `Archive` page A/Bs against |
 | `Archive` | nds-ci-archive.md | **unknown** — refused `deprecated` in BOTH directions. Contents are **newer** than live ETF (node block 6508 vs 5735; screenshots 2026-07-08; notes 7/13). No live page defines itself against it — and that mechanism exists in this file, so its absence is meaningful |
 | `은행/증권/기관` | nds-ci-banks-brokerages.md | live — content revision stamps `240328` |
 | `간편인증기관` | nds-ci-simple-auth.md | live |
@@ -96,6 +96,19 @@ these are *third-party* logos whose colour belongs to 농협/애플, not NH. **G
 **Cross-file proof** — NDS_CI **consumes** NDS_Library: its `nds_flag` instance resolves via
 `getMainComponentAsync()` → parent SET `d81573482ffbff1e5076384753d483a3072d775f`, matching `nds-lib-icons.md`
 byte-for-byte. First time that relationship was demonstrated rather than assumed.
+
+
+## ⚠️ Registry completeness — read this before trusting the CI rows
+
+**4 of 6 subagent batches sent structured returns and are fully merged** (guide · export · archive · firm-media ·
+stock). **The `institutions` batch (은행/증권/기관, 간편인증기관, 공공기관) never returned** — its three notes are
+complete and committed, but its **componentKeys and LEDGER conflicts were never merged**, and its INDEX rows were
+written by the orchestrator from reading the notes rather than from the agent's own return.
+**Low expected cost** — the other five batches independently established that NDS_CI's inventory pages carry **zero
+components**, so there are probably no keys to miss — **but "probably" is doing work in that sentence.**
+**Open, and cheap to close:** are the **150 institution codes** dropped from the live banks page *retired*, or
+**re-scoped** into 간편인증기관 / 공공기관 / 펌뱅킹 / 자문사? The institutions batch holds two of those four pages
+and is the only party positioned to answer it. See `LEDGER#ci-banks-dropped-codes`.
 
 ## Method notes for the next pass on this file
 

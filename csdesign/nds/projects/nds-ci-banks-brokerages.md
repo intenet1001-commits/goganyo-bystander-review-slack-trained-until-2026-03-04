@@ -53,7 +53,15 @@ The brief listed five mechanisms. **This page exposes a sixth, and it is the wor
 
 **Consequence:** the institution-name mapping — the single most valuable thing on this page — is **100% invisible to `get_metadata`**, because the names live on GROUP nodes. A structure-only read of this page yields 240 opaque codes and nothing else. **The mapping below was recoverable only via `use_figma`.**
 
-Verified absent on this page: **opacity ghosting (zero nodes with opacity<1)**, **STRIKETHROUGH (zero)**, **fill-matching invisibility (none found)**, **`👿`/`제외`/`해당없음`/`deprecated`/`폐기` (zero hits)**. The mechanisms present are **`hidden="true"` (16 nodes)** and **the GROUP-omission bug above**.
+Verified absent on this page: **opacity ghosting (zero)**, **STRIKETHROUGH (zero)**, **fill-matching invisibility (none found)**, **`👿`/`제외`/`해당없음`/`deprecated`/`폐기` (zero hits)**. The mechanisms present are **`hidden="true"` (16 nodes)** and **the GROUP-omission bug above**.
+
+**Opacity sweep — method stated, because the first one was not rigorous enough.** My initial sweep used `findAll(() => true)` + an unguarded `typeof n.opacity` read. That is the pattern that (a) can trip the read-only guard and (b) throws on `SLICE`. **I re-ran it properly:** `findAllWithCriteria` over 15 explicit types, `try/catch` around every `.opacity` read.
+
+Result, on **all 3,810 nodes**: **0 ghosted · 0 opacity throws · 0 SLICE nodes on the page** (which is why the unguarded read happened to survive — luck, not correctness).
+
+Type census from the guarded sweep: `VECTOR` 1582 · `GROUP` 1291 · `ELLIPSE` 479 · `FRAME` 263 · `RECTANGLE` 163 · `TEXT` 18 · `BOOLEAN_OPERATION` 13 · `INSTANCE` 1 · **`COMPONENT` 0 · `COMPONENT_SET` 0 · `SLICE` 0**.
+
+> **⭐ This page is a prime ghosting candidate — a merged/defunct bank's logo is exactly what gets `opacity: 0.10`-parked in the sibling `- Illusts` file (65 of 153). It has ZERO. The convention is genuinely not used here.** Parking on this page is done with `visible:false` GROUP siblings instead (see the 케이뱅크 exhibit).
 
 ## Name-reliability verdict: **RELIABLE, and unusually so — but the codes are the names**
 
@@ -76,13 +84,16 @@ Grammar, inferred from 169 frames (**the page states no grammar caption for this
 
 Prefix carries the **institution class**, and this is verbatim-verifiable against the on-canvas column headings:
 
-| Prefix | Count | Class (from position under headings) |
+| Prefix | Live count | Class (from position under headings) |
 |---|---|---|
-| `a1` | 32 | 은행 — 1st-tier banks, 지방은행, 인터넷은행, 공사/기금 |
+| `a1` | 30 | 은행 — 1st-tier banks, 지방은행, 인터넷은행, 공사/기금 |
 | `a2` | 4 | 외국계 은행 서울지점 |
-| `a3` | 80 | 저축은행 (the bulk) |
+| `a3` | **80** | 저축은행 (the bulk) |
 | `a4` | 5 | 협동조합 중앙회 |
 | `c1` | 48 | 금융투자 — 증권/선물/자산운용 |
+| **total** | **167** | **all distinct — zero duplicate codes** |
+
+(Counts exclude the 2 `히스토리 참고용` column frames at x<7000, which are exhibits, not inventory.)
 
 **Numbering-hole analysis is meaningless for this system** — the `<xx>` slot is a sparse alphabetic allocation, not a dense counter. **Do not iterate it.** (Contrast the sibling file, where iterating `01..N` 404s.)
 
@@ -210,9 +221,12 @@ Two small columns sit far left (x≈4931–5500), **outside both main grids**, e
 | **COMPONENT** | **0** |
 | **COMPONENT_SET** | **0** |
 | INSTANCE | **1** (`scale guide`, hidden) |
-| SVN institution-code frames | **169** (166 distinct codes) |
-| CDN `ss_img_company_*` frames | **70** (67 distinct numeric + `null` + 2 history dupes) |
-| Nodes with `opacity < 1` | **0** |
+| **SVN live institution-code frames** | **167** — all distinct, zero dupes |
+| **CDN live `ss_img_company_*` frames** | **68** — all distinct (67 numeric + `null`) |
+| `히스토리 참고용` exhibit frames (x<7000, NOT inventory) | **4** (2× `a1aajb0000`, 2× `ss_img_company_089`) |
+| **Total distinct live codes** | **235** (167 SVN + 68 CDN) |
+| **`ss_img_sb_*` frames** | **0** — swept, family entirely absent from live |
+| Nodes with `opacity < 1` | **0** (guarded sweep; see below) |
 | `visible:false` nodes | **16** |
 | STRIKETHROUGH segments | **0** |
 | Frames `get_metadata` wrongly called empty | **105** |
@@ -224,6 +238,45 @@ Three column headings sit at y=9793: `은행` (x=7054), `금융투자` (x=9617),
 **The `보험/캐피탈` column is EMPTY.** The right-most asset frame on the entire page is at **x=11769** (`c1aacq0000` NH투자증권 / `c1aadb0000` / `c1aaij0000` / `c1aaqc0000`). Nothing exists at or beyond x=12290. **`보험/캐피탈` is a heading over zero assets** — either a planned section never filled, or one whose contents were removed without removing the heading.
 
 Corroborating the gap: the page's only insurance asset, **`a1aahe0000` 미래에셋생명보험**, is filed at x=8974 — **under `은행`, not under `보험/캐피탈`**. The taxonomy is broken in both directions.
+
+## `LEDGER#ci-banks-dropped-codes` — what this page can and cannot settle
+
+The archive-vs-live diff was put to me as: **167 live codes, all present on the 317-code archive → 150 dropped, plus all 79 `ss_img_sb_*`; but live added `ss_img_company_030`/`_221`, so live is not a strict subset either.** Question: are the 150 **retired**, or **re-scoped to a sibling page**?
+
+**What I can confirm from this page:**
+
+- **`167` is exact, and it is the `SVN 마이데이터 기관코드` family — not CDN.** My live count is **167 SVN frames, all distinct, zero duplicate codes**. The match is exact, which pins the archive diff to the SVN family. (Live CDN is a separate **68**.) ⚠️ **The `_030`/`_221` "additions" are `ss_img_company_*` — CDN names, not SVN.** So the diff as stated **mixes two disjoint families**: 167-of-317 is an SVN comparison, but the two additions are CDN. **Those two facts cannot both be about the same set.** Re-run the diff per-family before trusting the "not a strict superset" conclusion — I suspect it is an artifact of the mix.
+- **`ss_img_sb_*`: 0 hits.** Swept all 3,810 nodes by regex. **The family is entirely absent from live** — confirmed, not assumed.
+
+**⛔ RE-SCOPED-TO-A-SIBLING-PAGE IS REFUTED — this is the cheap test you asked for, and it comes back clean negative.**
+
+I hold the other two pages in the diff's blast radius. **Their namespaces are disjoint from this page's, with zero overlap:**
+
+| Page | Namespaces present | `ss_img_company_*` | `ss_img_sb_*` |
+|---|---|---|---|
+| `511:2` 은행/증권/기관 | `a1`/`a2`/`a3`/`a4`/`c1`, `ss_img_company_*` | 68 | **0** |
+| `1251:2` 간편인증기관 | `ZY`/`ZV`/`ZW`, `ss_img_ci_*` | **0** | **0** |
+| `1255:2` 공공기관 | `PB` | **0** | **0** |
+
+**Not one of the 150 dropped codes, and not one of the 79 `ss_img_sb_*`, appears on 간편인증기관 or 공공기관.** Those pages do not use the `a*`/`c1`/`ss_img_*company|sb*` namespaces at all. **The 150 were not re-scoped to my pages.** (I cannot speak for pages outside my batch — 언론사 etc.)
+
+**⭐ A better hypothesis for the 79 `ss_img_sb_*`, with a numeric coincidence worth testing:**
+
+**79 archived `ss_img_sb_*` (savings banks) vs 80 live `a3` codes (savings banks).** And live CDN retains exactly one generic **`ss_img_company_050` → child GROUP `050. 저축은행`** — a single catch-all savings-bank logo.
+
+That reads as **family consolidation, not retirement**: per-savings-bank logos were dropped from the CDN/`sb` family, the CDN kept **one generic 저축은행 mark**, and per-bank identity now lives in the **SVN `a3` family**. The `80 = 79 + 1` gap fits precisely — my `a3` set contains **`a3aaph0000` 상호저축은행중앙회**, which is the *association*, not a savings bank. **79 banks + 1 중앙회 = 80.**
+
+**⚠️ Label this a hypothesis, not a finding.** It is a numeric coincidence plus a plausible story. **The decisive test:** diff the archive's 79 `ss_img_sb_*` institution names against my 80 `a3` names (full list in the mapping table above — I extracted them via `use_figma`; `get_metadata` cannot see them). If they match 79:79, the item closes as *consolidated*. If not, it stays open. **I did not run it — I have no read on the archive.**
+
+**⭐ `보험/캐피탈` — the taxonomy DID change, but not in the direction that would absorb the 150.**
+
+The heading exists here and (per your note) not on the archive. **But I verified the column is EMPTY** — rightmost asset on the page is x=11769; the heading sits at x=12290; **nothing exists at or beyond it.** So the taxonomy gained **a category with zero members**. It cannot be the destination of any dropped code.
+
+Corroborating: the page's only insurance logo, **`a1aahe0000` 미래에셋생명보험**, is filed at x=8974 — **under `은행`**, not under the insurance heading that exists for it.
+
+**Inference, flagged as inference:** `보험/캐피탈` looks like a *planned* home that was never populated. If the 150 dropped included 보험/캐피탈 institutions, they were **removed before their new section was built** — which would make them retired-pending-rework rather than cleanly retired. **I cannot establish this from the page** and I will not assert it.
+
+**Verdict: the 150 are NOT on my two sibling pages (established). Whether they are retired outright, consolidated into `a3` (the 79/80 hypothesis), or parked pending `보험/캐피탈` — UNRESOLVED from my batch.**
 
 ## Conflicts / LEDGER candidates
 
