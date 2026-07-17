@@ -83,8 +83,8 @@ select name, file_key, kind, total_pages, learned_pages, status
 from nhdesign3_sources order by kind, name;
 ```
 
-Snapshot as of 2026-07-17 (post audit+repair) — **13 sources, 182 pages, 191 components
-(65 with internal-geometry tokens), 189 topics, 7 open ledger rows**:
+Snapshot as of 2026-07-17 (post audit+repair, +proposal-template add) — **14 sources, 184
+pages, 191 components (65 with internal-geometry tokens), 190 topics, 7 open ledger rows**:
 
 | Source | fileKey | Kind | Pages |
 |---|---|---|---|
@@ -101,6 +101,16 @@ Snapshot as of 2026-07-17 (post audit+repair) — **13 sources, 182 pages, 191 c
 | nhnamuh-production (mynamuh.com) | — | website | 1/1 |
 | nhsec-production | — | website | 1/1 |
 | SYNTHESIS — vibe rubric & cross-cutting rules | `synthesis-nhdesign3` | guide | 4/4 |
+| PPT_Proposal+FlowOverview Template | `zRrojC3HnGljRiRYMFiCjX` | guide | 2/2 |
+
+The PPT_Proposal+FlowOverview Template source (added 2026-07-17) holds the two-page structural
+spec behind the global `nds-proposal` skill (`~/.claude/skills/nds-proposal/SKILL.md`) —
+`ppt-proposal-slide-pattern` (Cover/content-slide/Closing layout) and
+`screen-flow-overview-pattern` (numbered screens connected by green flow/branch arrows, with a
+popup·시트 mockup section) — learned verbatim from a real shipped example (해외주식의결권 NDS
+기획서 파일, fileKey `zRrojC3HnGljRiRYMFiCjX`, distinct from the BUILD-lessons source above
+which shares the same feature name but a different fileKey). Invoke `/nds-proposal <feature>`
+to generate a new 기획서+화면흐름개요 pair for any NDS feature; it loads this skill first.
 
 The SYNTHESIS source (added 2026-07-17 after a 6-auditor quality audit) holds rules distilled
 from the corpus rather than transcribed from Figma: the **vibe-rubric** page (mandatory BUILD
@@ -311,3 +321,18 @@ claim changes.
   `supabase-cli-concurrent-auth-race-2026-07-17`) — fan-outs use dump-then-read with serial
   SQL apply. Repair scripts preserved under `supabase/migrations/` (phaseA_synthesis + 4
   learner scripts).
+- **2026-07-17 (PPT_Proposal+FlowOverview template)**: User pointed at a real shipped example
+  (해외주식 의결권 투표 — NDS 기획서 - 화면설계 — Copy, fileKey `zRrojC3HnGljRiRYMFiCjX`, a
+  companion file to but distinct from the `QFs41kWBHUMQt3k1oRmzgK` BUILD-lessons source) and
+  asked for a reusable global skill command that can generate the same two-part deliverable
+  (PPT 기획서 slide deck + 화면 흐름 개요 flow diagram) for future features. Learned the file's
+  two structural patterns verbatim into a new `guide`-kind source (2/2 pages, see snapshot
+  table above) rather than hardcoding the spec into a skill file, consistent with this
+  project's DB-is-source-of-truth stance. Shipped `~/.claude/skills/nds-proposal/SKILL.md` as
+  a thin orchestrator: it loads `nhdesign3` + `figma-use`, queries the new template rows
+  alongside the existing BUILD lessons/SYNTHESIS rubric, builds the flow overview before the
+  slides (reusing the same screen instances in both), and runs the standard BUILD quality
+  gate plus a template-fidelity screenshot compare against the reference file. Not yet
+  measured: whether a real `/nds-proposal` run for a brand-new (unbuilt) feature actually
+  produces deck+flow output that reads as on-template — the pattern is transcribed from one
+  example only, so a second real use is the first test of whether it generalizes.
