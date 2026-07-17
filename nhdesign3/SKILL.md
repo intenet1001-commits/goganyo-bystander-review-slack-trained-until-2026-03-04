@@ -83,8 +83,9 @@ select name, file_key, kind, total_pages, learned_pages, status
 from nhdesign3_sources order by kind, name;
 ```
 
-Snapshot as of 2026-07-17 (post audit+repair, +proposal-template add) — **14 sources, 184
-pages, 191 components (65 with internal-geometry tokens), 190 topics, 7 open ledger rows**:
+Snapshot as of 2026-07-17 (post audit+repair, +proposal-template add, +website VERIFY+expand) —
+**14 sources, 188 pages, 191 components (65 with internal-geometry tokens), 191 topics, 8 open
+ledger rows**:
 
 | Source | fileKey | Kind | Pages |
 |---|---|---|---|
@@ -98,8 +99,8 @@ pages, 191 components (65 with internal-geometry tokens), 190 topics, 7 open led
 | 반영완료 ⭐️ 국내주식 권리 | `ZkwarjFkN8BiGolWO7PcwI` | project | 6/6 |
 | 반영완료 ⭐️채권권리 행사 | `FnGtZI4foLBk4nLAZmodAx` | project | 3/3 |
 | 해외주식의결권 (BUILD lessons) | `QFs41kWBHUMQt3k1oRmzgK` | project | 8/8 |
-| nhnamuh-production (mynamuh.com) | — | website | 1/1 |
-| nhsec-production | — | website | 1/1 |
+| nhnamuh-production (mynamuh.com) | `https://www.mynamuh.com/` | website | 1/1 |
+| nhsec-production (nhsec.com) | `https://www.nhsec.com/` | website | 5/5 |
 | SYNTHESIS — vibe rubric & cross-cutting rules | `synthesis-nhdesign3` | guide | 4/4 |
 | PPT_Proposal+FlowOverview Template | `zRrojC3HnGljRiRYMFiCjX` | guide | 2/2 |
 
@@ -110,7 +111,25 @@ spec behind the global `nds-proposal` skill (`~/.claude/skills/nds-proposal/SKIL
 popup·시트 mockup section) — learned verbatim from a real shipped example (해외주식의결권 NDS
 기획서 파일, fileKey `zRrojC3HnGljRiRYMFiCjX`, distinct from the BUILD-lessons source above
 which shares the same feature name but a different fileKey). Invoke `/nds-proposal <feature>`
-to generate a new 기획서+화면흐름개요 pair for any NDS feature; it loads this skill first.
+to generate a new 기획서+화면흐름개요 pair for any NDS **mobile app/mobile-web** feature; it loads
+this skill first. `/web-proposal <feature>` (`~/.claude/skills/web-proposal/SKILL.md`, added
+2026-07-17) generates the same two-part deliverable for NH's **desktop websites**
+(나무증권/mynamuh.com, NH투자증권/nhsec.com) instead, sourced from the `website`-kind rows below
+rather than the NDS guide files — no Figma component library exists for these, so it builds
+plain frames reproducing live-sampled layout/color/nav instead of importing instances.
+
+**The website sources are volatile — verify live before trusting the DB snapshot.** A 2026-07-17
+VERIFY+expand pass found the two domains' redirect direction AND brand palette had flipped
+within ~24 hours of the prior (2026-07-16) VERIFY: mynamuh.com now redirects to nhsec.com (the
+reverse of the earlier finding), and the live brand is blue NH투자증권 (#1171D2/#1692E8, 6-item
+nav incl. 연금자산, no 나무란?) — not the teal 나무 brand (#00A5BD/#0A808C) recorded a day
+earlier. See ledger `mynamuh-nhsec-rebrand-flap-2026-07`. The same pass captured 4 new category-
+landing pages under `nhsec-production` (뱅킹/계좌정보, 주식/파생상품안내, 고객센터, plus a
+flagged `unreliable`-status quirk page for 금융상품 which routes to a mobile guide instead of a
+desktop landing) — real layout/color/copy-tone notes for future 새로운 영역 기획, not just nav
+labels. `nhnamuh-production` now holds only historical/provenance value plus a note that it has
+zero independent content while the redirect points away from it — treat `nhsec-production` as
+the primary reference row regardless of which domain a request names.
 
 The SYNTHESIS source (added 2026-07-17 after a 6-auditor quality audit) holds rules distilled
 from the corpus rather than transcribed from Figma: the **vibe-rubric** page (mandatory BUILD
@@ -336,3 +355,32 @@ claim changes.
   measured: whether a real `/nds-proposal` run for a brand-new (unbuilt) feature actually
   produces deck+flow output that reads as on-template — the pattern is transcribed from one
   example only, so a second real use is the first test of whether it generalizes.
+- **2026-07-17 (website VERIFY+expand, then web-proposal skill)**: User asked to confirm the
+  two website learn passes (mynamuh.com/nhsec.com) were done correctly and improve them for
+  future 나무증권/N2증권 새 영역 기획 use. A 2-agent workflow live-browsed both domains: found the
+  2026-07-16 record ("nhsec.com redirects to mynamuh.com, teal 나무 rebrand") had already
+  REVERSED within ~24h — mynamuh.com now redirects to nhsec.com, live brand is blue NH투자증권
+  (nav reverted to the old 6-item order incl. 연금자산, colors reverted to #1171D2/#1692E8,
+  confirmed via a full-document computed-style frequency scan). Filed as ledger
+  `mynamuh-nhsec-rebrand-flap-2026-07` rather than silently overwriting the prior finding, since
+  this demonstrated real same-week volatility a future skill needs to know about. Also captured
+  4 new category-landing pages under `nhsec-production` (뱅킹/계좌정보, 주식/파생상품안내,
+  고객센터, plus a flagged quirk page for 금융상품) with real layout/color/copy-tone detail, not
+  just nav labels — total_pages/learned_pages 1→5 for that source. One of the two agents
+  reported a conflicting color reading during this pass (unconfirmed, noted in the ledger, not
+  resolved) — a reminder that even a rigorous live-check can disagree with itself and deserves a
+  documented "unresolved" state rather than a forced pick when the methodology strength differs.
+
+  Immediately after, user asked (with `ultracode`, so run as a multi-agent Workflow) for a
+  sibling to `nds-proposal` that builds the SAME two-part deliverable but for NH's desktop
+  websites in the website-learned brand instead of the NDS mobile guide. A 2-agent research +
+  1-agent draft workflow produced a first draft, but its research phase read the DB **before**
+  the VERIFY+expand corrections above had landed — it drafted the skill defaulting to "teal is
+  current, nhsec→mynamuh redirect," exactly backwards from what was just confirmed live. Caught
+  before shipping and hand-corrected before writing `~/.claude/skills/web-proposal/SKILL.md`: the
+  skill now has NO default brand — step 1 mandates a live same-session check every run (never
+  trust the DB snapshot for color/nav) precisely because of the demonstrated 24h flip, and points
+  at the 6-row website query plus the new category-landing captures instead of the stale
+  1-page-per-site state. Lesson for future workflow design: when a research phase's freshness
+  matters relative to another in-flight write, either sequence them (apply writes, then research)
+  or have the research phase re-query rather than reuse a pre-fetched snapshot passed via args.
