@@ -52,6 +52,15 @@ The AI loads that skill's knowledge and helps you with specialized expertise!
 
 ## Skill Categories
 
+### NH / NDS Design System (in-house)
+Skills that learn NH투자증권's NDS design system from Figma and build screens at
+human-designer quality:
+- `@nhdesign3` - **Supabase-backed NDS knowledge store + build pipeline** — all 6 NDS guide
+  files learned (153 pages), shipped human deliverables as vibe references, verified
+  component keys, and a vibe-rubric-gated BUILD mode. See [nhdesign3/README.md](nhdesign3/README.md).
+- `@nhdesign2` - The earlier fork nhdesign3 was seeded from (frozen at 3 sources / 79 pages)
+- `@csdesign` - File-based sibling (LEADER/CORE/INDEX markdown store) covering NDS + project files
+
 ### Creative & Design
 Skills for visual design, UI/UX, and artistic creation:
 - `@algorithmic-art` - Create algorithmic art with p5.js

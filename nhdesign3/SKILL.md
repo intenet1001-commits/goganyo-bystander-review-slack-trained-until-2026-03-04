@@ -56,6 +56,15 @@ scripts. Multi-agent LEARN fan-outs must write per-agent temp SQL files with uni
 (agents once nearly clobbered each other via shared `/tmp` filenames — ledger anchor
 `concurrent-agent-tmp-file-collision-2026-07-16`).
 
+**Parallel agents must NEVER call the supabase CLI concurrently.** The CLI's temp login role
+is shared per project; concurrent `db query --linked` calls race its initialization and
+rotate each other's credentials (`SASL: password authentication failed`), producing endless
+retry loops — a 6-agent fan-out thrashed for an hour with zero completions on 2026-07-17
+(ledger `supabase-cli-concurrent-auth-race-2026-07-17`). Required pattern for any fan-out:
+the orchestrator dumps the needed tables to local JSON once (`select json_agg(t) from
+nhdesign3_x t`), agents read the dump and emit SQL files, the orchestrator applies them
+serially with `-f`.
+
 | Table | Mirrors (csdesign) | Purpose |
 |---|---|---|
 | `nhdesign3_sources` | `nds/LEADER.md` "Learned files" table | One row per Figma file: fileKey, kind, `total_pages` (the `figma.root.children` denominator), `learned_pages`, status |
@@ -74,8 +83,8 @@ select name, file_key, kind, total_pages, learned_pages, status
 from nhdesign3_sources order by kind, name;
 ```
 
-Snapshot as of 2026-07-17 — **12 sources, 178 pages, 183+ components, 172 topics, 4 open
-ledger rows**:
+Snapshot as of 2026-07-17 (post audit+repair) — **13 sources, 182 pages, 191 components
+(65 with internal-geometry tokens), 189 topics, 7 open ledger rows**:
 
 | Source | fileKey | Kind | Pages |
 |---|---|---|---|
@@ -91,6 +100,13 @@ ledger rows**:
 | 해외주식의결권 (BUILD lessons) | `QFs41kWBHUMQt3k1oRmzgK` | project | 8/8 |
 | nhnamuh-production (mynamuh.com) | — | website | 1/1 |
 | nhsec-production | — | website | 1/1 |
+| SYNTHESIS — vibe rubric & cross-cutting rules | `synthesis-nhdesign3` | guide | 4/4 |
+
+The SYNTHESIS source (added 2026-07-17 after a 6-auditor quality audit) holds rules distilled
+from the corpus rather than transcribed from Figma: the **vibe-rubric** page (mandatory BUILD
+checklist), **csdesign-token-port** (app-side hex/fonts confirmed by instance sampling —
+fills the NDS_Colors gap), **csdesign-defects-port** (broken component sets + manual header
+recipe), and **copy-tone-rule** (해요체 현행 / 합니다체 레거시).
 
 All six guide fileKeys correspond to the live NDS Figma URLs
 (`figma.com/design/<fileKey>/...`). The 해외주식의결권 source is special: its 8 "pages" are
@@ -144,19 +160,28 @@ Per-file caveats that survive from the original learn passes:
 
 ## Mode 2 — BUILD
 
-0. **Read the BUILD lessons first.** The 해외주식의결권 source (8 pages, all lesson notes
-   from a real BUILD session) is required reading before any Figma build — it records
-   verified component keys, plugin-API bugs (SECTION `rescale()`, auto-layout rescale
-   drift, `createPolygon()` rotation), the flow-diagram connector recipe, and the
-   Sectionbar ban. Pull them all in one query:
+0. **Read the BUILD lessons and the vibe rubric first — both are mandatory.** The
+   해외주식의결권 source (8 lesson pages: verified component keys, plugin-API bugs, the
+   Sectionbar ban) AND the SYNTHESIS source (vibe-rubric checklist, app-side token/font
+   port, broken-set diagnostics, copy-tone rule). One query gets both:
 
    ```sql
-   select p.page_name, p.content_md from nhdesign3_pages p
+   select s.name, p.page_name, p.content_md from nhdesign3_pages p
    join nhdesign3_sources s on s.id = p.source_id
-   where s.name = '해외주식의결권' order by p.page_name;
+   where s.file_key in ('QFs41kWBHUMQt3k1oRmzgK','synthesis-nhdesign3') order by s.name, p.page_name;
    ```
 
-1. Query `nhdesign3_components` for the component(s) needed. Rows with
+1. **Reference-first (mandatory — skipping this is the #1 machine-output failure mode).**
+   Before touching components, pick the nearest human-made screen(s) from the `project`-kind
+   sources (공개매수청약 / 국내주식 권리 / 채권권리 행사) and read their pages for: section
+   order, density, spacing rhythm, real microcopy tone, and which components a human chose
+   for which job. Name the chosen reference screen(s) in your working notes — the final
+   quality gate compares against them. If no project screen resembles the target, say so
+   explicitly and fall back to the closest guide Templates page, flagging the build as
+   reference-weak. Note: project pages mix build-facing content with LEARN forensics
+   (naming-reliability notes, coverage bookkeeping) — read for the former, skip the latter.
+
+2. Query `nhdesign3_components` for the component(s) needed. Rows with
    `status='verified'` carry **real, createInstance()-tested keys** (SET key in
    `component_key`, per-variant keys in `variants[]`); the majority are honest
    name/variant sightings with `component_key IS NULL` — for those, recover the key live
@@ -167,7 +192,7 @@ Per-file caveats that survive from the original learn passes:
    from nhdesign3_components where name ilike '%btn%' or 'button' = any(string_to_array(lower(name),'_'));
    ```
 
-2. **SET→variant two-step (mandatory for every variant component).**
+3. **SET→variant two-step (mandatory for every variant component).**
    `search_design_system` returns component-**set**-level keys; passing one to
    `figma.importComponentByKeyAsync` fails with "Component with key ... not found."
    Instead: `figma.importComponentSetByKeyAsync(setKey)` → find the needed variant →
@@ -179,7 +204,7 @@ Per-file caveats that survive from the original learn passes:
    not NDS_Library; `Sectionbar` is **banned standalone** (ledger
    `sectionbar-offset-bug`).
 
-3. Query `nhdesign3_topics` for the topic — by keyword (GIN-indexed, keywords are
+4. Query `nhdesign3_topics` for the topic — by keyword (GIN-indexed, keywords are
    bilingual ko/en) and read **every** matching row (topic names repeat across
    Templates/Library). Follow `page_ids`/`component_ids` to the verbatim rules. Full-text
    fallback when keywords miss: `where content_md ilike '%…%'` on `nhdesign3_pages`. If a
@@ -191,19 +216,35 @@ Per-file caveats that survive from the original learn passes:
    where keywords && array['popup','팝업'];
    ```
 
-4. Build per `figma-use`/`figma-generate-design`.
+5. Build per `figma-use`/`figma-generate-design`, with the rubric's hard constraints:
+   **540px canvas** for MTS/app screens (app-shell components have fixed-px children sized
+   for 540 — a 375 frame clips them into what looks like mangled Korean text);
+   **channel-correct fonts** (app = NanumBarunGothic + Roboto numerals; M.web = Pretendard —
+   never crossed). **Anti-invention escalation**: when the store and live Figma are both
+   silent on something (a color, a spacing, a variant), do not silently guess — either
+   sample it off a rendered instance (methodology in `csdesign-token-port`), take it from
+   the named reference screen, or flag it as a stated assumption in your output. A page
+   row's `status='learned'` still means "visited, something verbatim recovered" — check its
+   own `content_md` gap notes before treating any variant list as complete.
 
-5. Precedence when guide and project sources conflict: component facts from the guide
+6. Precedence when guide and project sources conflict: component facts from the guide
    store (NDS_* files), screen structure/behaviour from shipped production (the
    `project`-kind sources: 공개매수청약, 국내주식 권리, 채권권리 행사 and the `website`
    rows) — more specific wins on conflict.
 
-6. **Quality gate before declaring done**: `get_screenshot` the built node and compare
-   against the learned reference (the source page's screenshots / verbatim specs —
-   spacing, tokens, variant states). A build that was never screenshot-compared is not
-   done. New verified keys or pitfalls discovered during the build go back into the DB
-   (update the component row to `status='verified'`, append to the 해외주식의결권 lesson
-   pages or add a new one) — that write-back loop is what keeps BUILD quality compounding.
+7. **Quality gate before declaring done — two checks, both mandatory.**
+   (a) **Vibe rubric pass**: walk the checklist at the bottom of the `vibe-rubric` page
+   (540px canvas, channel font, NDS green CTA present, bg #EBEDF1, dot-format dates,
+   해요체 register, quickmenu_basic on top-level screens, no '더보기' next to notices,
+   density matched to the named reference). A geometrically perfect screen that fails
+   these reads as machine-made — the 2026-07-16 proto screens passed geometry and failed
+   exactly here. (b) **Screenshot compare vs the NAMED reference from step 1** (not just
+   the component spec pages): `get_screenshot` the built node, view it next to the
+   reference screen, and reconcile spacing, density, and tone deltas. A build that was
+   never screenshot-compared is not done. New verified keys or pitfalls discovered during
+   the build go back into the DB (update the component row to `status='verified'`, append
+   to the 해외주식의결권 lesson pages or add a new one) — that write-back loop is what
+   keeps BUILD quality compounding.
 
 ## Mode 3 — VERIFY
 
@@ -252,3 +293,21 @@ claim changes.
   known key traps, and a screenshot-compare quality gate with DB write-back. Repair SQL
   preserved at `supabase/migrations/repair_2026-07-17.sql` (documentation only — applied
   via `db query -f`, never `db push`); all changes verified against the live DB post-apply.
+- **2026-07-17 (ultracode audit + vibe repair)**: A 6-auditor workflow measured the store
+  and pipeline end-to-end. Results: stored claims are accurate (53/54 verified against live
+  Figma screenshots); a **blind build probe** (rebuild a shipped 국내주식 권리 screen from
+  the DB alone) scored copy ~9/10 and layout ~9/10 but overall fidelity 7.4/10 — the
+  deficit was entirely **in-context visual surface** (colors, chrome, density), and the
+  prior BUILD's proto screens were judged "colorless wireframes" for the same reason.
+  Repairs: (1) new SYNTHESIS source — vibe-rubric checklist, csdesign token/font port
+  (#84C13D, NanumBarunGothic app-side, 540px canvas), defect diagnostics, copy-tone rule
+  (해요체 현행); (2) four targeted Figma re-learn passes — MASTER 국내주식 권리 shipped
+  screens (all 9 probe misses resolved with concrete hex/px values), internal geometry for
+  13 tier-1 components (65 component rows now carry tokens), Templates Layout completion
+  (4/17 → 16/17 groups), clipped variant sheets recaptured; (3) BUILD Mode 2 rewritten —
+  mandatory vibe-rubric read, mandatory reference-first step, anti-invention escalation,
+  two-part quality gate; (4) operational rule added after a live failure: parallel agents
+  must never call the supabase CLI concurrently (login-role credential race, ledger
+  `supabase-cli-concurrent-auth-race-2026-07-17`) — fan-outs use dump-then-read with serial
+  SQL apply. Repair scripts preserved under `supabase/migrations/` (phaseA_synthesis + 4
+  learner scripts).
