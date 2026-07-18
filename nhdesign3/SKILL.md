@@ -73,6 +73,20 @@ serially with `-f`.
 | `nhdesign3_topics` | `nds/INDEX.md` | topic → page_ids/component_ids, with a `flag` (none/contested/blocked) |
 | `nhdesign3_ledger` | `nds/LEDGER.md` | Contested/blocked findings, `anchor` slug referenced from `nhdesign3_topics.flag` rows |
 
+**`nhdesign3_sources.kind` has four values, not two — `guide` / `project` / `website` / `knowhow`.**
+`guide` = NDS design-system files (designer-authored). `project` / `website` = finished, shipped
+work (experienced planner + designer, signed off) — a project only belongs here once it's
+actually done, not mid-iteration. `knowhow` (added 2026-07-18) is a third, deliberately distinct
+category: generalizable lessons discovered while a human iteratively corrects a BUILD-in-progress
+— coordinate-calculation bugs, layout conventions, alignment gotchas, anything a future BUILD
+should not have to rediscover. It is NOT a place to register a project's current working output
+(a demo/exercise mid-correction is not "finished" and does not belong in `project`), and it is
+NOT guide content either — it's the record of *how a human corrected the machine*, kept separate
+so it stays browsable on its own rather than buried as scattered amendments inside guide/project
+pages. One `knowhow`-kind source exists so far: `knowhow-nhdesign3` (🧠 노하우), holding one page
+per lesson; bump its `learned_pages`/`total_pages` as pages are added. See Mode 4 below for
+when/how to write to it.
+
 ## Scope (current)
 
 **The DB is the source of truth, not this section** — it will drift as more is learned.
@@ -281,6 +295,40 @@ Re-run enumeration regardless of when a file was last learned (pages get added).
 existing `nhdesign3_pages` rows as claims to check, not a blank slate. Update in place with a
 `reviewed_date` bump — never silently overwrite; note old → new in `nhdesign3_ledger` if a
 claim changes.
+
+## Mode 4 — KNOWHOW capture (ongoing, every BUILD/correction session)
+
+Distinct from LEARN (Figma → DB) and BUILD (DB → Figma). This mode runs *alongside* BUILD
+whenever a human is actively reviewing/correcting a build in progress — it captures what the
+correction taught, not the build output itself.
+
+**Trigger**: any time a user correction during a BUILD session reveals something generalizable
+— not "this one screen was wrong" but "this class of mistake will recur." Signals: you had to
+recompute coordinates a second time because the first approach silently produced wrong values;
+a fix required understanding a Figma API quirk (auto-layout padding vs. direct x, instance
+offset bugs, absoluteBoundingBox vs. manual parent-chain summing); a documented "intentional"
+design choice got overridden by real human judgment; a quality-gate check that existed missed
+something anyway and needed a new, more specific check.
+
+**What does NOT belong here**: the corrected build output itself (that's just BUILD doing its
+job — nothing to register as a source unless the project is actually finished/shipped, per the
+`project`-kind bar above). One-off content typos with no generalizable lesson. Anything already
+fully covered by an existing guide/vibe-rubric rule (extend that rule instead of duplicating it
+here).
+
+**How to write**:
+1. Insert one page per lesson into the `knowhow-nhdesign3` source (`kind='knowhow'`) —
+   `page_name` states the lesson as a short claim, `content_md` gives root cause + fix +
+   the generalizable rule (not just "what I did this one time").
+2. If the lesson is *operationally* load-bearing for BUILD (e.g. a routing algorithm, a
+   coordinate rule), ALSO fold it into the actual page BUILD reads (vibe-rubric, the connector
+   recipe, screen-flow-overview-pattern, etc.) — the `knowhow` page is the browsable index/
+   record of *why*, the guide/rubric page is what BUILD actually executes against. Don't rely
+   on the knowhow page alone to change future behavior; it documents, the operational page
+   enforces.
+3. Register/extend a `nhdesign3_topics` row so the lesson is keyword-findable, and bump
+   `knowhow-nhdesign3`'s `total_pages`/`learned_pages`.
+4. This is meant to keep growing every session — there is no fixed page count to reach.
 
 ## Decision log (why DB, not files)
 
