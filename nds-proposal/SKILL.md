@@ -121,6 +121,18 @@ finished flow overview and the finished slide deck against the reference file
 (`zRrojC3HnGljRiRYMFiCjX`) for layout fidelity to the template shape itself (badge placement,
 화면경로/화면구분 box structure, arrow style). A deliverable that skips either check is not done.
 
+**Numbered callout badges on PPT slides must be anchored to the real target element's
+`absoluteBoundingBox`, never placed by evenly-spaced guessing** (same failure class as
+connector arrows — see `knowhow-12`). For each slide's numbered badge: find the real element
+it describes on the 540px source screen (Screens page), take its `absoluteBoundingBox`, scale
+by `mockupFrame.width / 540`, and offset by the mockup frame's own position. **When writing the
+result back to `node.x`/`node.y`, convert from absolute to the badge's own parent's local
+coordinates first** (`localX = absX - node.parent.absoluteBoundingBox.x`) — assigning an
+absolute coordinate straight to `.x` on a node whose parent is a Slide/Section frame (not the
+page) silently double-offsets it off-slide. If no real element matches a described action
+(e.g. a feature not yet present in the built screen), anchor to the closest real element and
+say so explicitly — never invent a floating position.
+
 Write back: if this run discovers a new verified component key, a template deviation that
 turned out necessary, or a new popup/sheet pattern, update `nhdesign3_components` /
 `nhdesign3_pages` / append a `nhdesign3_ledger` row — same write-back discipline as BUILD mode.
