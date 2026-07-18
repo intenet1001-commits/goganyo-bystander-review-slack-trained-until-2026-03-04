@@ -1,6 +1,6 @@
 ---
 name: nhdesign3
-description: "Entry point for NH투자증권 NDS design work, backed by Postgres (Supabase) instead of markdown files. Companion/competitor to `csdesign` — same target domain (NDS: component keys, variants, tokens, per-category rules) and the same rigorous learn methodology (figma.root.children enumeration, verbatim screenshot transcription, honest N/M coverage reporting), but knowledge is stored in queryable `nhdesign3_*` tables in the shared Supabase project `portmanagement` rather than in `LEADER.md`/`CORE.md`/`INDEX.md` files. Covers all six NDS guide files (UX Guide, M.web, CI, Templates, Library, PPT Templates) plus learned project files and production-website records. Use when asked to learn/build/verify any NDS file or NH design work via nhdesign3, or to compare nhdesign3 vs csdesign performance. ALSO trigger on explicit knowhow-save requests during or after a BUILD/nds-proposal correction session — Korean phrases like '노하우 저장해', '이거 노하우로 남겨', '노하우로 기록해', or English 'save this as knowhow' — even mid-conversation with no other nhdesign3 context: write the lesson into the `knowhow-nhdesign3` source (`kind='knowhow'`) per Mode 4, not into a project/guide source."
+description: "Entry point for NH투자증권 NDS design work, backed by Postgres (Supabase) instead of markdown files. Companion/competitor to `csdesign` — same target domain (NDS: component keys, variants, tokens, per-category rules) and the same rigorous learn methodology (figma.root.children enumeration, verbatim screenshot transcription, honest N/M coverage reporting), but knowledge is stored in queryable `nhdesign3_*` tables in the shared Supabase project `portmanagement` rather than in `LEADER.md`/`CORE.md`/`INDEX.md` files. Covers all six NDS guide files (UX Guide, M.web, CI, Templates, Library, PPT Templates) plus learned project files and production-website records. Use when asked to learn/build/verify any NDS file or NH design work via nhdesign3, or to compare nhdesign3 vs csdesign performance. For explicit knowhow-save or session-wrap requests ('노하우 저장해', '세션 마무리', '노하우 정리해줘', 'save this as knowhow') prefer invoking the dedicated `nhdesign3-knowhow` skill instead, which wraps this skill's Mode 4."
 risk: safe
 ---
 
@@ -301,6 +301,12 @@ claim changes.
 Distinct from LEARN (Figma → DB) and BUILD (DB → Figma). This mode runs *alongside* BUILD
 whenever a human is actively reviewing/correcting a build in progress — it captures what the
 correction taught, not the build output itself.
+
+**Dedicated entry point**: `~/.claude/skills/nhdesign3-knowhow/SKILL.md` wraps this mode for two
+common invocations — "save this specific lesson now" and "wrap up the session, mine it for
+knowhow candidates." It defers to this section for the actual write procedure (no rule
+duplication); invoke it directly when either of those is what's being asked, rather than
+re-deriving the procedure inline here.
 
 **Trigger**: any time a user correction during a BUILD session reveals something generalizable
 — not "this one screen was wrong" but "this class of mistake will recur." Signals: you had to
