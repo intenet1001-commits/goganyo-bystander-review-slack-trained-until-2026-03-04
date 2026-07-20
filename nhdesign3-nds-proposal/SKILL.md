@@ -1,9 +1,9 @@
 ---
-name: nds-proposal
-description: Generate an NDS-standard feature proposal deliverable — a PPT 기획서 (slide deck) plus a 화면 흐름 개요 (screen flow diagram) — for a given feature, built from real NDS components per nhdesign3's learned design system. Trigger: "/nds-proposal <feature name or scope>", or any request to make a "기획서", "화면흐름개요", "PPT 기획서", "screen flow overview", or "proposal deck" for an NDS feature.
+name: nhdesign3-nds-proposal
+description: Generate an NDS-standard feature proposal deliverable — a PPT 기획서 (slide deck) plus a 화면 흐름 개요 (screen flow diagram) — for a given feature, built from real NDS components per nhdesign3's learned design system (v3 series — reads nhdesign3_* tables; not to be confused with a future v4 sibling). Trigger: "/nhdesign3-nds-proposal <feature name or scope>", or any request to make a "기획서", "화면흐름개요", "PPT 기획서", "screen flow overview", or "proposal deck" for an NDS feature.
 ---
 
-# nds-proposal
+# nhdesign3-nds-proposal
 
 Produces the two-part deliverable pattern discovered in the 해외주식의결권 reference file
 (`zRrojC3HnGljRiRYMFiCjX`, "해외주식 의결권 투표 — NDS 기획서 - 화면설계 — Copy"): a **PPT

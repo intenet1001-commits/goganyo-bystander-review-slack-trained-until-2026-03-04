@@ -1,6 +1,6 @@
 ---
 name: nhdesign3
-description: "Entry point for NH투자증권 NDS design work, backed by Postgres (Supabase) instead of markdown files. Companion/competitor to `csdesign` — same target domain (NDS: component keys, variants, tokens, per-category rules) and the same rigorous learn methodology (figma.root.children enumeration, verbatim screenshot transcription, honest N/M coverage reporting), but knowledge is stored in queryable `nhdesign3_*` tables in the shared Supabase project `portmanagement` rather than in `LEADER.md`/`CORE.md`/`INDEX.md` files. Covers all six NDS guide files (UX Guide, M.web, CI, Templates, Library, PPT Templates) plus learned project files and production-website records. Use when asked to learn/build/verify any NDS file or NH design work via nhdesign3, or to compare nhdesign3 vs csdesign performance. For explicit knowhow-save or session-wrap requests ('노하우 저장해', '세션 마무리', '노하우 정리해줘', 'save this as knowhow') prefer invoking the dedicated `nhdesign3-knowhow` skill instead, which wraps this skill's Mode 4."
+description: "Entry point for NH투자증권 NDS design work, backed by Postgres (Supabase) instead of markdown files. Companion/competitor to `csdesign` — same target domain (NDS: component keys, variants, tokens, per-category rules) and the same rigorous learn methodology (figma.root.children enumeration, verbatim screenshot transcription, honest N/M coverage reporting), but knowledge is stored in queryable `nhdesign3_*` tables in the shared Supabase project `portmanagement` rather than in `LEADER.md`/`CORE.md`/`INDEX.md` files. Covers all six NDS guide files (UX Guide, M.web, CI, Templates, Library, PPT Templates) plus learned project files and production-website records. Use when asked to learn/build/verify any NDS file or NH design work via nhdesign3, or to compare nhdesign3 vs csdesign performance. For explicit knowhow-save or session-wrap requests ('노하우 저장해', '세션 마무리', '노하우 정리해줘', 'save this as knowhow') prefer invoking the dedicated `nhdesign3-knowhow-app` skill (NDS/app BUILD sessions, via `nhdesign3-nds-proposal`) or `nhdesign3-knowhow-homepage` (desktop-website BUILD sessions, via `nhdesign3-homepage-proposal`) instead, whichever matches the current session — both wrap this skill's Mode 4 for their respective knowhow source. All skill names in this v3 family carry an explicit `nhdesign3-` prefix (except this entry-point skill itself, named bare `nhdesign3`) so they are never confused with a future `nhdesign4-`-prefixed sibling series reading a separate `nhdesign4_*` table set."
 risk: safe
 ---
 
@@ -55,6 +55,14 @@ Inline SQL that begins with `--` comments gets eaten by the flag parser — use 
 scripts. Multi-agent LEARN fan-outs must write per-agent temp SQL files with unique names
 (agents once nearly clobbered each other via shared `/tmp` filenames — ledger anchor
 `concurrent-agent-tmp-file-collision-2026-07-16`).
+
+**Chained statements silently return only the last statement's result.** Running multiple
+`;`-separated `select`s in one `db query --linked` call (inline or via `-f`) prints just the
+final statement's output — the earlier statements still execute, but their result sets are
+discarded, not concatenated or shown. This looks like a successful single-query run and is
+easy to misread as "the whole file returned this." Run one query per invocation (or wrap
+multi-check audits in a single query with UNIONs / CTEs) when every statement's output needs
+to be visible.
 
 **Parallel agents must NEVER call the supabase CLI concurrently.** The CLI's temp login role
 is shared per project; concurrent `db query --linked` calls race its initialization and
@@ -119,15 +127,18 @@ ledger rows**:
 | PPT_Proposal+FlowOverview Template | `zRrojC3HnGljRiRYMFiCjX` | guide | 2/2 |
 
 The PPT_Proposal+FlowOverview Template source (added 2026-07-17) holds the two-page structural
-spec behind the global `nds-proposal` skill (`~/.claude/skills/nds-proposal/SKILL.md`) —
+spec behind the global `nhdesign3-nds-proposal` skill (`~/.claude/skills/nhdesign3-nds-proposal/SKILL.md`,
+named `nds-proposal` until 2026-07-20, renamed for v3/v4-series clarity) —
 `ppt-proposal-slide-pattern` (Cover/content-slide/Closing layout) and
 `screen-flow-overview-pattern` (numbered screens connected by green flow/branch arrows, with a
 popup·시트 mockup section) — learned verbatim from a real shipped example (해외주식의결권 NDS
 기획서 파일, fileKey `zRrojC3HnGljRiRYMFiCjX`, distinct from the BUILD-lessons source above
-which shares the same feature name but a different fileKey). Invoke `/nds-proposal <feature>`
-to generate a new 기획서+화면흐름개요 pair for any NDS **mobile app/mobile-web** feature; it loads
-this skill first. `/web-proposal <feature>` (`~/.claude/skills/web-proposal/SKILL.md`, added
-2026-07-17) generates the same two-part deliverable for NH's **desktop websites**
+which shares the same feature name but a different fileKey). Invoke `/nhdesign3-nds-proposal
+<feature>` to generate a new 기획서+화면흐름개요 pair for any NDS **mobile app/mobile-web**
+feature; it loads this skill first. `/nhdesign3-homepage-proposal <feature>`
+(`~/.claude/skills/nhdesign3-homepage-proposal/SKILL.md`, added 2026-07-17 as `web-proposal`,
+renamed `homepage-proposal` then `nhdesign3-homepage-proposal` on 2026-07-20) generates the same
+two-part deliverable for NH's **desktop websites**
 (나무증권/mynamuh.com, NH투자증권/nhsec.com) instead, sourced from the `website`-kind rows below
 rather than the NDS guide files — no Figma component library exists for these, so it builds
 plain frames reproducing live-sampled layout/color/nav instead of importing instances.
