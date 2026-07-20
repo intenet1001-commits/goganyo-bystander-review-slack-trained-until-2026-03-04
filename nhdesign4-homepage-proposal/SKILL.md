@@ -1,11 +1,16 @@
 ---
-name: web-proposal
-description: Generate an NH desktop-website feature proposal deliverable — a PPT 기획서 (slide deck) plus a 화면 흐름 개요 (screen flow diagram) — in the current live brand style of 나무증권/mynamuh.com and NH투자증권/nhsec.com (currently the same site), built from live-site-derived layout/color/nav facts recorded in nhdesign3. Trigger: "/web-proposal <feature/area>", or any request to make a "기획서", "화면흐름개요", "웹버전 기획서", "웹 화면흐름도" for a 나무증권/mynamuh/nhsec.com desktop website feature. For mobile app or mobile-web (NDS) requests, use `nds-proposal` instead.
+name: nhdesign4-homepage-proposal
+description: Generate an NH desktop-website feature proposal deliverable — a PPT 기획서 (slide deck) plus a 화면 흐름 개요 (screen flow diagram) — in the current live brand style of 나무증권/mynamuh.com and NH투자증권/nhsec.com (currently the same site), built from live-site-derived layout/color/nav facts recorded in nhdesign4 (v4 series — reads nhdesign4_* tables; not to be confused with the v3 sibling). Trigger: "/nhdesign4-homepage-proposal <feature/area>", or any request to make a "기획서", "화면흐름개요", "웹버전 기획서", "웹 화면흐름도", "홈페이지 기획서" for a 나무증권/mynamuh/nhsec.com desktop website feature. For mobile app or mobile-web (NDS) requests, use `nhdesign4-nds-proposal` instead.
 ---
 
-# web-proposal
+# nhdesign4-homepage-proposal
 
-Website-brand sibling of `nds-proposal`. Produces the **same two-part deliverable shape** — a
+This is the nhdesign4-series counterpart of the v3 skill at
+`~/.claude/skills/.claude/worktrees/nhdesign3-knowhow/nhdesign3-homepage-proposal/SKILL.md`,
+reading from the forked `nhdesign4_*` tables — do not confuse it with the v3 skill or its
+`nhdesign3_*` tables.
+
+Website-brand sibling of `nhdesign4-nds-proposal`. Produces the **same two-part deliverable shape** — a
 **PPT 기획서** slide deck and a **화면 흐름 개요** flow diagram, both structured per the pattern
 learned from `zRrojC3HnGljRiRYMFiCjX` — but for NH's **desktop website** properties (나무증권 /
 mynamuh.com and NH투자증권 / nhsec.com), not the mobile NDS design system.
@@ -16,25 +21,25 @@ inspection (Chrome `use_browser`), not Figma. Every mockup in this skill's outpu
 as plain Figma frames/rectangles/text reproducing the recorded nav structure, colors, and layout
 — never NDS component instances.
 
-This skill is a thin orchestrator, same as `nds-proposal`. It hands off to `nhdesign3` for DB
-access and to `figma-use` for everything about writing Figma. Load `nhdesign3` first, always.
+This skill is a thin orchestrator, same as `nhdesign4-nds-proposal`. It hands off to `nhdesign4` for DB
+access and to `figma-use` for everything about writing Figma. Load `nhdesign4` first, always.
 
 ## 0. Load prerequisites (mandatory, in order)
 
-1. Invoke the `nhdesign3` skill. Do not skip this even if it was loaded earlier in the session.
+1. Invoke the `nhdesign4` skill. Do not skip this even if it was loaded earlier in the session.
 2. Load `figma-use` before any `use_figma` call.
 3. Pull the slide/flow template pattern and every website source row in one query:
 
    ```sql
-   select s.name, p.node_id, p.page_name, p.content_md from nhdesign3_pages p
-   join nhdesign3_sources s on s.id = p.source_id
+   select s.name, p.node_id, p.page_name, p.content_md from nhdesign4_pages p
+   join nhdesign4_sources s on s.id = p.source_id
    where s.file_key = 'zRrojC3HnGljRiRYMFiCjX'
       or s.kind = 'website'
    order by s.name, p.page_name;
    ```
 
    This returns: the slide-deck pattern (`ppt-proposal-slide-pattern`), the flow-overview
-   pattern (`screen-flow-overview-pattern`) — both shared verbatim with `nds-proposal`, reused
+   pattern (`screen-flow-overview-pattern`) — both shared verbatim with `nhdesign4-nds-proposal`, reused
    as-is, not re-derived — plus every `website`-kind row (`nhnamuh-production`,
    `nhsec-production`; 6 rows total as of the 2026-07-17 VERIFY expansion: each site's homepage,
    plus 4 category-landing captures — 뱅킹/계좌정보, 주식/파생상품안내, 고객센터, and a flagged
@@ -45,7 +50,7 @@ access and to `figma-use` for everything about writing Figma. Load `nhdesign3` f
 4. **Also read the ledger row `mynamuh-nhsec-rebrand-flap-2026-07`** — mandatory, not optional:
 
    ```sql
-   select title, description from nhdesign3_ledger where anchor = 'mynamuh-nhsec-rebrand-flap-2026-07';
+   select title, description from nhdesign4_ledger where anchor = 'mynamuh-nhsec-rebrand-flap-2026-07';
    ```
 
    This is the single most important fact for this skill: the two domains' redirect direction
@@ -54,18 +59,21 @@ access and to `figma-use` for everything about writing Figma. Load `nhdesign3` f
 
 ## 1. Resolve which brand you're building (mandatory live check, do not skip)
 
-nhsec.com and mynamuh.com currently converge on **one live site** — but which domain redirects
-to which, and which brand (teal 나무 vs. blue NH투자증권) is live, has already reversed once in
-one day (ledger `mynamuh-nhsec-rebrand-flap-2026-07`). As of the last VERIFY pass (2026-07-17):
-mynamuh.com redirects to nhsec.com, and the live brand is blue NH투자증권 (nav: 금융상품,
-뱅킹/계좌정보, 주식/파생상품안내, 투자정보, 연금자산, 고객센터; colors #1171D2/#1692E8, bg
-#F0F3F8-family) — the OPPOSITE of the 2026-07-16 finding (nhsec→mynamuh redirect, teal brand).
+nhsec.com and mynamuh.com are **two co-existing live properties, not a redirect pair** — the
+earlier "24h brand flip" story (ledger `mynamuh-nhsec-rebrand-flap-2026-07`) was a mis-observation,
+retracted by that same ledger row's later (3rd/4th) live-check entries, which found no redirect
+between the two domains and no flip. Each domain runs its own brand: mynamuh.com serves teal
+나무증권, nhsec.com serves blue NH투자증권 (nav: 금융상품, 뱅킹/계좌정보, 주식/파생상품안내,
+투자정보, 연금자산, 고객센터; colors #1171D2/#1692E8, bg #F0F3F8-family). **Pick which brand to
+build by which domain/brand was asked for, not by "which one wins today"** — there is no flip to
+chase.
 
-**Do not build against the DB's last-recorded palette/nav without a fresh live check.** Before
-finalizing any color or nav decision:
+**Do not build against the DB's last-recorded palette/nav without a fresh live check.** The two
+brands' own content can still drift independently of each other, so before finalizing any color
+or nav decision:
 
 1. Load the live site with the Chrome `use_browser` tool (not Playwright `browser_navigate` —
-   it has hung on this template family), confirm current redirect direction and brand via a
+   it has hung on this template family), confirm the domain's current brand/palette via a
    full-document computed-style frequency scan (see `nhsec-production`'s stored VERIFY note for
    the exact method — sample every element's `background-color`/`color`, tally by hex, trust the
    high-frequency values over a handful of manually-inspected elements).
@@ -74,13 +82,13 @@ finalizing any color or nav decision:
 3. If the user asks for a specific historical brand state (e.g. "예전 나무 teal 브랜드로", or "예전
    블루 브랜드로") instead of whatever's live, honor that explicitly and label the deliverable as
    using a non-current/historical brand snapshot.
-4. Write the live-checked state back to the DB (`nhdesign3_pages`/`nhdesign3_sources` for
+4. Write the live-checked state back to the DB (`nhdesign4_pages`/`nhdesign4_sources` for
    whichever site row, `reviewed_date` bump) so the next run starts from a fresher snapshot —
    same write-back discipline as step 6 below.
 
 ## 2. Scope the feature
 
-Same two cases as `nds-proposal`, adapted:
+Same two cases as `nhdesign4-nds-proposal`, adapted:
 
 - **Feature already exists as recorded content**: read its page(s) from the DB (see the 6-row
   query in step 0.3) — fast path. Five of those six page rows are real captured category
@@ -99,31 +107,31 @@ reachable from any of them. This list drives both deliverables.
 
 ## 3. Build the 화면 흐름 개요 first
 
-Same shape as `nds-proposal` step 2 — left-to-right compact-scale screen row, numbered-circle
+Same shape as `nhdesign4-nds-proposal` step 2 — left-to-right compact-scale screen row, numbered-circle
 step labels (①②③...), green `flow:` arrows (ellipse start-dot + vector + arrowhead), and a
 `팝업·시트` section below with one Mockup frame per popup/modal, each linked back by a `branch:`
 arrow (Scrim + centered/drawer overlay — desktop overlays are modals/drawers, not mobile bottom
 sheets; no recorded desktop overlay pattern exists yet in the store, so sample one live before
 building it, don't default to NDS's sheet-with-handle shape).
 
-Building this before the slides surfaces missing states the same way it does for `nds-proposal` —
+Building this before the slides surfaces missing states the same way it does for `nhdesign4-nds-proposal` —
 e.g. a mega-menu hover-open state, an empty-search-result state, a login-required gate. Flag any
 state the feature clearly needs but has no recorded/sampled reference for, rather than omitting it
 silently.
 
 ## 4. Build the PPT 기획서
 
-Same three-part shape as `nds-proposal` step 3 — Cover / one content slide per primary-flow
+Same three-part shape as `nhdesign4-nds-proposal` step 3 — Cover / one content slide per primary-flow
 screen (reusing the flow-overview instances, not rebuilding) / Closing — with bilingual
 Korean+English header pairs on content slides, per the template pattern.
 
-## 5. What must differ from `nds-proposal`'s BUILD step (the substance swap)
+## 5. What must differ from `nhdesign4-nds-proposal`'s BUILD step (the substance swap)
 
 This is the core of the skill. Every mockup screen must be built as **plain Figma
 frames/rectangles/text reproducing the live layout** — there is no desktop component library to
 import instances from. Concretely:
 
-- **No component-instance lookup step.** `nds-proposal` has a "BUILD-mode component lookup"
+- **No component-instance lookup step.** `nhdesign4-nds-proposal` has a "BUILD-mode component lookup"
   phase against NDS's Figma library. Skip it entirely — build header/nav/hero/section/footer as
   raw frames, rectangles, and text nodes matching the recorded (or freshly live-checked)
   structure.
@@ -170,7 +178,7 @@ import instances from. Concretely:
 ## 6. Quality gate (mandatory, both deliverables)
 
 Because the reference here is a **live website, not a Figma project file**, the fidelity check is
-different from `nds-proposal`'s Figma-to-Figma screenshot compare:
+different from `nhdesign4-nds-proposal`'s Figma-to-Figma screenshot compare:
 
 - Screenshot-compare each mockup screen against a live screenshot of the actual site
   (`use_browser` screenshot, same viewport used for sampling) — colors, nav structure, section
@@ -180,28 +188,77 @@ different from `nds-proposal`'s Figma-to-Figma screenshot compare:
   matches the live reference, not an assumed one.
 - Separately, screenshot-compare the finished flow overview and slide deck against the
   `zRrojC3HnGljRiRYMFiCjX` template file for the *deck/flow shape itself* (badge placement,
-  화면경로/화면구분 box structure, arrow style) — this part is identical to `nds-proposal`'s
+  화면경로/화면구분 box structure, arrow style) — this part is identical to `nhdesign4-nds-proposal`'s
   step 4, since the deck/flow SHAPE is shared.
 - A deliverable that skips either check — live-site visual fidelity, or template-shape fidelity —
   is not done.
 
 Write back: if this run samples a new page, reconfirms or corrects the live brand/nav state (per
 step 1.4), or confirms a previously-inferred dimension, update the `website`-kind
-`nhdesign3_pages`/`nhdesign3_sources` rows for the relevant site — same write-back discipline
-`nds-proposal` uses for BUILD lessons. If the brand/redirect state has flipped again since the
+`nhdesign4_pages`/`nhdesign4_sources` rows for the relevant site — same write-back discipline
+`nhdesign4-nds-proposal` uses for BUILD lessons. If the brand/redirect state has flipped again since the
 last VERIFY, update the `mynamuh-nhsec-rebrand-flap-2026-07` ledger row's description rather than
-filing a new anchor, so the volatility history stays in one place.
+filing a new anchor, so the volatility history stays in one place. This inline write-back is for
+a single reviewed_date bump or ledger row's worth of in-flight correction; if the run turns up
+substantial new LEARN work — a whole unsampled area or category, not a one-fact reconfirmation —
+route that to `nhdesign4-homepage-ingest` instead of trying to absorb it here.
+
+## 7. KNOWHOW capture (ongoing, every BUILD/correction session)
+
+Distinct from the page write-back in step 6 (which corrects/reconfirms a recorded site fact) and
+from the deliverable itself — this captures what a human correction *taught*, not the corrected
+fact or the corrected mockup.
+
+**Dedicated entry point**: `~/.claude/skills/nhdesign4-knowhow-homepage/SKILL.md` wraps this
+section for two common invocations — "save this specific lesson now" and "wrap up the session,
+mine it for knowhow candidates." It defers to this section for the actual write procedure (no
+rule duplication); invoke it directly when either of those is what's being asked, rather than
+re-deriving the procedure inline here.
+
+**Trigger**: any time a user correction during a `nhdesign4-homepage-proposal` BUILD session reveals
+something generalizable — not "this one screen was wrong" but "this class of mistake will
+recur." Signals: a live-site sampling method silently produced a wrong value (e.g. a
+computed-style frequency scan undercounted because of an iframe boundary); a browser-automation
+quirk (`use_browser` vs. Playwright hanging on this template family); a brand/nav assumption
+that turned out stale — the `mynamuh-nhsec-rebrand-flap-2026-07` class of mistake; a
+quality-gate check (screenshot-compare) that existed but still missed a live-vs-mockup mismatch
+anyway.
+
+**What does NOT belong here**: a one-off page fact correction (that's step 6's write-back, not a
+knowhow lesson) unless it also reveals a generalizable sampling-method lesson. Anything already
+fully covered by an existing rule in this skill (extend that rule instead of duplicating it
+here).
+
+**How to write**:
+1. Insert one page per lesson into the `knowhow-nhdesign4-homepage` source (`kind='knowhow'`,
+   same `portmanagement` Supabase project `nhdesign4` uses) — `page_name` states the lesson as a
+   short claim, `content_md` gives root cause + fix + the generalizable rule.
+2. If the lesson is *operationally* load-bearing for future BUILD runs, ALSO fold it into this
+   skill's own relevant step (step 1's live-check procedure, step 5's substance-swap rules, step
+   6's quality gate) — the knowhow page is the browsable record of *why*, this skill's own steps
+   are what actually enforces it. Don't rely on the knowhow page alone to change future behavior.
+3. Register/extend a `nhdesign4_topics` row so the lesson is keyword-findable, and bump
+   `knowhow-nhdesign4-homepage`'s `total_pages`/`learned_pages`.
+4. If the lesson traces back to a concrete incident worth a permanent audit trail, also append a
+   `nhdesign4_ledger` row with `status='resolved'`.
+5. This is meant to keep growing every session — there is no fixed page count to reach.
+
+This source is kept deliberately separate from `knowhow-nhdesign4` (the NDS/app-side knowhow
+used by `nhdesign4-nds-proposal`, captured via `nhdesign4-knowhow-app`) — desktop-website lessons
+(live-site sampling, brand volatility, browser-tool quirks) and NDS-component lessons (Figma API
+quirks, coordinate/connector rules) are different enough in kind that mixing them would make
+either skill's BUILD pass filter through irrelevant entries.
 
 ## Non-goals
 
-- Not for mobile app or mobile-web (NDS) requests — redirect those to `nds-proposal`. If a
+- Not for mobile app or mobile-web (NDS) requests — redirect those to `nhdesign4-nds-proposal`. If a
   request is ambiguous about channel ("모바일에서도 이 화면 보여줘"), ask which channel before
   building, don't guess.
 - Not a general slide-maker — always produces both parts (deck + flow), even if the user only
   asked for one. If the user explicitly wants only one part, say so back before dropping the
   other.
 - Does not invent screens, copy, dimensions, footer content, or brand colors/nav the live site
-  hasn't been sampled for THIS RUN. Anti-invention escalation is inherited from `nhdesign3`:
+  hasn't been sampled for THIS RUN. Anti-invention escalation is inherited from `nhdesign4`:
   sample it live, take it from a recorded reference row, or flag the assumption — never guess
   silently, and never trust a DB color/nav snapshot as current without the step-1 live check,
   given this site pair's demonstrated ~24h brand volatility.
