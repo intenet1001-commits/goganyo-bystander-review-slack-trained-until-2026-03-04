@@ -140,6 +140,10 @@ say so explicitly — never invent a floating position.
 Write back: if this run discovers a new verified component key, a template deviation that
 turned out necessary, or a new popup/sheet pattern, update `nhdesign4_components` /
 `nhdesign4_pages` / append a `nhdesign4_ledger` row — same write-back discipline as BUILD mode.
+This inline write-back is for small in-flight corrections only (a single component/page fact,
+a ledger row); if the run surfaces substantial new LEARN work — a guide file that needs a real
+enumeration/transcription pass, not just a one-row correction — route that to
+`nhdesign4-nds-ingest` instead of trying to absorb it here.
 
 ## Non-goals
 

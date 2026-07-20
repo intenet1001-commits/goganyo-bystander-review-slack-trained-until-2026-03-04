@@ -136,6 +136,11 @@ relax that discipline. When registering a newly learned source, set `domain` exp
 insert time (don't leave it to a later backfill pass) — `app` for MTS/M.web content, `homepage`
 for desktop-website content, per the same rule used in the fork backfill above.
 
+**Dedicated entry points**: `nhdesign4-nds-ingest` (app guide) and `nhdesign4-project-ingest`
+(app project) wrap this mode. Invoke one directly when the request is specifically "learn/
+register/re-learn this file"; they defer here for the write procedure rather than carrying
+their own copy of it.
+
 ## Mode 2 — BUILD
 
 Identical procedure to nhdesign3 Mode 2 (reference-first, SET→variant two-step, vibe-rubric +
@@ -155,6 +160,11 @@ Identical procedure to nhdesign3 Mode 3. Re-run enumeration regardless of when a
 learned; re-read existing `nhdesign4_pages` rows as claims to check, not a blank slate. Update
 in place with a `reviewed_date` bump — never silently overwrite; note old → new in
 `nhdesign4_ledger` if a claim changes.
+
+`nhdesign4-homepage-ingest` wraps this mode for the volatile homepage rows (re-sample via
+Chrome `use_browser` + `reviewed_date` bump) — invoke it directly for "is this homepage source
+still accurate" requests. App-side guide/project re-verify runs through `nhdesign4-nds-ingest`/
+`nhdesign4-project-ingest` instead.
 
 ## Mode 4 — KNOWHOW capture
 
@@ -208,7 +218,8 @@ any session running outside this worktree.
    variants, tokens, per-category rules. Source: `nhdesign4_sources where domain='app' and
    kind='guide'`. For a full 기획서+화면흐름개요 deliverable of a **new/unbuilt** feature, hand
    off to `~/.claude/skills/nhdesign4-nds-proposal/SKILL.md` (it loads this skill's data
-   itself).
+   itself) — the read path. To *learn/re-verify* this slice instead (not build a deliverable),
+   hand off to `~/.claude/skills/nhdesign4-nds-ingest/SKILL.md` — the write path.
 2. **App-side finished-project knowledge** — how a shipped mobile app/M.web screen was
    actually built (reference screens, real component choices, density, copy tone). Source:
    `nhdesign4_sources where domain='app' and kind='project' and status='complete'` (the
@@ -217,7 +228,9 @@ any session running outside this worktree.
    nhdesign4_sources where domain='app' and kind='project' group by status`; as of 2026-07-20
    that query returned 1 of 7 project rows still `in_progress`, not a fixed number to assume
    going forward). For a full deliverable **re-presenting an existing/shipped** feature, hand off
-   to `~/.claude/skills/nhdesign4-project-proposal/SKILL.md`.
+   to `~/.claude/skills/nhdesign4-project-proposal/SKILL.md` — the read path. To *learn/finish
+   learning* a shipped feature's record instead (not re-present it), hand off to
+   `~/.claude/skills/nhdesign4-project-ingest/SKILL.md` — the write path.
 3. **App-side knowhow** — generalizable lessons from live BUILD corrections (coordinate
    bugs, layout conventions, alignment gotchas, plugin-API pitfalls). Source:
    `nhdesign4_sources where domain='app' and kind='knowhow'` (file_key `knowhow-nhdesign4` as
@@ -229,9 +242,12 @@ any session running outside this worktree.
    ('guide','website')`. **The website rows are volatile — verify live before trusting the DB
    snapshot**, same caveat as nhdesign3 (see ledger `mynamuh-nhsec-rebrand-flap-2026-07`,
    inherited unchanged). For a full deliverable, hand off to
-   `~/.claude/skills/nhdesign4-homepage-proposal/SKILL.md`. There is no homepage equivalent of
-   lane 2 yet (no `project`-kind homepage source exists) — an "existing homepage feature"
-   request also lands here, sourced from the `website`-kind rows instead.
+   `~/.claude/skills/nhdesign4-homepage-proposal/SKILL.md` — the read path. To *learn or
+   re-verify* this slice instead (not build a deliverable) — including the routine "is this
+   homepage row still accurate" re-sample — hand off to
+   `~/.claude/skills/nhdesign4-homepage-ingest/SKILL.md` — the write path. There is no homepage
+   equivalent of lane 2 yet (no `project`-kind homepage source exists) — an "existing homepage
+   feature" request also lands here, sourced from the `website`-kind rows instead.
 5. **Homepage-side knowhow** — generalizable lessons specific to homepage/desktop-website
    builds or corrections, kept separate from app-side knowhow (#3) since the two channels
    have different component libraries, fonts, and conventions. Source: `nhdesign4_sources

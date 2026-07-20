@@ -97,7 +97,10 @@ straight to a slide-child node's `.x`/`.y`).
 
 Write back: if this run discovers a page/content gap in the finished-project record used, update
 the relevant `nhdesign4_pages` row (`reviewed_date` bump) or append a `nhdesign4_ledger` row —
-same write-back discipline `nhdesign4-nds-proposal` uses.
+same write-back discipline `nhdesign4-nds-proposal` uses. This inline write-back is for small
+in-flight corrections only; if the gap is substantial — an unenumerated screen or a whole
+popup/sheet flow still missing, real new LEARN work rather than a single fact fix — route that
+to `nhdesign4-project-ingest` instead of trying to absorb it here.
 
 ## Non-goals
 

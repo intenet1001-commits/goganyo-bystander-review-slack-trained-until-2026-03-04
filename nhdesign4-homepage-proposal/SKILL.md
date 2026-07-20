@@ -198,7 +198,10 @@ step 1.4), or confirms a previously-inferred dimension, update the `website`-kin
 `nhdesign4_pages`/`nhdesign4_sources` rows for the relevant site — same write-back discipline
 `nhdesign4-nds-proposal` uses for BUILD lessons. If the brand/redirect state has flipped again since the
 last VERIFY, update the `mynamuh-nhsec-rebrand-flap-2026-07` ledger row's description rather than
-filing a new anchor, so the volatility history stays in one place.
+filing a new anchor, so the volatility history stays in one place. This inline write-back is for
+a single reviewed_date bump or ledger row's worth of in-flight correction; if the run turns up
+substantial new LEARN work — a whole unsampled area or category, not a one-fact reconfirmation —
+route that to `nhdesign4-homepage-ingest` instead of trying to absorb it here.
 
 ## 7. KNOWHOW capture (ongoing, every BUILD/correction session)
 
