@@ -39,12 +39,12 @@ against this project from this skill. The fork files live outside `supabase/migr
 the linked project dir specifically so no migration runner auto-picks them up.
 
 **Exact invocation** (both flags matter — without `--linked` the CLI dials a local Postgres
-and fails; the project link lives in `~/.claude/skills/nhdesign3/supabase/.temp/`, so run
-from there — nhdesign4 does not need its own separate link, it shares the same linked
-project):
+and fails; nhdesign4 now has ITS OWN link at `~/.claude/skills/nhdesign4/supabase/.temp/`
+(copied from nhdesign3 on 2026-07-21), so run the CLI from `~/.claude/skills/nhdesign4`;
+nhdesign3 remains an independent, untouched fallback with its own link):
 
 ```bash
-cd ~/.claude/skills/nhdesign3
+cd ~/.claude/skills/nhdesign4
 supabase db query --linked "select ..."          # inline, single statement
 supabase db query --linked -f path/to/file.sql   # multi-statement / anything with -- comments
 ```
@@ -56,7 +56,9 @@ scripts.
 is shared per project; concurrent `db query --linked` calls race its initialization and
 rotate each other's credentials (`SASL: password authentication failed`), producing endless
 retry loops (ledger `supabase-cli-concurrent-auth-race-2026-07-17`, inherited from nhdesign3 —
-still applies since nhdesign4 shares the same linked project). Required pattern for any
+still applies because nhdesign4's own link (`~/.claude/skills/nhdesign4/supabase/.temp/`)
+targets the same remote project ref `fvkmkqhavlqmltowwpfc` as nhdesign3's, so the shared
+temp login role races identically). Required pattern for any
 fan-out: the orchestrator dumps the needed tables to local JSON once (`select json_agg(t) from
 nhdesign4_x t`), agents read the dump and emit SQL files, the orchestrator applies them
 serially with `-f`.

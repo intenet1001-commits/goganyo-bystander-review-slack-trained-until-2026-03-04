@@ -1,6 +1,6 @@
 ---
 name: nhdesign4-knowhow-homepage
-description: "Dedicated entry point for saving lessons learned into nhdesign4-homepage-proposal's knowhow category (kind='knowhow', source `knowhow-nhdesign4-homepage`) — the running record of what a human correction taught during a `nhdesign4-homepage-proposal` BUILD/correction session (NH desktop website mockup work), distinct from `nhdesign4-knowhow-app` (which covers NDS/app BUILD sessions via `nhdesign4-nds-proposal`) and distinct from the finished deliverable itself. Two invocation styles: (1) targeted — user names a specific lesson right now ('노하우 저장해', '이거 노하우로 남겨', '노하우로 기록해', 'save this as knowhow'); (2) session-wrap — invoked at the end of a session ('세션 마무리', '노하우 정리해줘', 'wrap up and save knowhow') with no single lesson pre-named, so this skill scans the conversation for correction/fix moments and proposes candidates before writing. Use when the correction happened during nhdesign4-homepage-proposal work (desktop website mockups, live-site sampling, brand/nav facts) — use `nhdesign4-knowhow-app` instead if the correction happened during nhdesign4-nds-proposal/NDS component BUILD work. Trigger via `/nhdesign4-knowhow-homepage <lesson or 'wrap up'>`."
+description: "Dedicated entry point for saving lessons learned into nhdesign4-homepage-proposal's knowhow category (kind='knowhow', source `knowhow-nhdesign4-homepage`) — the running record of what a human correction taught during a `nhdesign4-homepage-proposal` BUILD/correction session (NH desktop website mockup work), distinct from `nhdesign4-knowhow-app` (which covers NDS/app BUILD sessions via `nhdesign4-nds-proposal`) and distinct from the finished deliverable itself. Two invocation styles: (1) targeted — user names a specific lesson right now ('노하우 저장해', '이거 노하우로 남겨', '노하우로 기록해', 'save this as knowhow'); (2) session-wrap — invoked at the end of a session ('세션 마무리', '노하우 정리해줘', 'wrap up and save knowhow') with no single lesson pre-named, so this skill scans the conversation for correction/fix moments and proposes candidates before writing. It also re-verifies/audits the existing knowhow corpus (Mode 3 over its own kind='knowhow' rows) — re-reading `knowhow-nhdesign4-homepage` pages as claims to re-check, bumping `reviewed_date`, merging/updating superseded lessons — when asked to '노하우 재검증'/'노하우 정리·중복 정리'/'verify the knowhow', not just capturing new ones. Use when the correction happened during nhdesign4-homepage-proposal work (desktop website mockups, live-site sampling, brand/nav facts) — use `nhdesign4-knowhow-app` instead if the correction happened during nhdesign4-nds-proposal/NDS component BUILD work. Trigger via `/nhdesign4-knowhow-homepage <lesson | 'wrap up' | 'verify knowhow'>`."
 risk: safe
 ---
 
@@ -93,6 +93,48 @@ one thing written down. Procedure:
    `nhdesign4_ledger` row with `status='resolved'`.
 6. There is no fixed page count to reach — this keeps growing every session. Do not treat "enough
    knowhow pages exist" as a reason to stop capturing new ones.
+
+## Ingest / VERIFY mode — re-read and re-verify existing knowhow rows
+
+This mode is the counterpart to the LEARN+VERIFY front doors (`nhdesign4-nds-ingest`,
+`nhdesign4-project-ingest`, `nhdesign4-homepage-ingest`) that can re-read and re-verify existing
+DB rows, not only write new ones — applied here to this skill's own `kind='knowhow'` corpus. It
+runs nhdesign4's **Mode 3 — VERIFY** over the `knowhow-nhdesign4-homepage` source; this skill
+carries no verify procedure of its own and defers to `nhdesign4/SKILL.md` Mode 3 for the
+discipline (re-read every stored row as a claim to check, update in place with a `reviewed_date`
+bump, never silently overwrite, note old → new in `nhdesign4_ledger`), the same framing as
+`nhdesign4-homepage-ingest` §2 and `nhdesign4-nds-ingest` Mode 3.
+
+**When this mode fires, vs. the capture path (§1/§2).** Capture = a NEW lesson from a live
+correction the user just made and wants recorded — stay on the §1/§2 path for that, even at
+session-wrap. VERIFY = re-auditing the EXISTING knowhow corpus with no new lesson being learned.
+Signal phrases for VERIFY: "노하우 재검증", "노하우 정리해줘 / 중복 정리해줘", "노하우 감사",
+"verify/audit the knowhow", "이미 저장된 노하우 최신화". If the user just corrected something and
+wants it written down, that is still capture, not this — do not route a fresh correction here.
+
+**Procedure** (defer to `nhdesign4/SKILL.md` Mode 3; knowhow-specific application):
+
+1. Pull ALL existing `nhdesign4_pages` rows for THIS skill's knowhow source
+   (`file_key = 'knowhow-nhdesign4-homepage'`) and treat each lesson as a CLAIM to re-check, not
+   a blank slate. **If no `knowhow-nhdesign4-homepage` source/pages exist yet** — expected until
+   the first homepage knowhow is captured (this source is created on first capture, per §0) —
+   there is nothing to re-verify; say so plainly and stop, rather than inventing rows to audit.
+2. For each lesson decide: still true & relevant? superseded by a newer rule or already folded
+   into an operational page (a vibe-rubric / recipe / a skill's own quality-gate section, e.g.
+   `nhdesign4-homepage-proposal/SKILL.md`'s live-check/substance-swap/quality-gate steps)?
+   duplicated by another knowhow page?
+3. Lessons that still hold unchanged → bump `reviewed_date` on that page's row (or the source
+   row, per existing convention) — the signal it was actually re-checked, not left stale.
+4. Lessons that changed / were superseded / should merge → update `content_md` in place and
+   append a `nhdesign4_ledger` row recording old → new (or merged-into `<anchor>`) — never
+   silently overwrite. Keep `total_pages`/`learned_pages` accurate after any prune or merge.
+5. Operationally load-bearing lessons NOT yet folded into the rubric/recipe/skill → fold them now
+   into `nhdesign4-homepage-proposal/SKILL.md`'s relevant step, exactly as §2 step 2 requires for
+   capture — a re-verify pass is a legitimate moment to close that gap.
+
+**This VERIFY mode NEVER manufactures new lessons.** New knowhow enters only through the capture
+path (§1/§2) from a real human correction; re-verify audits, bumps, updates, and merges what is
+already stored — it does not invent claims that no correction ever taught.
 
 ## 3. Report back
 

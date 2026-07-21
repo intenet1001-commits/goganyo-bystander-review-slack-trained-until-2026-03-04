@@ -1,6 +1,6 @@
 ---
 name: nhdesign4-knowhow-app
-description: "Dedicated entry point for saving lessons learned into nhdesign4's app/NDS knowhow category (kind='knowhow', source `knowhow-nhdesign4`) — the running record of what a human correction taught during a `nhdesign4-nds-proposal`/NDS-component BUILD session, distinct from the finished design output itself and distinct from `nhdesign4-knowhow-homepage` (which covers `nhdesign4-homepage-proposal`/desktop-website sessions). Two invocation styles: (1) targeted — user names a specific lesson right now ('노하우 저장해', '이거 노하우로 남겨', '노하우로 기록해', 'save this as knowhow'); (2) session-wrap — invoked at the end of a session ('세션 마무리', '노하우 정리해줘', 'wrap up and save knowhow') with no single lesson pre-named, so this skill scans the conversation for correction/fix moments and proposes candidates before writing. Use when the correction happened during nhdesign4-nds-proposal/NDS component BUILD work (Figma component instances, coordinate/connector rules) — use `nhdesign4-knowhow-homepage` instead if the correction happened during nhdesign4-homepage-proposal/desktop-website work. Invoke as `/nhdesign4-knowhow-app <lesson or 'wrap up'>`."
+description: "Dedicated entry point for saving lessons learned into nhdesign4's app/NDS knowhow category (kind='knowhow', source `knowhow-nhdesign4`) — the running record of what a human correction taught during a `nhdesign4-nds-proposal`/NDS-component BUILD session, distinct from the finished design output itself and distinct from `nhdesign4-knowhow-homepage` (which covers `nhdesign4-homepage-proposal`/desktop-website sessions). Two invocation styles: (1) targeted — user names a specific lesson right now ('노하우 저장해', '이거 노하우로 남겨', '노하우로 기록해', 'save this as knowhow'); (2) session-wrap — invoked at the end of a session ('세션 마무리', '노하우 정리해줘', 'wrap up and save knowhow') with no single lesson pre-named, so this skill scans the conversation for correction/fix moments and proposes candidates before writing. Beyond capture it now also re-reads and re-verifies/audits the existing `knowhow-nhdesign4` rows (Mode 3 — VERIFY) when asked to re-audit the corpus ('노하우 재검증', '노하우 중복 정리해줘', '노하우 감사', 'verify/audit the knowhow'), not only writing new lessons. Use when the correction happened during nhdesign4-nds-proposal/NDS component BUILD work (Figma component instances, coordinate/connector rules) — use `nhdesign4-knowhow-homepage` instead if the correction happened during nhdesign4-homepage-proposal/desktop-website work. Invoke as `/nhdesign4-knowhow-app <lesson, 'wrap up', or 'verify knowhow'>`."
 risk: safe
 ---
 
@@ -94,6 +94,40 @@ one thing written down. Procedure:
    etc.).
 6. There is no fixed page count to reach — this keeps growing every session. Do not treat
    "enough knowhow pages exist" as a reason to stop capturing new ones.
+
+## Ingest / VERIFY mode — re-read and re-verify existing knowhow rows
+
+The sections above are the **capture path**: a NEW lesson enters from a live correction that just
+happened (targeted §1a) or from mining this session's correction history (session-wrap §1b). This
+mode is the opposite direction — it does not write a fresh lesson at all, it re-audits the
+**existing** `knowhow-nhdesign4` corpus, mirroring `nhdesign4/SKILL.md` **Mode 3 — VERIFY** (the
+same re-read / `reviewed_date`-bump / ledger-on-change discipline the sibling `nhdesign4-nds-ingest`
+applies to guide rows).
+
+**When this fires vs. capture**: VERIFY fires on re-audit signals — "노하우 재검증", "노하우
+정리해줘"/"노하우 중복 정리해줘", "노하우 감사", "이미 저장된 노하우 최신화",
+"verify/audit the knowhow". If the user just corrected something and wants it recorded, that is
+still the capture path (§1), not this — VERIFY never opens on a fresh correction.
+
+**Procedure** (defer to `nhdesign4/SKILL.md` Mode 3 for the discipline; the knowhow-specific
+application):
+
+1. Pull ALL existing pages for this skill's knowhow source (`file_key = 'knowhow-nhdesign4'`) and
+   treat each lesson as a **CLAIM to re-check**, not a blank slate.
+2. For each lesson decide: still true & relevant? superseded by a newer rule or already folded
+   into an operational page (vibe-rubric / connector recipe / a skill's own quality-gate section)?
+   duplicated by another `knowhow-nhdesign4` page?
+3. Lessons that still hold unchanged → bump `reviewed_date` on that page (or the source row per
+   existing convention) — the signal it was actually re-checked, not left stale.
+4. Lessons that changed / were superseded / should merge → update `content_md` in place and append
+   a `nhdesign4_ledger` row recording old → new (or merged-into `<anchor>`); never silently
+   overwrite. Keep `total_pages`/`learned_pages` accurate after any prune or merge.
+5. Operationally load-bearing lessons NOT yet folded into the rubric/recipe/skill → fold them now,
+   exactly as capture §2 step 2.
+
+**Anti-invention**: this VERIFY mode NEVER manufactures new lessons. New knowhow enters only
+through the capture path (§1) from a real correction — a re-audit can confirm, update, merge, or
+prune existing claims, but it does not invent one.
 
 ## 3. Report back
 
